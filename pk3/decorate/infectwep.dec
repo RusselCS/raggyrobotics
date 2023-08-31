@@ -1,0 +1,291 @@
+actor RoboenzaTimerInvBar : CustomInventory
+{
+    Inventory.amount 90
+    Inventory.maxamount 90
+    +INVBAR
+    States
+    {
+    Use:
+        TNT1 A 0
+        fail
+    }
+}
+
+actor RoboenzaTimer : Ammo
+{
+    Inventory.amount 90
+    Inventory.maxamount 90
+}
+
+actor RoboenzaWep_ScriptBar : ScriptBar {}
+
+actor RoboenzaWep : MegaBuster
+{
+    Weapon.AmmoUse 0
+    Weapon.SlotNumber 1
+    Weapon.Ammotype "RoboenzaTimer"
+    Obituary "%o was eaten alive by %k."
+    Inventory.Pickupmessage "Infected!"
+    +WEAPON.AMMO_OPTIONAL
+    //inventory.icon "INFEWEP"
+    Scale 2.0
+    States
+    {
+    Spawn:
+        WEA2 Y 0
+        stop
+    Ready:
+        ZOMA D 0 ACS_NamedExecuteWithResult("core_weaponcolor", CLR_INFECTED)
+        ZOMA D 1 A_WeaponReady(WRF_DISABLESWITCH)
+        Goto Ready+1
+    Deselect:
+        TNT1 AAAAAAAAAAAAAAAAAAAAAA 0 A_Lower
+        ZOMA D 1 A_Lower
+        loop
+    Select:
+        TNT1 AAAAAAAAAAAAAAAAAAAAAA 0 A_Raise
+        ZOMA D 1 A_Raise
+        Loop
+    Fire: // OLD ANIATION: 27 TICKS
+        ZOMA D 0 A_GiveInventory("ZombieAttack_P", 1)
+        ZOMA EGHIJK 2
+        TNT1 A 9
+        TNT1 A 0 A_Refire("LeftSwing")
+        goto FireEnd
+    LeftSwing:
+        ZOMA L 0 A_GiveInventory("ZombieAttackR_P", 1)
+        ZOMA LMNOPQ 2
+        TNT1 A 9
+        TNT1 A 0 A_Refire("RightSwing")
+        goto FireEnd
+    RightSwing:
+        ZOMA L 0 A_GiveInventory("ZombieAttack_P", 1)
+        ZOMA FGHIJK 2
+        TNT1 A 9
+        TNT1 A 0 A_Refire("LeftSwing")
+        goto FireEnd
+    FireEnd: // 6 TICKS
+        ZOMA ABC 2
+        Goto Ready+2
+    AltFire:
+        ZOMA C 1 A_JumpIf(momz!=0, "Nope")
+        ZOMA C 0 A_JumpIfInventory("RoboenzaTimer", 6, "SupaJump")
+        ZOMA C 0 A_JumpIfHealthLower(15, "Nope")
+        Goto SupaJump
+    Nope:
+        Goto Ready+2
+    SupaJump:
+        ZOMA C 0 A_PlaySoundEx("rroboenza/player/superjump","Voice")
+        ZOMA C 0 ThrustThingZ(0, 80, 0, 0)
+        ZOMA C 0 A_TakeInventory("JumpCancler",1)
+        ZOMA C 0 A_TakeInventory("RoboenzaTimer",5)
+        ZOMA C 0 ACS_NamedExecuteWithResult("RROBOENZ_HEALTHSPEND")
+        ZOMA CBA 1
+        TNT1 A 10
+        ZOMA ABC 3
+        Goto Ready+2
+    Flash:
+        TNT1 AAAAAAAAAA 2 A_FireCustomMissile("ClimbChecker",0,0,0,0)
+        stop
+    }
+}
+
+actor ClimbChecker : FastProjectile
+{
+    PROJECTILE
+    +RIPPER
+    damage (0)
+    Height 16
+    Radius 16
+    Speed 64
+    States
+    {
+    Spawn:
+        TNT1 A 0
+        stop
+    Death:
+        TNT1 A 0
+        TNT1 A 1 A_GiveToTarget("Climb",1)
+        stop
+    }
+}
+
+actor Climb : CustomInventory
+{
+    states
+    {
+    Pickup:
+        TNT1 A 0
+        TNT1 A 0 ThrustThingZ(0,20,0,0)
+        stop
+    }
+}
+
+actor RoboenzaMutation : BasicACSDamager { damagetype "Slime" }
+
+actor InfectRecoil : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_Recoil(6)
+        stop
+    }
+}
+
+actor ZombieAttack_P : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_JumpIfInventory("RoboenzaAlphaInfected", 1, "Lunge")
+        TNT1 A 0 A_GunFlash
+        TNT1 A 0 A_SpawnItemEx("InfectMorphWatcher")
+        TNT1 A 0 A_SpawnItemEx("InfectClawWarper", cos(-pitch)*56,0,32+(sin(-pitch)*48))
+        TNT1 A 0 A_SpawnItemEx("InfectClawWarperSmallLeft",  cos(-pitch)*56,-15, 38+(sin(-pitch)*48),  15)
+        TNT1 A 0 A_SpawnItemEx("InfectClawWarperSmallRight", cos(-pitch)*56, 15, 26+(sin(-pitch)*48), -15)
+        stop
+    Lunge:
+        TNT1 A 0 A_Recoil(-10)
+        goto Pickup+1
+    }
+}
+
+actor ZombieAttackR_P : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_JumpIfInventory("RoboenzaAlphaInfected", 1, "Lunge")
+        TNT1 A 0 A_GunFlash
+        TNT1 A 0 A_SpawnItemEx("InfectMorphWatcher")
+        TNT1 A 0 A_SpawnItemEx("InfectClawWarperR", cos(-pitch)*56,0,32+(sin(-pitch)*48))
+        TNT1 A 0 A_SpawnItemEx("InfectClawWarperSmallLeftR",  cos(-pitch)*56,-15, 26+(sin(-pitch)*48),  15)
+        TNT1 A 0 A_SpawnItemEx("InfectClawWarperSmallRightR", cos(-pitch)*56, 15, 38+(sin(-pitch)*48), -15)
+        stop
+    Lunge:
+        TNT1 A 0 A_Recoil(-10)
+        goto Pickup+1
+    }
+}
+
+actor InfectMorphWatcher : BasicWatcher
+{
+    States
+    {
+    Spawn:
+        TNT1 A 0
+        TNT1 A 0 A_PlaySoundEx("rroboenza/player/slash","Weapon")
+        TNT1 AAA 3 A_GiveToTarget("FireInfectMorpher_P", 1)
+        TNT1 A 5
+        stop
+    }
+}
+
+actor InfectClawWarper : BasicProjectile
+{
+    +NOINTERACTION
+    accuracy 0
+    mass 32
+    Damage (0)
+    States
+    {
+    Spawn:
+        TNT1 A 0
+        RZCL AABBCCDDEEFF 1 A_GiveInventory("InfectClawWarper_P", 1)
+        stop
+    }
+}
+
+actor InfectClawWarperSmallLeft : InfectClawWarper
+{
+    accuracy -10
+    scale 1.25
+    mass 38
+}
+
+actor InfectClawWarperSmallRight : InfectClawWarperSmallLeft
+{
+    accuracy 10
+    mass 26
+}
+
+actor InfectClawWarperR : BasicProjectile
+{
+    +NOINTERACTION
+    accuracy 0
+    mass 32
+    Damage (0)
+    States
+    {
+    Spawn:
+        TNT1 A 0
+        RZC2 AABBCCDDEEFF 1 A_GiveInventory("InfectClawWarper_P", 1)
+        stop
+    }
+}
+
+actor InfectClawWarperSmallLeftR : InfectClawWarperR
+{
+    accuracy -10
+    scale 1.25
+    mass 26
+}
+
+actor InfectClawWarperSmallRightR : InfectClawWarperSmallLeftR
+{
+    accuracy 10
+    mass 38
+}
+
+actor InfectClawWarper_P : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0
+        TNT1 A 0 A_SetPitch(CallACS("core_GetPtrPitch", AAPTR_TARGET))
+        TNT1 A 0 A_Warp(AAPTR_TARGET, cos(-pitch)*56,accuracy,mass+(sin(-pitch)*48),-accuracy,WARPF_INTERPOLATE)
+        stop
+    }
+}
+
+actor FireInfectMorpher_P : CustomInventory { States { Pickup: TNT1 A 0 A_SpawnItemEx ("InfectMorpher",cos(-pitch)*56,0,32+(sin(-pitch)*48), momx, momy, 0,0,SXF_ABSOLUTEMOMENTUM,0) stop }}
+
+actor InfectMorpher : BasicProjectile
+{
+    Renderstyle "None"
+    Speed 20
+    radius 10
+    height 6
+    damage (10)
+    +RIPPER
+    damagetype "RoboenzaInfection"
+    States
+    {
+    Spawn:
+        RZCL A 3
+        stop
+    }
+}
+
+actor InfectionEffect : BasicWatcher
+{
+    States
+    {
+    Spawn:
+        TNT1 A 0
+        TNT1 A 2 A_PlaySoundEx("rroboenza/player/infect","Voice")
+        stop
+    }
+}
+
+actor InfectMorph_P : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 ACS_NamedExecuteWithResult("RROBOENZ_INFECTME")
+        stop
+    }
+}

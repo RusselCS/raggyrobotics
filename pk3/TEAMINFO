@@ -1,0 +1,39 @@
+ClearTeams
+
+Team "Survivors"
+{
+   PlayerColor "00 70 E8"
+   TextColor "Cyan"
+   RailColor "00 70 E8"
+   FlagItem "MegaBlueFlag"
+   SkullItem "MegaBlueHat"
+   SmallFlagHUDIcon "LFLG"
+   SmallSkullHUDIcon "LSKL"
+   LargeFlagHUDIcon "BFLASMAL"
+   LargeSkullHUDIcon "BSKUA0"
+   WinnerPic "SURVIWIN"
+   LoserPic "INFCTWIN"
+   WinnerTheme "TOGETH"
+   LoserTheme "SADCRED"
+   AllowCustomPlayerColor
+   PlayerStartThingNumber 5080
+}
+
+Team "Infected"
+{
+	PlayerColor "E0 00 58"
+	TextColor "DarkGreen"
+	RailColor "E0 00 58"
+	FlagItem "MegaRedFlag"
+	SkullItem "MegaRedHat"
+	SmallFlagHUDIcon "WFLG"
+	SmallSkullHUDIcon "WSKL"
+	LargeFlagHUDIcon "RFLASMAL"
+	LargeSkullHUDIcon "RSKUA0"
+	WinnerPic "INFCTWIN"
+	LoserPic "SURVIWIN"
+	WinnerTheme "SADCRED"
+	LoserTheme "TOGETH"
+	AllowCustomPlayerColor
+	PlayerStartThingNumber 5081
+}

@@ -1,0 +1,118 @@
+#library "RROBOADD"
+
+#include "zcommon.acs"
+
+#include "RROBCOMM.acs"
+
+#import "8BDT.acs"
+
+#include "DTADD.acs"
+#include "CROCFUNC.acs"
+
+script "RROBOENZ_DTADD" OPEN
+{
+    // Need to remake the possession script from vanilla because it triggers the color script that's impossible to disable once it's on
+    // Sooooo I'll just define the same thing again, without that color script.
+    // AddArtifactPickupFunc(DTADD_PFT_POSSESSION, "rroboenz_possession_gives");
+    delay(1);
+
+    // override vanilla's possession give script
+    for(int i = 0; i < ArtiPickupFuncs_Max[DTADD_PFT_POSSESSION]; i++) {
+        if(StrCmp(getArtifactPickupFunc(DTADD_PFT_POSSESSION, i), "core_possession_gives") == 0) {
+            setArtifactPickupFunc(DTADD_PFT_POSSESSION, i, "rroboenz_possession_gives");
+        }
+    }
+}
+
+script "RROBOENZ_DTADD_CLIENT" OPEN CLIENTSIDE
+{
+    CreatePlayerTranslationGlow(CLR_INFECTED, CLR_INF_CYAN, CLR_INF_BLUE, CLR_INF_BLACK);
+}
+
+// as discussed, this is point for point the same exact script as the one in vanilla, but without the colors
+script "rroboenz_possession_gives" (void)
+{
+    // also need to remove the notarget stacker, since this wasn't fixed
+    CSetInventory("PlayerPropertyNoTarget",1);
+    ACS_NamedExecuteWithResult("core_notargetplayer",0,0);
+
+    // No boosters
+    GiveInventory("NoWeaponSwitchSound", 1);
+    TakeInventory("SuperAdaptorWep", 999);
+    TakeInventory("TrebleBoost", 999);
+
+    // Restore movement wep stuff
+    SetPlayerProperty(0,0,0);
+    CSetInventory("PlayerPropertyFlight",1);
+    CSetInventory("PlayerPropertyFlightForced",1);
+    ACS_NamedExecuteWithResult("core_flyplayer",0,false,true);
+    CSetInventory("PlayerPropertyNoGravity",1);
+    CSetInventory("PlayerPropertyNoGravityForced",1);
+    ACS_NamedExecuteWithResult("core_nogravityplayer",0,false,true);
+    CSetInventory("PlayerPropertyFrozen",1);
+    ACS_NamedExecuteWithResult("core_freezeplayer",0,false);
+    CSetInventory("PlayerPropertyUnsolid",1);
+    ACS_NamedExecuteWithResult("core_unsolidplayer",0,0);
+    TakeInventory("OilBoat", 999);
+
+    // No invisible holders
+    CSetInventory("PlayerPropertyNoIdentify",1);
+    ACS_NamedExecuteWithResult("core_dontidentifytargetplayer", 0, false);
+    CSetInventory("PlayerPropertyCantSeek",1);
+    ACS_NamedExecuteWithResult("core_cantseekplayer", 0, false);
+    CSetInventory("PlayerPropertyInvisible",1);
+    ACS_NamedExecuteWithResult("core_invisibleplayer", 0, false);
+    TakeInventory("CentaurFlashNoAlpha", 999);
+    TakeInventory("CentaurFlashHalfAlpha", 999);
+    TakeInventory("CentaurFlashQuarterAlpha", 999);
+
+    // No excess flags or noise spam
+    TakeInventory("WeaponCharge", 999);
+    TakeInventory("WeaponChargeLevel", 999);
+    TakeInventory("OilSliderFlag", 999);
+    TakeInventory("HomingSniperCharge", 999);
+    TakeInventory("PhotonMissileCharge", 999);
+    TakeInventory("SuperArmTemp", 999);
+    TakeInventory("DeepDiggerFlagL", 999);
+    TakeInventory("DeepDiggerFlagR", 999);
+    TakeInventory("PharaohCharge", 999);
+    TakeInventory("WheelCutterCheck", 999);
+    TakeInventory("SakugarneActive", 999);
+    TakeInventory("MirrorBusterFlag", 999);
+    
+
+    // // Handles the colors of the player
+    // if (GetCvar("mm8bdm_sv_quickpossession")) {
+    //     // this seemed funny as a side mode [Trill]
+    //     ACS_NamedExecuteWithResult("core_weaponcolor", CLR_QUICKMAN, CLRF_SILENT);
+    //     GiveInventory("IGMovement",1);
+    // }
+    // if (!GetCvar("mm8bdm_sv_quickpossession") || isTeamGame) {
+    //     ACS_NamedExecuteWithResult("core_poss_holdeffect");
+    // }
+
+    // No shield leftovers
+    GiveInventory("StopShield", 1);
+    TakeInventory("ShieldCheck", 999);
+    TakeInventory("LeafShieldCharge", 999);
+    CSetInventory("PlayerPropertyNonshootable", 1);
+    ACS_NamedExecuteWithResult("core_nonshootableplayer", 0, false);
+    TakeInventory("ScorchWheelPowerup", 999);
+    TakeInventory("WheelCount",99);
+    TakeInventory("JewelShieldCheck", 999);
+    GiveInventory("JewelSatelliteDisable", 1);
+    TakeInventory("JunkShieldCharge", 999);
+    GiveInventory("BlackHoleTrigger", 1);
+    if(!GetCvar("sv_infiniteammo")) { TakeInventory("BlackHoleAmmo", 4); }
+    TakeInventory("PlantWeakener", 999);
+    TakeInventory("SkullShieldCheck", 999);
+    TakeInventory("WaterShieldCheck", 999);
+    GiveInventory("WaterShieldStop", 1);
+
+    if(CheckInventory("RushJetCounter") > 0) {
+        ACS_NamedExecuteWithResult("core_flyplayer", 0, 2);
+    }
+    if(CheckInventory("RushMarineCounter") > 0 && CheckInventory("IsUnderwater")) {
+        ACS_NamedExecuteWithResult("core_flyplayer", 0, 2);
+    }
+}

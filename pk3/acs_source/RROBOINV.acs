@@ -1,0 +1,196 @@
+#library "RROBOINV"
+
+#include "zcommon.acs"
+
+#include "CROCFUNC.acs"
+#include "RROBCOMM.acs"
+
+#import "8BDT.acs"
+
+int classHealth[RBNZ_PLAYERLIMIT];
+
+// Inventory management scripts, for infects and survivors.
+script "RROBENZ_PLAYERSTART" (void)
+{
+    classHealth[PlayerNumber()] = GetActorProperty(0, APROP_SpawnHealth);
+    GiveInventory("NoTeamTranslation", 1);
+    GiveInventory("NoProjectileTeamTranslation", 1);
+    CallACS0("RROBENZ_SURVIVORMANAGE");
+
+    until(CheckInventory("LightTeamFlag") > 0 ||
+          CheckInventory("WilyTeamFlag") > 0 ||
+          CheckInventory("CossackTeamFlag") > 0 ||
+          CheckInventory("KingTeamFlag") > 0)
+        delay(1);
+
+    TakeInventory("LightTeamFlag", 1);
+    TakeInventory("WilyTeamFlag", 1);
+    TakeInventory("CossackTeamFlag", 1);
+    TakeInventory("KingTeamFlag", 1);
+}
+
+script "RROBENZ_SURVIVORMANAGE" (void)
+{
+    CallACS0("RROBOENZ_REVOKEZOMBIESKIN");
+    // [Russ] Placeholder script, I guess.
+    // while(!CheckInventory("RoboenzaInfected") > 0) {
+    //     delay(1);
+    // }
+}
+
+script "RROBOENZ_INFECTME" (void) {
+    if(!CheckInventory("RoboenzaInfected"))
+        CallACS1("RROBOENZ_INFECT", PlayerNumber());
+}
+
+script "RROBOENZ_INFECT" (int who, int alpha)
+{
+    SetActivator(who + PLN_TID);
+    if(alpha) {
+        GiveInventory("RoboenzaDontRip", 1);
+        GiveInventory("RoboenzaAlphaInfected", 1);
+    }
+    Player_SetTeam(TEAM_INFECTED, true);
+    CallACS1("core_hazardtag_clear", who);
+    removeAssists();
+    GiveInventory("RoboenzaInfected", 1);
+    GiveInventory("RoboenzaTimer", ZOMBIE_TIME);
+    GiveInventory("RoboenzaWep", 1);
+    SpawnSpotForced("InfectionEffect", 0, 0, 0);
+    SetWeapon("RoboenzaWep");
+    str weap = GetWeapon();
+    TakeInventory(weap, 1);
+    GiveInventory(weap, 1);
+    CallACS1("core_poss_runfuncs", who);
+
+    CallACS0("RROBOENZ_APPLYZOMBIESKIN");
+
+    int zombieHealth = ZOMBIE_HP_BASE;
+    int infectCount = playerCountTeam(TEAM_INFECTED);
+
+    if(!alpha) {
+        if(CheckActorInventory(patientToPlayerNum(patientZero) + PLN_TID, "RoboenzaAlphaInfected") > 0)
+        {
+            CallACS1("RROBOENZ_ALPHADISABLE", patientToPlayerNum(patientZero));
+        }
+        zombieHealth = ZOMBIE_HP_START + (PlayerCount() * ZOMBIE_HP_MIN - infectCount * ZOMBIE_HP_MAX);
+        if(zombieHealth < ZOMBIE_HP_MIN) zombieHealth = ZOMBIE_HP_MIN;
+        if(zombieHealth > ZOMBIE_HP_MAX) zombieHealth = ZOMBIE_HP_MAX;
+    }
+
+    zombieHealth = zombieHealth/3 + zombieHealth;
+
+    setRoboenzaHealth(0, zombieHealth);
+
+    CallACS2("RROBOENZ_ALERT", who, MSG_INFECTED);
+    CallACS2("RROBOENZ_TOOLTIP", zombieHealth, alpha);
+
+    int timeStart = Timer()-1;
+
+    while(GetActorProperty(0, APROP_Health) > 0 && CheckInventory("RoboenzaInfected") > 0)
+    {
+        int infectTime = timeStart - Timer();
+        if(infectTime % 35 == 0) { // Tick down the timer
+            TakeInventory("RoboenzaTimer", 1);
+            if(CheckInventory("RoboenzaTimer") == 0) {
+                int tid = ActivatorTID();
+                SetActivator(-1);
+                Thing_Damage(tid, 5000, MOD_SLIME);
+                terminate;
+            }
+        }
+
+        if(infectTime % (35 * 3) == 0) { // Gradual health regen
+            if(GetActorProperty(0, APROP_HEALTH) < GetActorProperty(0, APROP_SPAWNHEALTH)) {
+                HealThing(clamp(getCvar("sv_maxlives") * 5, 5, 30) + playerCountTeam(TEAM_SURVIVOR));
+            }
+        }
+
+        if(PlayerIsBot(PlayerNumber())) {
+            if(!CheckWeapon("RoboenzaWep")) // for some reason, bots don't seem to get the message
+                SetWeapon("RoboenzaWep");
+        }
+        delay(1);
+    }
+}
+
+script "RROBOENZ_CURE" (void)
+{
+    int who = PlayerNumber();
+    SetActivator(who + PLN_TID);
+
+    CSetInventory("RoboenzaDoRip", 1);
+    CSetInventory("RoboenzaAlphaInfected", 0);
+    CSetInventory("RoboenzaInfected", 0);
+    CSetInventory("RoboenzaTimer", 0);
+    CSetInventory("RoboenzaWep", 0);
+    returnAssists();
+    SpawnSpotForced("InfectionEffect", 0, 0, 0);
+    CallACS1("core_poss_runfuncs", who);
+    SetActorVelocity(0, 0, 0, 0, 0, 0);
+
+    setRoboenzaHealth(0, classHealth[who]);
+
+    CallACS2("RROBOENZ_ALERT", who, MSG_CURED);
+    
+    Player_SetTeam(TEAM_SURVIVOR, true);
+    CallACS1("core_hazardtag_clear", who);
+}
+
+script "RROBOENZ_ALPHADISABLE" (int who)
+{
+    SetActivator(who + PLN_TID);
+    TakeInventory("RoboenzaAlphaInfected", 1);
+    GiveInventory("RoboenzaDoRip", 1);
+}
+
+Script "RROBOENZ_HEALTHSPEND" (void)
+{
+	Int ActorHealth = GetActorProperty(ActivatorTID(), APROP_Health);
+	If(ActorHealth > 15)
+	{
+		SetActorProperty(ActivatorTID(), APROP_Health, ActorHealth-15);
+	}
+}
+
+// DAMAGE EVENT (for zombie recoil and infection)
+script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
+{
+    if(ev == GAMEEVENT_ACTOR_DAMAGED) {
+        if(PlayerNumber() >= 0) {
+            if(CheckInventory("RoboenzaInfected") && CheckInventory("RoboenzaAlphaInfected") == 0) {
+                GiveInventory("InfectRecoil", 1);
+            } else {
+                if(StrICmp(type, "RoboenzaInfection") == 0) {
+                    CallACS0("RROBOENZ_INFECTME");
+                }
+            }
+        }
+    }
+}
+
+// INVENTORY SLOT MANAGEMENT
+int playerInventory[RBNZ_PLAYERLIMIT][MAX_ITEMS_GLOBAL_LIMIT];
+
+function void removeAssists(void) {
+    int plr = PlayerNumber();
+    for(int i = 0; i < MAX_ITEMS_GLOBAL; i++) {
+        str inv = getAssistItemActor(i);
+        int cnt = CheckInventory(inv);
+        if(cnt > 0) {
+            playerInventory[plr][i] = cnt;
+            CSetInventory(inv, 0);
+        }
+    }
+}
+
+function void returnAssists(void) {
+    int plr = PlayerNumber();
+    for(int i = 0; i < MAX_ITEMS_GLOBAL; i++) {
+        if(playerInventory[plr][i] > 0) {
+            CSetInventory(getAssistItemActor(i), playerInventory[plr][i]);
+        }
+    }
+}
+
+

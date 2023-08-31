@@ -1,0 +1,10 @@
+// Roboenza sounds
+rroboenza/player/slash          CLAW        // core
+rroboenza/player/infect         ZOMBIE      // core
+rroboenza/player/alphainfect    ERPOSSES    // core
+rroboenza/player/superjump      REFILL      // core
+
+rroboenza/ui/infect             RBINFECT    // core
+rroboenza/ui/cure               RBCURED     // core
+rroboenza/ui/rage               RBSPREAD    // core
+rroboenza/ui/berserk            RBSPREAD    // core

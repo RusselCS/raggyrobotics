@@ -1,0 +1,162 @@
+#library "RROBOMSG"
+
+#include "zcommon.acs"
+
+#include "CROCFUNC.acs"
+#include "RROBCOMM.acs"
+
+#include "BARLIB.acs"
+
+// script "RR_TESTMSG" (void)
+// {
+//     for(int i = -RANGE; i < -1*RANGE/FRAG_BOT*-FRAC_TOP; i+=FRAG_PAGE) {
+//         CallACS2("RR_CLEARMSGRANGE", i, i+FRAG_PAGE);
+//     }
+//     delay(1);
+//     //restart;
+// }
+
+// script "RR_CLEARMSGRANGE" (int low, int high)
+// {
+//     for(int i = low; i < high; i++) {
+//         HudMessageBold(s:""; HUDMSG_PLAIN, i, CR_UNTRANSLATED, 0, 0, 0);
+//     }
+// }
+
+Script "RROBOENZ_COUNTER" OPEN CLIENTSIDE
+{
+	PrintBold(s:"");
+	Delay(5);
+
+    while(!CallACS0("RROBOENZ_PICKTIME"))
+        delay(1);
+
+	while(canRoboenza())
+	{
+		SetFont("SMALLFONT");
+		HudMessageBold(s:"Infected: ", i:playerCountTeam(TEAM_INFECTED); HUDMSG_PLAIN, MSGID_INFECTSCOUNT, GetTeamProperty(TEAM_INFECTED, TPROP_TextColor), 0.04, 0.93, 1.0,0);
+		HudMessageBold(s:"Survivors: ", i:playerCountTeam(TEAM_SURVIVOR); HUDMSG_PLAIN, MSGID_SURVIVECOUNT, GetTeamProperty(TEAM_SURVIVOR, TPROP_TextColor), 0.04, 0.95, 1.0,0);
+		Delay(1);
+	}
+}
+
+script "RROBOENZ_ALERT" (int who, int type) CLIENTSIDE
+{
+    int cln = ConsolePlayerNumber();
+    int cam = checkPlayerCameraPln(cln);
+    SetFont("BIGFONT");
+    switch(type) {
+        default:
+        case MSG_INFECTED:
+            HudMessageBold(n:who+1, l:"RBNZ_AL_INFECT";  HUDMSG_FADEOUT, MSGID_ALERT, CR_YELLOW,0.5, 0.90, 1.8,0.2);
+            if(cam != who && GetUserCVar(cln, "rroboenz_infectsound")) AmbientSound("rroboenza/ui/infect", 128);
+            break;
+        case MSG_CURED:
+            HudMessageBold(n:who+1, l:"RBNZ_AL_CURED";   HUDMSG_FADEOUT, MSGID_ALERT, CR_BLUE,  0.5, 0.90, 1.8,0.2);
+            if(cam != who && GetUserCVar(cln, "rroboenz_curedsound")) AmbientSound("rroboenza/ui/cure", 128);
+            break;
+        case MSG_ENRAGED:
+            HudMessageBold(n:who+1, l:"RBNZ_AL_ENRAGE";  HUDMSG_FADEOUT, MSGID_ALERT, CR_RED,   0.5, 0.90, 1.8,0.2);
+            if(cam != who && GetUserCVar(cln, "rroboenz_enragesound")) AmbientSound("rroboenza/ui/rage", 128);
+            break;
+        case MSG_BERSERK:
+            HudMessageBold(n:who+1, l:"RBNZ_AL_BERSERK"; HUDMSG_FADEOUT, MSGID_ALERT, CR_RED,   0.5, 0.90, 1.8,0.2);
+            if(cam != who && GetUserCVar(cln, "rroboenz_berserksound")) AmbientSound("rroboenza/ui/berserk", 128);
+            break;
+    }
+}
+
+script "RROBOENZ_TOOLTIP" (int hp, int alpha) CLIENTSIDE
+{
+    SetFont("SMALLFONT");
+    if(alpha) {
+        HudMessage(l:"RBNZ_TIP_A1"; HUDMSG_FADEOUT, MSGID_ZOMBIETIP1, CR_YELLOW,0.5, 0.14, 3.0,2.0);
+        HudMessage(l:"RBNZ_TIP_A2"; HUDMSG_FADEOUT, MSGID_ZOMBIETIP2, CR_RED,1.5, 0.18, 3.0,2.0);
+        HudMessage(l:"RBNZ_TIP_A3", i:hp; HUDMSG_FADEOUT, MSGID_ZOMBIETIP3, CR_WHITE,0.5, 0.26, 3.0,2.0);
+        Print(l:"RBNZ_TIP_A1", s:"\n", l:"RBNZ_TIP_A2", s:"\n", l:"RBNZ_TIP_A3", i:hp);
+        Print(s:"");
+    } else {
+        HudMessage(l:"RBNZ_TIP_1"; HUDMSG_FADEOUT, MSGID_ZOMBIETIP1, CR_YELLOW,0.5, 0.14, 3.0,2.0);
+        HudMessage(l:"RBNZ_TIP_2"; HUDMSG_FADEOUT, MSGID_ZOMBIETIP2, CR_RED,1.5, 0.18, 3.0,2.0);
+        HudMessage(l:"RBNZ_TIP_3", i:hp; HUDMSG_FADEOUT, MSGID_ZOMBIETIP3, CR_WHITE,0.5, 0.26, 3.0,2.0);
+        Print(l:"RBNZ_TIP_1", s:"\n", l:"RBNZ_TIP_2", s:"\n", l:"RBNZ_TIP_3", i:hp);
+        Print(s:"");
+    }
+}
+
+script "RROBOENZ_APPLYZOMBIESKIN" (void) CLIENTSIDE
+{
+    int cpn = ConsolePlayerNumber();
+	if(cpn!=PlayerNumber()){terminate;}
+
+    str skin = GetUserCvarString(cpn, "rroboenz_zombieskin");
+    ConsoleCommand("rroboenz_tempskin $skin");
+    ConsoleCommand(StrParam(s:"skin ", s:skin));
+
+    delay(1);
+
+    // str zombie = GetUserCvarString(cpn, "rroboenz_zombieskin");
+    // str temp = GetUserCvarString(cpn, "rroboenz_tempskin");
+    // str comp = GetUserCvarString(cpn, "rroboenz_compskin");
+
+    // Log(s:"Apply Skin\nzombie: ", s:zombie, s:"\ntemp: ", s:temp, s:"\ncomp: ", s:comp);
+}
+
+script "RROBOENZ_REVOKEZOMBIESKIN" (void) CLIENTSIDE
+{
+    int cpn = ConsolePlayerNumber();
+	if(cpn!=PlayerNumber()){terminate;}
+
+    ConsoleCommand("rroboenz_compskin $skin");
+    delay(1);
+
+    str zombie = GetUserCvarString(cpn, "rroboenz_zombieskin");
+    str temp = GetUserCvarString(cpn, "rroboenz_tempskin");
+    str comp = GetUserCvarString(cpn, "rroboenz_compskin");
+
+    //Log(s:"Revoke Skin\nzombie: ", s:zombie, s:"\ntemp: ", s:temp, s:"\ncomp: ", s:comp);
+
+    if(StrICmp(zombie, "") == 0) {
+        SetUserCvarString(cpn, "rroboenz_tempskin", "");
+    } else {
+        if(StrICmp(temp, "") != 0) {
+            if(StrICmp(zombie, comp) == 0) { // If the player changed their skin in the middle of this, it should just accept the new skin as uninfect.
+                //Log(s:"Resetting skin");
+                ConsoleCommand("skin $rroboenz_tempskin");
+            }
+            SetUserCvarString(cpn, "rroboenz_tempskin", "");
+        }
+    }
+}
+
+script "rroboenz_resetzombieskin" (void) NET CLIENTSIDE
+{
+    Delay(1);
+
+	int cpn = ConsolePlayerNumber();
+	if(cpn!=PlayerNumber()){terminate;}
+
+    SetUserCvarString(cpn, "rroboenz_zombieskin", "");
+    ConsoleCommand("openmenu menu_rroboenz");
+}
+
+script "rroboenz_copyskintozombie" (void) NET CLIENTSIDE
+{
+    Delay(1);
+
+	int cpn = ConsolePlayerNumber();
+	if(cpn!=PlayerNumber()){terminate;}
+    ConsoleCommand("rroboenz_zombieskin $skin");
+    ConsoleCommand("openmenu menu_rroboenz");
+}
+
+script "DrawBar_RoboenzaWep" (int cam)
+{
+    int cpn = ConsolePlayerNumber();
+
+    SetMugshotColorGlow(CLR_INF_CYAN,CLR_INF_BLUE,CLR_INF_BLACK);
+
+    if(GetUserCvar(cpn,"rroboenz_timerbar") == 1) {
+        DrawBarColorGlow(CLR_INF_CYAN,CLR_INF_BLUE,CLR_INF_BLACK);
+    }
+}

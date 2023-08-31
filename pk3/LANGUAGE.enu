@@ -1,0 +1,31 @@
+[enu default]
+
+RBNZ_AL_INFECT = " \ckhas contracted Roboenza!";
+RBNZ_AL_CURED = " \ckhas been \c-cured!";
+RBNZ_AL_ENRAGE = " \ckhas become \cgenraged!";
+RBNZ_AL_BERSERK = " \ckhas gone \cgberserk!";
+
+RBNZ_TIP_1 = "You have contracted Roboenza!";
+RBNZ_TIP_2 = "Infect the remaining players!\n\n\cdAim at a wall and attack to climb it!\n\cdPress Alt-Fire to jump up high!";
+RBNZ_TIP_3 = "Health: \ci";
+
+RBNZ_TIP_A1 = "You are Roboenza Patient Zero!";
+RBNZ_TIP_A2 = "Infect the remaining players!\n\n\cdUntil you infect someone, you have \cjreduced hitstun\cd and \cjyour mainfire lunges forward!\n\cdAim at a wall and attack to climb it!\n\cdPress Alt-Fire to jump up high!";
+RBNZ_TIP_A3 = "\nHealth: \ci";
+
+RBZN_TITLE = "ROBOENZA";
+RBZN_MENU = "ROBOENZA OPTIONS";
+
+// Menu constants
+RBZN_SUBHEADER_ZOMBIE   = "Zombie Options";
+RBZN_BARTYPE            = "Zombie Timer Type";
+RBZN_ZOMBIESKIN         = "Zombie Skin";
+RBZN_SUBHEADER_SKINDISCLAIMER = "\ci(You must type the skin in)";
+RBZN_RESETSKIN          = "Reset Skin";
+RBZN_COPYSKIN           = "Copy Skin to Zombie";
+
+RBZN_SUBHEADER_ALERT    = "Global Alert Sounds";
+RBZN_GLOBALINFECTSOUND  = "Infection Alert";
+RBZN_GLOBALCURESOUND    = "Cure Alert";
+RBZN_GLOBALRAGESOUND    = "Enrage Alert";
+RBZN_GLOBALBERSERKSOUND = "Berserk Alert";

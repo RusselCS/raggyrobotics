@@ -1,0 +1,3 @@
+alias robooptions "openmenu menu_rroboenz"
+alias resetzombieskin "closemenu; pukename rroboenz_resetzombieskin"
+alias copyzombieskin "closemenu; pukename rroboenz_copyskintozombie"

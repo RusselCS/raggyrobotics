@@ -1,0 +1,26 @@
+const int CLR_INFECTED = 55388;
+
+actor BusterShotPain : MegaShot replaces MegaShot { +FORCEPAIN }
+
+actor RoboenzaInfected : Once {}
+actor RoboenzaAlphaInfected : Once {}
+
+actor RoboenzaDontRip : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_ChangeFlag(DONTRIP, true)
+        stop
+    }
+}
+
+actor RoboenzaDoRip : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_ChangeFlag(DONTRIP, false)
+        stop
+    }
+}

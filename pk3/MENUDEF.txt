@@ -1,0 +1,52 @@
+OptionMenu "menu_rroboenz"
+{
+	Title "$RBZN_MENU"
+
+	StaticText 	" "
+	StaticText	"$RBZN_SUBHEADER_ZOMBIE", 1
+	StaticText 	" "
+	Option		"$RBZN_BARTYPE",			"rroboenz_timerbar",		"Menu_RROBOENZ_BarType"
+
+	StaticText 	" "
+	TextField	"$RBZN_ZOMBIESKIN",			"rroboenz_zombieskin"
+	Command		"$RBZN_COPYSKIN",	 		"copyzombieskin"
+	Command		"$RBZN_RESETSKIN",	 		"resetzombieskin"
+	StaticText 	" "
+	Submenu		"Player Setup",				"PlayerMenu"
+
+	StaticText 	" "
+	StaticText	"$RBZN_SUBHEADER_ALERT", 1
+	StaticText 	" "
+	Option		"$RBZN_GLOBALINFECTSOUND",	"rroboenz_infectsound",		"OnOff"
+	Option		"$RBZN_GLOBALCURESOUND",	"rroboenz_curedsound",		"OnOff"
+	Option		"$RBZN_GLOBALRAGESOUND",	"rroboenz_enragesound",		"OnOff"
+	Option		"$RBZN_GLOBALBERSERKSOUND",	"rroboenz_berserksound",	"OnOff"
+
+	// SubMenu		"Offline Skirmish",			"8BDM_Skirmish"
+	// SubMenu		"Player Setup",				"8BDM_PlayerMenu"
+	// SubMenu		"Log in",					"ZA_LoginMenu"
+	// StaticText	" "
+	// SubMenu		"Server Administration",	"ZA_ServerSetupMenu"
+	// StaticText	" "
+	// Command		"Spectate",					"menu_spectate"
+	// Command		"Switch teams",				"menu_changeteam"
+	// Command		"Disconnect",				"menu_disconnect"
+	// StaticText	" "
+	// SubMenu		"Call a vote",				"ZA_CallVote"
+	// SubMenu		"Ignore a player",			"ZA_IgnoreMenu"
+	// StaticText	" "
+	// SubMenu 	"Customize team colors",	"8BDM_ColorOptions"
+	// StaticText 	" "
+	// StaticText	"Passwords", 1
+	// TextField	"Connect To Server",		"cl_password"
+	// TextField	"Join Game",				"cl_joinpassword"
+	// StaticText 	" "
+}
+
+OptionValue "Menu_RROBOENZ_BarType"
+{
+	0, "None"
+	1, "Weapon Bar"
+	2, "Assist Bar (Rush Jet style)"
+	3, "Inventory Bar (Old style)"
+}

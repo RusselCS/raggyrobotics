@@ -1,0 +1,108 @@
+#library "RROBOENZ"
+
+#include "zcommon.acs"
+
+#include "RROBCOMM.acs"
+#include "CROCFUNC.acs"
+
+int maxPlayer = 0;
+int pickTime;
+
+// Overall game management scripts here.
+// Uses `patientZero` world variable from `RROBCOMM.acs`.
+
+script "RROBOENZ_ENTER" ENTER
+{
+    maxPlayer = max(maxPlayer, PlayerNumber()+1);
+    CallACS0("RROBENZ_PLAYERSTART");
+    
+    if(canRoboenza()) {
+        CallACS2("core_invulnerableplayer", 0, true);
+        while(!pickTime)
+            delay(1);
+        CallACS2("core_invulnerableplayer", 0, false);
+    }
+}
+
+script "RROBENZ_RESPAWN" RESPAWN
+{
+    CallACS0("RROBENZ_PLAYERSTART");
+    if(canRoboenza()) {
+        CallACS1("RROBOENZ_INFECT", PlayerNumber());
+    }
+}
+
+script "RROBOENZ_PICKALPHA" OPEN
+{
+    delay(35*3);
+    if(canRoboenza()) {
+        infectAlpha();
+    }
+}
+
+script "RROBOENZ_PICKTIME" (void) { setResultValue(pickTime); }
+
+function void infectAlpha(void) {
+
+    // set the stage by ensuring survivor team can spare their infected member
+    if(playerCountTeam(TEAM_INFECTED) > playerCountTeam(TEAM_SURVIVOR)) {
+        SetActivator(findFirstTeamMember(TEAM_INFECTED) + PLN_TID);
+        Player_SetTeam(TEAM_SURVIVOR, true);
+    }
+
+    int who = pickAPlayer();
+
+    storePatient(who);
+    CallACS2("RROBOENZ_INFECT", who, true);
+
+    for(int i = 0; i < maxPlayer; i++) {
+        if(i != who) {
+            SetActivator(i + PLN_TID);
+            Player_SetTeam(TEAM_SURVIVOR, true);
+        }
+    }
+
+    pickTime = timer();
+}
+
+function int pickAPlayer(void)
+{
+    int target;
+    if(PlayerCount() == 2) { // handle the 1v1 scenario
+        target = findFirstTeamMember(TEAM_INFECTED);
+    } else {
+        // choose a player who wasn't the last player
+        int choice = random(1, countAlive());
+
+        for(int i = 0; i < maxPlayer; i++) {
+            if(!PlayerInGame(i))
+                continue;
+
+            choice--;
+            if(choice == 0) {
+                target = i;
+                break;
+            }
+        }
+    }
+    return target;
+}
+
+function int findFirstTeamMember(int team) {
+    for(int i = 0; i < maxPlayer; i++) {
+        if(PlayerInGame(i) && GetPlayerInfo(i, PLAYERINFO_TEAM) == team) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
+function int countAlive(void) {
+    int ret = 0;
+    for(int i = 0; i < maxPlayer; i++) {
+        if(playerInGame(i))
+            ret++;
+    }
+    return ret;
+}

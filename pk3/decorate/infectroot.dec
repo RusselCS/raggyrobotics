@@ -1,0 +1,2 @@
+#include "decorate/infectflags.dec"
+#include "decorate/infectwep.dec"

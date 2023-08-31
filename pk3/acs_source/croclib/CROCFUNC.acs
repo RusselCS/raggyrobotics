@@ -1,0 +1,72 @@
+#define PLN_TID 1000
+#define MAX_PLAYERS 64
+
+// Script wrappers
+function int CallACS0(str scr) { return CallACS4(scr, 0, 0, 0, 0); }
+function int CallACS1(str scr, int a1) { return CallACS4(scr, a1, 0, 0, 0); }
+function int CallACS2(str scr, int a1, int a2) { return CallACS4(scr, a1, a2, 0, 0); }
+function int CallACS3(str scr, int a1, int a2, int a3) { return CallACS4(scr, a1, a2, a3, 0); }
+function int CallACS4(str scr, int a1, int a2, int a3, int a4) { return ACS_NamedExecuteWithResult(scr, a1, a2, a3, a4); }
+
+// Player number functions
+function bool isPlayerPln(int id) { return id > -1 && id < MAX_PLAYERS; }
+function bool isPlayerTID(int id) { return id >= PLN_TID && id < PLN_TID+MAX_PLAYERS; }
+
+// Math functions
+function int solveForX(int y, int m, int b) { return FixedDiv((y-b), m); }
+
+// String functions
+function bool StrEqual(str str1, str str2) { return StrCmp(str1, str2) == 0; }
+function bool StrMatches(str str1, str str2) { return StrICmp(str1, str2) == 0; }
+
+// Actor functions
+function void setActorPointer(int who, int ptr, int tid) { CallACS3("rr_setptr", who, ptr, tid); }
+
+function int getClassProperty(str act, int prop)
+{
+    int u = UniqueTID();
+    SpawnForced(act, 0, 0, 0, u, 0);
+    int ret = GetActorProperty(u, prop);
+    Thing_Remove(u);
+    return ret;
+}
+
+function void CSetInventory(str inventory_item, int amount)
+{
+CSetInventory2(inventory_item,amount,CheckInventory(inventory_item));
+}
+
+function void CSetInventory2(str inventory_item, int amount, int currentamount)
+{
+if(amount>currentAmount) GiveInventory(inventory_item,amount-currentAmount);
+else if(amount<currentAmount) TakeInventory(inventory_item,currentAmount-amount);
+}
+
+function void CSetActorInventory(int tid, str inventory_item, int amount)
+{
+CSetActorInventory2(tid,inventory_item,amount,CheckActorInventory(tid,inventory_item));
+}
+
+function void CSetActorInventory2(int tid, str inventory_item, int amount, int currentamount)
+{
+if(amount>currentAmount) {
+	GiveActorInventory(tid,inventory_item,amount-currentAmount);
+} else if(amount<currentAmount) {
+	TakeActorInventory(tid,inventory_item,currentAmount-amount);
+}
+}
+
+function int getPlnFromTid(int tid)
+{
+	int pln = tid-PLN_TID;
+
+	if(pln >= 0 && pln < MAX_PLAYERS)
+		return pln;
+	
+	return -1;
+}
+
+function int checkPlayerCameraPln(int pln)
+{
+	return getPlnFromTid(CheckPlayerCamera(pln));
+}

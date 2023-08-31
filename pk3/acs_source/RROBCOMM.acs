@@ -1,0 +1,57 @@
+
+#define ZOMBIE_HP_MIN      125
+#define ZOMBIE_HP_MAX      250
+#define ZOMBIE_HP_START    250
+#define ZOMBIE_HP_BASE     360
+
+#define ZOMBIE_HP_ADD      5
+#define ZOMBIE_HP_SUB      20
+
+#define ZOMBIE_TIME     90
+
+#define MSG_INFECTED    0
+#define MSG_CURED       1
+#define MSG_ENRAGED     2
+#define MSG_BERSERK     3
+
+#define TEAM_SURVIVOR   0
+#define TEAM_INFECTED   1
+
+#define CLR_INFECTED    55388
+#define CLR_INF_CYAN    228
+#define CLR_INF_BLUE    121
+#define CLR_INF_BLACK   176
+
+#define WRLD_PATIENTZERO 1
+
+#define MSGID_ALERT 58
+#define MSGID_ZOMBIETIP1 56
+#define MSGID_ZOMBIETIP2 57
+#define MSGID_ZOMBIETIP3 59
+
+#define MSGID_INFECTSCOUNT 98
+#define MSGID_SURVIVECOUNT 99
+
+#define RBNZ_PLAYERLIMIT 64
+
+world int WRLD_PATIENTZERO: patientZero;
+
+function bool canRoboenza(void) { return getCVar("teamlms") && getGameModeState() == GAMESTATE_INPROGRESS && getCVar("sv_maxteams") == 2; }
+function int playerCountTeam(int team) { return GetTeamProperty(team, TPROP_NumLivePlayers); }
+function int max(int x, int y) { if(x > y) return x; return y; }
+function int min(int x, int y) { if(x < y) return x; return y; }
+function int clamp(int n, int x, int y) {
+    if(n < x)
+        n = x;
+    if(n > y)
+        n = y;
+    return n;
+}
+
+function int patientToPlayerNum(int ptn) { return ptn-1; }
+function void storePatient(int pln) { patientZero = pln+1; }
+
+function void setRoboenzaHealth(int tid, int amt) {
+    SetActorProperty(tid, APROP_Health, amt);
+    SetActorProperty(tid, APROP_SpawnHealth, amt);
+}
