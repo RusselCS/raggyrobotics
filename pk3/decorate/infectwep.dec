@@ -185,8 +185,7 @@ actor InfectMorphWatcher : BasicWatcher
 actor InfectClawWarper : BasicProjectile
 {
     +NOINTERACTION
-    accuracy 0
-    mass 32
+    args 0, 32, 56
     Damage (0)
     States
     {
@@ -199,22 +198,19 @@ actor InfectClawWarper : BasicProjectile
 
 actor InfectClawWarperSmallLeft : InfectClawWarper
 {
-    accuracy -10
     scale 1.25
-    mass 38
+    args -10, 38, 56
 }
 
 actor InfectClawWarperSmallRight : InfectClawWarperSmallLeft
 {
-    accuracy 10
-    mass 26
+    args 10, 26, 56
 }
 
 actor InfectClawWarperR : BasicProjectile
 {
     +NOINTERACTION
-    accuracy 0
-    mass 32
+    args 0, 32, 56
     Damage (0)
     States
     {
@@ -227,15 +223,13 @@ actor InfectClawWarperR : BasicProjectile
 
 actor InfectClawWarperSmallLeftR : InfectClawWarperR
 {
-    accuracy -10
     scale 1.25
-    mass 26
+    args -10, 26, 56
 }
 
 actor InfectClawWarperSmallRightR : InfectClawWarperSmallLeftR
 {
-    accuracy 10
-    mass 38
+    args 10, 36, 56
 }
 
 actor InfectClawWarper_P : CustomInventory
@@ -245,7 +239,7 @@ actor InfectClawWarper_P : CustomInventory
     Pickup:
         TNT1 A 0
         TNT1 A 0 A_SetPitch(CallACS("core_GetPtrPitch", AAPTR_TARGET))
-        TNT1 A 0 A_Warp(AAPTR_TARGET, cos(-pitch)*56,accuracy,mass+(sin(-pitch)*48),-accuracy,WARPF_INTERPOLATE)
+        TNT1 A 0 A_Warp(AAPTR_TARGET, cos(-pitch)*args[2],args[0],args[1]+(sin(-pitch)*48),-args[0],WARPF_INTERPOLATE)
         stop
     }
 }

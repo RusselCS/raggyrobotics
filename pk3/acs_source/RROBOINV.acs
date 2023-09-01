@@ -40,12 +40,10 @@ script "RROBENZ_SURVIVORMANAGE" (void)
     int pln = PlayerNumber();
     int oldFrags = GetPlayerScore(pln, SCORE_FRAGS);
     int startFrags = oldFrags;
-    Log(s:"Managing player ", n:pln+1);
     while(GetActorProperty(0, APROP_Health) > 0 && CheckInventory("RoboenzaInfected") == 0) {
         if(oldFrags != GetPlayerScore(pln, SCORE_FRAGS)) {
             oldFrags = GetPlayerScore(pln, SCORE_FRAGS);
             int diff = oldFrags - startFrags;
-            Log(i:diff, s:" ", i:frenzyFrags[CheckInventory("FrenzyBuffCount")]);
 
             while(CheckInventory("FrenzyBuffCount") < FRENZY_BUFFSTACK_MAX && diff >= frenzyFrags[CheckInventory("FrenzyBuffCount")])
             {

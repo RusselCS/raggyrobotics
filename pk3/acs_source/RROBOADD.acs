@@ -34,12 +34,15 @@ script "RROBOENZ_DTADD_CLIENT" OPEN CLIENTSIDE
 // as discussed, this is point for point the same exact script as the one in vanilla, but without the colors
 script "rroboenz_possession_gives" (void)
 {
-    // also need to remove the notarget stacker, since this wasn't fixed
+    // [Russ] also need to remove the notarget stacker, since this wasn't fixed
+    
     CSetInventory("PlayerPropertyNoTarget",1);
     ACS_NamedExecuteWithResult("core_notargetplayer",0,0);
 
+    // [Russ] Also removing the "NoWeaponSwitchSound" since this script takes a bit to run
+    // GiveInventory("NoWeaponSwitchSound", 1);
+
     // No boosters
-    GiveInventory("NoWeaponSwitchSound", 1);
     TakeInventory("SuperAdaptorWep", 999);
     TakeInventory("TrebleBoost", 999);
 

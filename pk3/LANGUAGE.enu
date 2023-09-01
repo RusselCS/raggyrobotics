@@ -10,7 +10,7 @@ RBNZ_TIP_2 = "Infect the remaining players!\n\n\cdAim at a wall and attack to cl
 RBNZ_TIP_3 = "Health: \ci";
 
 RBNZ_TIP_A1 = "You are Roboenza Patient Zero!";
-RBNZ_TIP_A2 = "Infect the remaining players!\n\n\cdUntil you infect someone, you have \cjreduced hitstun\cd and \cjyour mainfire lunges forward!\n\cdAim at a wall and attack to climb it!\n\cdPress Alt-Fire to jump up high!";
+RBNZ_TIP_A2 = "Infect the remaining players!\n\n\cdUntil you infect someone, you have \cjreduced knockback\cd and \cjyour mainfire leaps forward!\n\cdAim at a wall and attack to climb it!\n\cdPress Alt-Fire to jump up high!";
 RBNZ_TIP_A3 = "\nHealth: \ci";
 
 RBZN_TITLE = "ROBOENZA";
