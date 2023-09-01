@@ -90,16 +90,11 @@ script "RROBOENZ_APPLYZOMBIESKIN" (void) CLIENTSIDE
 	if(cpn!=PlayerNumber()){terminate;}
 
     str skin = GetUserCvarString(cpn, "rroboenz_zombieskin");
-    ConsoleCommand("rroboenz_tempskin $skin");
-    ConsoleCommand(StrParam(s:"skin ", s:skin));
 
-    delay(1);
-
-    // str zombie = GetUserCvarString(cpn, "rroboenz_zombieskin");
-    // str temp = GetUserCvarString(cpn, "rroboenz_tempskin");
-    // str comp = GetUserCvarString(cpn, "rroboenz_compskin");
-
-    // Log(s:"Apply Skin\nzombie: ", s:zombie, s:"\ntemp: ", s:temp, s:"\ncomp: ", s:comp);
+    if(StrICmp(skin, "") == 0) {
+        ConsoleCommand("rroboenz_tempskin $skin");
+        ConsoleCommand(StrParam(s:"skin ", s:skin));
+    }
 }
 
 script "RROBOENZ_REVOKEZOMBIESKIN" (void) CLIENTSIDE
