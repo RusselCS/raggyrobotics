@@ -9,6 +9,7 @@ OptionMenu "menu_rroboenz"
 	Option		"$RBNZ_ALPHABUFFAST",		"rroboenz_alphabuffast",	"OnOff"
 	Option		"$RBNZ_RAGEBUFFAST",		"rroboenz_ragebuffast",		"OnOff"
 	Option		"$RBNZ_SPREADBUFFAST",		"rroboenz_spreadbuffast",	"OnOff"
+	Option		"$RBZN_AUTOFRENZY",			"rroboenz_autofrenzy",		"OnOff"
 
 	StaticText 	" "
 	TextField	"$RBZN_ZOMBIESKIN",			"rroboenz_zombieskin"

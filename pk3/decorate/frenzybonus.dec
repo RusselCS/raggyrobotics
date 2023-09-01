@@ -1,0 +1,109 @@
+actor FrenzyBuffCount : Once { inventory.maxamount 500 }
+actor FrenzyBuffStack : Once { inventory.maxamount 500 }
+actor FrenzyAuraActive : Once {}
+
+const int RBNZ_FRENZY_PARTICLE_DIST = 48;
+
+actor FrenzyBuffItem : CustomInventory
+{
+    States
+    {
+    Use:
+        TNT1 A 0
+        TNT1 A 0 ACS_NamedExecuteWithResult("RROBOENZ_FRENZYBUFF")
+        TNT1 A 0 A_JumpIfInventory("FrenzyAuraActive", 1, "End")
+        TNT1 A 0 A_SpawnItemEx("FrenzyAuraWatcher")
+        stop
+    End:
+        TNT1 A 0
+        stop
+    }
+}
+
+actor FrenzyBuff : FrenzyBuffItem { +INVENTORY.AUTOACTIVATE }
+
+actor FrenzyAuraWatcher : BasicWatcher
+{
+    States
+    {
+    Spawn:
+        TNT1 A 0
+        TNT1 A 0 A_JumpIfInTargetInventory("RoboenzaInfected", 1, "End")
+        TNT1 A 0 A_JumpIfInTargetInventory("FrenzyBuffStack", 2, "Tier2")
+    Tier1:
+        TNT1 A 0 A_GiveToTarget("FrenzyAuraParticle1_P")
+        TNT1 A 5
+        goto Spawn
+    Tier2:
+        TNT1 A 0 A_GiveToTarget("FrenzyAuraParticle2_P")
+        TNT1 A 4
+        goto Spawn
+    End:
+        TNT1 A 0
+        stop
+    }
+}
+
+actor FrenzyAuraParticle1_P : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_SpawnItemEx("FrenzyAuraParticle1", frandom(-RBNZ_FRENZY_PARTICLE_DIST, RBNZ_FRENZY_PARTICLE_DIST), frandom(-RBNZ_FRENZY_PARTICLE_DIST, RBNZ_FRENZY_PARTICLE_DIST), 0, 0, 0, random(2, 5))
+        stop
+    }
+}
+
+actor FrenzyAuraParticle2_P : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_SpawnItemEx("FrenzyAuraParticle2", frandom(-RBNZ_FRENZY_PARTICLE_DIST, RBNZ_FRENZY_PARTICLE_DIST), frandom(-RBNZ_FRENZY_PARTICLE_DIST, RBNZ_FRENZY_PARTICLE_DIST), 0, 0, 0, random(2, 5))
+        stop
+    }
+}
+
+actor FrenzyAuraParticle1 : BasicGraphicEffect
+{
+    speed 100
+    States
+    {
+    Spawn:
+        RZDS AA 1
+        RZDS A 0 A_ScaleVelocity(0.9)
+        RZDS A 0 A_FadeOut(0.08)
+        RZDS AA 1
+        RZDS A 0 A_ScaleVelocity(0.9)
+        RZDS A 0 A_FadeOut(0.08)
+        RZDS BB 1
+        RZDS B 0 A_ScaleVelocity(0.9)
+        RZDS B 0 A_FadeOut(0.08)
+        RZDS BB 1
+        RZDS B 0 A_ScaleVelocity(0.9)
+        RZDS B 0 A_FadeOut(0.08)
+        loop
+    }
+}
+
+actor FrenzyAuraParticle2 : BasicGraphicEffect
+{
+    speed 100
+    States
+    {
+    Spawn:
+        RZDS CC 1
+        RZDS C 0 A_ScaleVelocity(0.9)
+        RZDS C 0 A_FadeOut(0.08)
+        RZDS CC 1
+        RZDS C 0 A_ScaleVelocity(0.9)
+        RZDS C 0 A_FadeOut(0.08)
+        RZDS DD 1
+        RZDS D 0 A_ScaleVelocity(0.9)
+        RZDS D 0 A_FadeOut(0.08)
+        RZDS DD 1
+        RZDS D 0 A_ScaleVelocity(0.9)
+        RZDS D 0 A_FadeOut(0.08)
+        loop
+    }
+}

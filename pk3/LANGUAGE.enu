@@ -28,6 +28,8 @@ RBNZ_ALPHABUFFAST       = "Show Patient Zero buff on Assist Bar";
 RBNZ_RAGEBUFFAST        = "Show Rage buff on Assist Bar";
 RBNZ_SPREADBUFFAST      = "Show Berserk buff on Assist Bar";
 
+RBZN_AUTOFRENZY         = "Automatically apply frenzy powerups when available";
+
 RBZN_SUBHEADER_ALERT    = "Global Alert Sounds";
 RBZN_GLOBALINFECTSOUND  = "Infection Alert";
 RBZN_GLOBALCURESOUND    = "Cure Alert";

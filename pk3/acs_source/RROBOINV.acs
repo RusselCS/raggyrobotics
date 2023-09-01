@@ -8,6 +8,10 @@
 #import "8BDT.acs"
 
 int classHealth[RBNZ_PLAYERLIMIT];
+#define FRENZY_BUFFSTACK_MAX 2
+int frenzyFrags[FRENZY_BUFFSTACK_MAX] = {
+    2, 5
+};
 
 // Inventory management scripts, for infects and survivors.
 script "RROBENZ_PLAYERSTART" (void)
@@ -32,10 +36,62 @@ script "RROBENZ_PLAYERSTART" (void)
 script "RROBENZ_SURVIVORMANAGE" (void)
 {
     CallACS0("RROBOENZ_REVOKEZOMBIESKIN");
-    // [Russ] Placeholder script, I guess.
-    // while(!CheckInventory("RoboenzaInfected") > 0) {
-    //     delay(1);
-    // }
+
+    int pln = PlayerNumber();
+    int oldFrags = GetPlayerScore(pln, SCORE_FRAGS);
+    int startFrags = oldFrags;
+    Log(s:"Managing player ", n:pln+1);
+    while(GetActorProperty(0, APROP_Health) > 0 && CheckInventory("RoboenzaInfected") == 0) {
+        if(oldFrags != GetPlayerScore(pln, SCORE_FRAGS)) {
+            oldFrags = GetPlayerScore(pln, SCORE_FRAGS);
+            int diff = oldFrags - startFrags;
+            Log(i:diff, s:" ", i:frenzyFrags[CheckInventory("FrenzyBuffCount")]);
+
+            while(CheckInventory("FrenzyBuffCount") < FRENZY_BUFFSTACK_MAX && diff >= frenzyFrags[CheckInventory("FrenzyBuffCount")])
+            {
+                GiveInventory("FrenzyBuffCount", 1);
+                if(GetUserCvar(pln, "rroboenz_autofrenzy")) {
+                    GiveInventory("FrenzyBuff", 1);
+                } else {
+                    GiveInventory("FrenzyBuffItem", 1);
+                }
+            }
+        }
+
+        delay(1);
+    }
+}
+
+script "RROBOENZ_FRENZYBUFF" (int to) {
+    int from = CheckInventory("FrenzyBuffStack");
+    if(from >= FRENZY_BUFFSTACK_MAX)
+        terminate;
+
+    if(to == 0) {
+        to = from+1;
+    }
+
+    switch(from) {
+        case 1:
+            CallACS3("core_runeplayer", 0, false, RUNE_RAGE);
+            break;
+        case 2:         
+            CallACS3("core_runeplayer", 0, false, RUNE_SPREAD);
+            break;
+    }
+
+    switch(to) {
+        default:
+        case 1:
+            CallACS3("core_runeplayer", 0, true, RUNE_RAGE);
+            CallACS2("RROBOENZ_ALERT", PlayerNumber(), MSG_ENRAGED);
+            break;
+        case 2:          
+            CallACS3("core_runeplayer", 0, true, RUNE_SPREAD);
+            CallACS2("RROBOENZ_ALERT", PlayerNumber(), MSG_BERSERK);
+            break;
+    }
+    CSetInventory("FrenzyBuffStack", to);
 }
 
 script "RROBOENZ_INFECTME" (void) {
@@ -128,7 +184,6 @@ script "RROBOENZ_MANAGEINFECTED" (void)
 script "RROBOENZ_CURE" (void)
 {
     int who = PlayerNumber();
-    SetActivator(who + PLN_TID);
 
     CSetInventory("RoboenzaDoRip", 1);
     CSetInventory("RoboenzaAlphaInfected", 0);
@@ -136,7 +191,7 @@ script "RROBOENZ_CURE" (void)
     CSetInventory("RoboenzaTimer", 0);
     CSetInventory("RoboenzaWep", 0);
     returnAssists();
-    SpawnSpotForced("InfectionEffect", 0, 0, 0);
+    SpawnSpotForced("RoboenzaCureEffect", 0, 0, 0);
     CallACS1("core_poss_runfuncs", who);
     SetActorVelocity(0, 0, 0, 0, 0, 0);
 
@@ -146,6 +201,8 @@ script "RROBOENZ_CURE" (void)
     
     Player_SetTeam(TEAM_SURVIVOR, true);
     CallACS1("core_hazardtag_clear", who);
+
+    CallACS0("RROBENZ_SURVIVORMANAGE");
 }
 
 script "RROBOENZ_ALPHADISABLE" (void)
@@ -192,6 +249,7 @@ int playerInventory[RBNZ_PLAYERLIMIT][MAX_ITEMS_GLOBAL_LIMIT];
 
 function void removeAssists(void) {
     int plr = PlayerNumber();
+    CSetInventory("FrenzyBuffItem", 0);
     for(int i = 0; i < MAX_ITEMS_GLOBAL; i++) {
         str inv = getAssistItemActor(i);
         int cnt = CheckInventory(inv);

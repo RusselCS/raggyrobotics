@@ -1,6 +1,17 @@
 #define PLN_TID 1000
 #define MAX_PLAYERS 64
 
+#define RUNE_STRENGTH 0
+#define RUNE_RAGE 1
+#define RUNE_DRAIN 2
+#define RUNE_SPREAD 3
+#define RUNE_RESISTANCE 4
+#define RUNE_REGENERATION 5
+#define RUNE_PROSPERITY 6
+#define RUNE_REFLECTION 7
+#define RUNE_HIGHJUMP 8
+#define RUNE_HASTE 9
+
 // Script wrappers
 function int CallACS0(str scr) { return CallACS4(scr, 0, 0, 0, 0); }
 function int CallACS1(str scr, int a1) { return CallACS4(scr, a1, 0, 0, 0); }

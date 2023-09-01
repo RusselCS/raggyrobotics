@@ -2,6 +2,8 @@ user string rroboenz_zombieskin      = "";
 user noarchive string rroboenz_tempskin = "";
 user noarchive string rroboenz_compskin = "";
 
+user bool   rroboenz_autofrenzy      = true;
+
 user int    rroboenz_timerbar        = 1;
 user bool   rroboenz_alphabuffast    = true;
 user bool   rroboenz_ragebuffast     = true;
