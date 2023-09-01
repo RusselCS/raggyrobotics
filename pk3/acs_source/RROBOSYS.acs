@@ -41,6 +41,7 @@ script "RROBOENZ_PICKALPHA" OPEN
 }
 
 script "RROBOENZ_PICKTIME" (void) { setResultValue(pickTime); }
+script "RROBOENZ_MAXPLAYER" (void) { setResultValue(maxPlayer); }
 
 function void infectAlpha(void) {
 

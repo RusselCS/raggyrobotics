@@ -1,7 +1,7 @@
 actor RoboenzaTimerInvBar : CustomInventory
 {
-    Inventory.amount 90
-    Inventory.maxamount 90
+    Inventory.amount 5000
+    Inventory.maxamount 5000
     +INVBAR
     States
     {
@@ -13,8 +13,8 @@ actor RoboenzaTimerInvBar : CustomInventory
 
 actor RoboenzaTimer : Ammo
 {
-    Inventory.amount 90
-    Inventory.maxamount 90
+    Inventory.amount 5000
+    Inventory.maxamount 5000
 }
 
 actor RoboenzaWep_ScriptBar : ScriptBar {}
