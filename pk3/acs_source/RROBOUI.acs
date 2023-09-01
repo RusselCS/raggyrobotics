@@ -6,6 +6,9 @@
 #include "RROBCOMM.acs"
 
 #include "BARLIB.acs"
+#include "ASSTLIB.acs"
+
+// All the clientside scripts go here.
 
 // script "RR_TESTMSG" (void)
 // {
@@ -91,7 +94,7 @@ script "RROBOENZ_APPLYZOMBIESKIN" (void) CLIENTSIDE
 
     str skin = GetUserCvarString(cpn, "rroboenz_zombieskin");
 
-    if(StrICmp(skin, "") == 0) {
+    if(StrICmp(skin, "") != 0) {
         ConsoleCommand("rroboenz_tempskin $skin");
         ConsoleCommand(StrParam(s:"skin ", s:skin));
     }
@@ -116,7 +119,6 @@ script "RROBOENZ_REVOKEZOMBIESKIN" (void) CLIENTSIDE
     } else {
         if(StrICmp(temp, "") != 0) {
             if(StrICmp(zombie, comp) == 0) { // If the player changed their skin in the middle of this, it should just accept the new skin as uninfect.
-                //Log(s:"Resetting skin");
                 ConsoleCommand("skin $rroboenz_tempskin");
             }
             SetUserCvarString(cpn, "rroboenz_tempskin", "");
@@ -145,7 +147,7 @@ script "rroboenz_copyskintozombie" (void) NET CLIENTSIDE
     ConsoleCommand("openmenu menu_rroboenz");
 }
 
-script "DrawBar_RoboenzaWep" (int cam)
+script "DrawBar_RoboenzaWep" (void) CLIENTSIDE
 {
     int cpn = ConsolePlayerNumber();
 
@@ -154,4 +156,91 @@ script "DrawBar_RoboenzaWep" (int cam)
     if(GetUserCvar(cpn,"rroboenz_timerbar") == 1) {
         DrawBarColorGlow(CLR_INF_CYAN,CLR_INF_BLUE,CLR_INF_BLACK);
     }
+}
+
+script "RROBOENZ_UIHANDLER" (int cam) CLIENTSIDE
+{
+    int cpn = ConsolePlayerNumber();
+
+    if(GetUserCvar(cpn,"rroboenz_timerbar") == 2) {
+        if(roboenzaBarCheck()) {
+            if(AssistDisplayBar_On()) {
+                SetHudSize(320,200,0);
+                int pos;
+                str img;
+                int x;
+                int y;
+                int timeSec;
+
+                SetActivator(cam);
+                int time = CheckActorInventory(cam,"RoboenzaTimer");
+                int timeMax = GetAmmoCapacity("RoboenzaTimer");
+                SetActivator(0,AAPTR_NULL);
+
+                if(GetUserCvar(cpn,"rroboenz_timerbar") == 2 && CheckActorInventory(cam,"RoboenzaTimer")>0) {
+                    pos = Get_And_Inc_AssistBarCount();
+                    int barX = Get_AssistDisplayBar_X(pos);
+                    int barY = Get_AssistDisplayBar_Y(pos);
+                    x = barX - 4.0;
+                    y = barY - 4.0;
+                    img = "INFECT1";
+                    if(CheckActorInventory(cam, "RoboenzaTimer") <= 1 && Timer() % 8 <= 3) img = "TNT1A0";
+                    BasicImageDisplay(img,Get_And_Inc_AssistDisplayID(),x,y);
+                    DrawBasicBarAndNumber(
+                        "ASTBRRBZ","ASTBRRBE",
+                        "ASTVRRBZ","ASTVRRBE",
+                        barX,barY,
+                        Get_And_Inc_AssistDisplayID(),Get_And_Inc_AssistDisplayID(),Get_And_Inc_AssistDisplayID(),
+                        ((time * 8.0 / timeMax) + 0.5) >> 16,
+                        CheckActorInventory(cam,"AssistNumberFlag")>0,
+                        CheckActorInventory(cam,"RoboenzaTimer")
+                    );
+                }
+
+                if(GetUserCvar(cpn, "rroboenz_alphabuffast") && CheckActorInventory(cam, "RoboenzaAlphaInfected")) {
+                    pos = Get_And_Inc_AssistBarCount();
+                    BasicImageDisplay("RBNZPZRI",Get_And_Inc_AssistDisplayID(),
+                        Get_AssistDisplayBar_X(pos),
+                        Get_AssistDisplayBar_Y(pos)
+                    );
+                }
+
+                if(GetUserCvar(cpn, "rroboenz_ragebuffast") && CheckActorInventory(cam, "FrenzyBuffStack") == 1) {
+                    pos = Get_And_Inc_AssistBarCount();
+                    BasicImageDisplay("RBNZRAGI",Get_And_Inc_AssistDisplayID(),
+                        Get_AssistDisplayBar_X(pos),
+                        Get_AssistDisplayBar_Y(pos)
+                    );
+                }
+
+                if(GetUserCvar(cpn, "rroboenz_spreadbuffast") && CheckActorInventory(cam, "FrenzyBuffStack") == 2) {
+                    pos = Get_And_Inc_AssistBarCount();
+                    BasicImageDisplay("RBNZBRZI",Get_And_Inc_AssistDisplayID(),
+                        Get_AssistDisplayBar_X(pos),
+                        Get_AssistDisplayBar_Y(pos)
+                    );
+                }
+            }
+        }
+    }
+
+    // turns out this needs to be done via the actual inventory manager script...
+    // if(GetUserCvar(cpn,"rroboenz_timerbar") == 3) {
+    //     int count = CheckActorInventory(cam, "RoboenzaTimer");
+    //     if(count > 0) {
+    //         SetActorInventory(cam, "RoboenzaTimerInvBar", count);
+    //     } else {
+    //         SetActorInventory(cam, "RoboenzaTimerInvBar", 0);
+    //     }
+    // } else {
+    //     SetActorInventory(cam, "RoboenzaTimerInvBar", 0);
+    // }
+}
+
+function bool roboenzaBarCheck(void) {
+    int cpn = ConsolePlayerNumber();
+
+    int ret = GetUserCvar(cpn,"rroboenz_timerbar") == 2;
+    
+    return ret;
 }

@@ -6,6 +6,9 @@ OptionMenu "menu_rroboenz"
 	StaticText	"$RBZN_SUBHEADER_ZOMBIE", 1
 	StaticText 	" "
 	Option		"$RBZN_BARTYPE",			"rroboenz_timerbar",		"Menu_RROBOENZ_BarType"
+	Option		"$RBNZ_ALPHABUFFAST",		"rroboenz_alphabuffast",	"OnOff"
+	Option		"$RBNZ_RAGEBUFFAST",		"rroboenz_ragebuffast",		"OnOff"
+	Option		"$RBNZ_SPREADBUFFAST",		"rroboenz_spreadbuffast",	"OnOff"
 
 	StaticText 	" "
 	TextField	"$RBZN_ZOMBIESKIN",			"rroboenz_zombieskin"

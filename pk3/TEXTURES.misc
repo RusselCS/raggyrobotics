@@ -1,0 +1,9 @@
+texture ASTBRRBE, 5, 16{patch ASSTBARE, 0, 0 {Translation "0:0=176:176"}}
+texture ASTVRRBE, 16, 5{patch ASSTBARE, 0, 0 {rotate 90 Translation "0:0=176:176"}}
+
+texture ASTBRRBZ, 5, 2{patch ASSTBARP, 0, 0 {Translation "192:192=228:228", "198:198=121:121"}}
+texture ASTVRRBZ, 2, 5{patch ASSTVARP, 0, 0 {Translation "192:192=228:228", "198:198=121:121"}}
+
+graphic RBNZPZRI, 32, 32 {xscale 2.0 yscale 2.0 patch RBNZINPZ,0,0}
+graphic RBNZRAGI, 32, 32 {xscale 2.0 yscale 2.0 patch RBNZENRG,0,0}
+graphic RBNZBRZI, 32, 32 {xscale 2.0 yscale 2.0 patch RBNZBERZ,0,0}

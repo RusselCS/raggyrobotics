@@ -1,7 +1,11 @@
-user int    rroboenz_timerbar        = 1;
 user string rroboenz_zombieskin      = "";
 user noarchive string rroboenz_tempskin = "";
 user noarchive string rroboenz_compskin = "";
+
+user int    rroboenz_timerbar        = 1;
+user bool   rroboenz_alphabuffast    = true;
+user bool   rroboenz_ragebuffast     = true;
+user bool   rroboenz_spreadbuffast   = true;
 
 user bool   rroboenz_infectsound     = true;
 user bool   rroboenz_curedsound      = true;

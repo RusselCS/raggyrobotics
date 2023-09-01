@@ -4,6 +4,7 @@ actor BusterShotPain : MegaShot replaces MegaShot { +FORCEPAIN }
 
 actor RoboenzaInfected : Once {}
 actor RoboenzaAlphaInfected : Once {}
+actor FrenzyBuffStack : Once { inventory.maxamount 500 }
 
 actor RoboenzaDontRip : CustomInventory
 {

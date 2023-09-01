@@ -114,6 +114,13 @@ script "RROBOENZ_MANAGEINFECTED" (void)
             if(!CheckWeapon("RoboenzaWep")) // for some reason, bots don't seem to get the message
                 SetWeapon("RoboenzaWep");
         }
+
+        if(GetUserCvar(pln,"rroboenz_timerbar") == 3) {
+            CSetInventory("RoboenzaTimerInvBar", CheckInventory("RoboenzaTimer"));
+        } else {
+            CSetInventory("RoboenzaTimerInvBar", 0);
+        }
+
         delay(1);
     }
 }

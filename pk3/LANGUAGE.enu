@@ -24,6 +24,10 @@ RBZN_SUBHEADER_SKINDISCLAIMER = "\ci(You must type the skin in)";
 RBZN_RESETSKIN          = "Reset Skin";
 RBZN_COPYSKIN           = "Copy Skin to Zombie";
 
+RBNZ_ALPHABUFFAST       = "Show Patient Zero buff on Assist Bar";
+RBNZ_RAGEBUFFAST        = "Show Rage buff on Assist Bar";
+RBNZ_SPREADBUFFAST      = "Show Berserk buff on Assist Bar";
+
 RBZN_SUBHEADER_ALERT    = "Global Alert Sounds";
 RBZN_GLOBALINFECTSOUND  = "Infection Alert";
 RBZN_GLOBALCURESOUND    = "Cure Alert";

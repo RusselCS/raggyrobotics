@@ -11,6 +11,8 @@
 
 script "RROBOENZ_DTADD" OPEN
 {
+    DefineAssistDisplay("RROBOENZ_UIHANDLER");
+
     // Need to remake the possession script from vanilla because it triggers the color script that's impossible to disable once it's on
     // Sooooo I'll just define the same thing again, without that color script.
     // AddArtifactPickupFunc(DTADD_PFT_POSSESSION, "rroboenz_possession_gives");
