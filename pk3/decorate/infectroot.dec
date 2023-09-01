@@ -1,3 +1,4 @@
 #include "decorate/infectflags.dec"
 #include "decorate/infectwep.dec"
+#include "decorate/infectghost.dec"
 #include "decorate/frenzybonus.dec"

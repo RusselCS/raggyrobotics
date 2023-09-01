@@ -263,13 +263,50 @@ actor InfectMorpher : BasicProjectile
     }
 }
 
+const int RBNZ_INFECT_RADIUS = 16;
+
 actor InfectionEffect : BasicWatcher
 {
     States
     {
     Spawn:
         TNT1 A 0
-        TNT1 A 2 A_PlaySoundEx("rroboenza/player/infect","Voice")
+        TNT1 A 0 A_PlaySoundEx("rroboenza/player/infect","Voice")
+        TNT1 A 0 A_SpawnItemEx("InfectionCloud", RBNZ_INFECT_RADIUS, 0, 40, frandom(0.25, 1), 0, frandom(-0.25, -1), 0)
+        TNT1 A 0 A_SpawnItemEx("InfectionCloud", RBNZ_INFECT_RADIUS, 0, 40, frandom(0.25, 1), 0, frandom(-0.25, -1), 180)
+        TNT1 AA 0 A_SpawnItemEx("InfectionCloud", frandom(0, RBNZ_INFECT_RADIUS), 0, 28+frandom(-RBNZ_INFECT_RADIUS, RBNZ_INFECT_RADIUS), frandom(0.25, 1), 0, frandom(-0.25, -1), frandom(0, 360))
+        TNT1 A 1
+
+        TNT1 A 0 A_SpawnItemEx("InfectionCloud", RBNZ_INFECT_RADIUS, 0, 16, frandom(0.25, 1), 0, frandom(-0.25, -1), 45+90)
+        TNT1 A 0 A_SpawnItemEx("InfectionCloud", RBNZ_INFECT_RADIUS, 0, 16, frandom(0.25, 1), 0, frandom(-0.25, -1), 45+270)
+        TNT1 AA 0 A_SpawnItemEx("InfectionCloud", frandom(0, RBNZ_INFECT_RADIUS), 0, 28+frandom(-RBNZ_INFECT_RADIUS, RBNZ_INFECT_RADIUS), frandom(0.25, 1), 0, frandom(-0.25, -1), frandom(0, 360))
+        TNT1 A 1
+
+        TNT1 A 0 A_SpawnItemEx("InfectionCloud", RBNZ_INFECT_RADIUS, 0, 40, frandom(0.25, 1), 0, frandom(-0.25, -1), 90)
+        TNT1 A 0 A_SpawnItemEx("InfectionCloud", RBNZ_INFECT_RADIUS, 0, 40, frandom(0.25, 1), 0, frandom(-0.25, -1), 270)
+        TNT1 AA 0 A_SpawnItemEx("InfectionCloud", frandom(0, RBNZ_INFECT_RADIUS), 0, 28+frandom(-RBNZ_INFECT_RADIUS, RBNZ_INFECT_RADIUS), frandom(0.25, 1), 0, frandom(-0.25, -1), frandom(0, 360))
+        TNT1 A 1
+
+        TNT1 A 0 A_SpawnItemEx("InfectionCloud", RBNZ_INFECT_RADIUS, 0, 16, frandom(0.25, 1), 0, frandom(-0.25, -1), 45+0)
+        TNT1 A 0 A_SpawnItemEx("InfectionCloud", RBNZ_INFECT_RADIUS, 0, 16, frandom(0.25, 1), 0, frandom(-0.25, -1), 45+180)
+        TNT1 AA 0 A_SpawnItemEx("InfectionCloud", frandom(0, RBNZ_INFECT_RADIUS), 0, 28+frandom(-RBNZ_INFECT_RADIUS, RBNZ_INFECT_RADIUS), frandom(0.25, 1), 0, frandom(-0.25, -1), frandom(0, 360))
+        TNT1 A 1
+
+        TNT1 A 2
+        stop
+    }
+}
+
+actor InfectionCloud : BasicGraphicEffect
+{
+    Renderstyle "Translucent"
+    alpha 0.6
+    speed 32
+    scale 2.0
+    States
+    {
+    Spawn:
+        RZTF AAABBBCCCCZCZCZC 1 A_ScaleVelocity(1.02)
         stop
     }
 }

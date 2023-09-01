@@ -1,0 +1,61 @@
+const int RBZN_GHOST_BEHIND  = 48;
+const int RBZN_GHOST_BASEZ   = 20;
+const int RBZN_GHOST_OFFS    = 8;
+const int RBZN_GHOST_INCR    = 4;
+
+actor InfectedWalking : Powerup { Powerup.duration 20 }
+
+actor RoboenzaGhostStart_P : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0
+        TNT1 A 0 A_PlaySoundEx("rroboenza/player/alphainfect", "voice")
+        TNT1 A 0 A_SpawnItemEx("RoboenzaGhostWarper", -RBZN_GHOST_BEHIND, 0, RBZN_GHOST_BASEZ, 0, 0, 0, 0, SXF_TRANSFERTRANSLATION)
+        TNT1 A 0
+        stop
+    }
+}
+
+actor RoboenzaGhostWarper : BasicShieldWarper
+{
+    Renderstyle "Translucent"
+    Alpha 0.4
+    var int user_floatpos;
+	States
+	{
+	Spawn:
+		TNT1 A 0
+        TNT1 A 1
+		TNT1 A 0 A_GiveInventory("MM8BDMProjSpawnFuncClient",1)
+        TNT1 A 0 ACS_NamedExecuteWithResult("RROBOENZ_GHOSTWARPER")
+		TNT1 A 0 A_Jump(256, "Shield")
+		Goto Shield
+    Shield:
+	Stand1:
+		RBES A 1 A_Warp(AAPTR_TARGET, -RBZN_GHOST_BEHIND, 0, RBZN_GHOST_BASEZ+(sin(user_floatpos)*RBZN_GHOST_OFFS), 0, WARPF_COPYINTERPOLATION|WARPF_NOCHECKPOSITION)
+        RBES A 0 A_SetUserVar(user_floatpos, user_floatpos + RBZN_GHOST_INCR)
+        RBES A 0 A_JumpIfInTargetInventory("InfectedWalking", 1, "Fly2")
+        goto Stand2
+    Stand2:
+        RBES C 1 A_Warp(AAPTR_TARGET, -RBZN_GHOST_BEHIND, 0, RBZN_GHOST_BASEZ+(sin(user_floatpos)*RBZN_GHOST_OFFS), 0, WARPF_COPYINTERPOLATION|WARPF_NOCHECKPOSITION)
+        RBES C 0 A_SetUserVar(user_floatpos, user_floatpos + RBZN_GHOST_INCR)
+        RBES C 0 A_JumpIfInTargetInventory("InfectedWalking", 1, "Fly1")
+		goto Stand1
+    Fly1:
+        RBES B 1 A_Warp(AAPTR_TARGET, -RBZN_GHOST_BEHIND, 0, RBZN_GHOST_BASEZ+(sin(user_floatpos)*RBZN_GHOST_OFFS), 0, WARPF_COPYINTERPOLATION|WARPF_NOCHECKPOSITION)
+        RBES B 0 A_SetUserVar(user_floatpos, user_floatpos + RBZN_GHOST_INCR * 2)
+        RBES B 0 A_JumpIfInTargetInventory("InfectedWalking", 1, "Fly2")
+        goto Stand2
+    Fly2:
+        RBES D 1 A_Warp(AAPTR_TARGET, -RBZN_GHOST_BEHIND, 0, RBZN_GHOST_BASEZ+(sin(user_floatpos)*RBZN_GHOST_OFFS), 0, WARPF_COPYINTERPOLATION|WARPF_NOCHECKPOSITION)
+        RBES D 0 A_SetUserVar(user_floatpos, user_floatpos + RBZN_GHOST_INCR * 2)
+        RBES D 0 A_JumpIfInTargetInventory("InfectedWalking", 1, "Fly1")
+        goto Stand1
+    Fade:
+        "----" "#" 1 A_FadeOut(0.1)
+        wait
+	}
+}
+

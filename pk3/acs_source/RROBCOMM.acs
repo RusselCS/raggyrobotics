@@ -22,6 +22,8 @@
 #define CLR_INF_BLUE    121
 #define CLR_INF_BLACK   176
 
+#define FREEZE_TIME     35
+
 #define WRLD_PATIENTZERO 1
 
 #define MSGID_ALERT 58
