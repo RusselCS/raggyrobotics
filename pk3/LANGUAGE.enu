@@ -16,6 +16,8 @@ RBNZ_TIP_A3 = "\nHealth: \ci";
 RBZN_TITLE = "ROBOENZA";
 RBZN_MENU = "ROBOENZA OPTIONS";
 
+OB_ROBOENZAWEP = "%o was eaten alive in %k's frenzy...";
+
 // Menu constants
 RBZN_SUBHEADER_ZOMBIE   = "Zombie Options";
 RBZN_BARTYPE            = "Zombie Timer Type";

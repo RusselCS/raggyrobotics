@@ -5,6 +5,59 @@ actor BusterShotPain : MegaShot replaces MegaShot { +FORCEPAIN }
 actor RoboenzaInfected : Once {}
 actor RoboenzaAlphaInfected : Once {}
 
+actor RoboenzaTimerInvBar : CustomInventory
+{
+    Inventory.amount 5000
+    Inventory.maxamount 5000
+    +INVBAR
+    States
+    {
+    Use:
+        TNT1 A 0
+        fail
+    }
+}
+
+actor RoboenzaTimer : Ammo
+{
+    Inventory.amount 5000
+    Inventory.maxamount 5000
+}
+
+actor InfectRecoilTime : PlayerPropertyInvulnerable {}
+
+actor InfectRecoil : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_JumpIfInventory("RoboenzaAlphaInfected", 1, "None")
+        TNT1 A 0 A_JumpIfInventory("InfectRecoilTime", 1, "None")
+        TNT1 A 0 A_GiveInventory("InfectRecoilTime", 2)
+        TNT1 A 0 A_Recoil(6)
+        stop
+    None:
+        TNT1 A 0
+        stop
+    }
+}
+
+actor RoboenzaMutation : BasicACSDamager { damagetype "Slime" }
+
+actor InfectionCloud : BasicGraphicEffect
+{
+    Renderstyle "Translucent"
+    alpha 0.6
+    speed 32
+    scale 2.0
+    States
+    {
+    Spawn:
+        RZTF AAABBBCCCCZCZCZC 1 A_ScaleVelocity(1.02)
+        stop
+    }
+}
+
 actor RoboenzaDontRip : CustomInventory
 {
     States

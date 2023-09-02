@@ -66,12 +66,14 @@ script "RROBENZ_PLAYERSTART" (void)
     // i do not think this will be looked upon kindly
     // but also, i do not want to replace COLOTRNS.acs
     str weap = GetWeapon();
-    CSetInventory(weap, 0);
-    GiveInventory(weap, 1);
-    SetWeapon(weap);
-    until(CheckWeapon(weap)) {
-        delay(1);
+    if(StrCmp(weap, "None") != 0) {
+        CSetInventory(weap, 0);
+        GiveInventory(weap, 1);
         SetWeapon(weap);
+        until(CheckWeapon(weap)) {
+            delay(1);
+            SetWeapon(weap);
+        }
     }
 
     until(CheckInventory("LightTeamFlag") > 0 ||
@@ -185,17 +187,14 @@ script "RROBOENZ_FRENZYBUFF" (int to) {
     CSetInventory("FrenzyBuffStack", to);
 }
 
-script "RROBOENZ_INFECTME" (void) {
-    if(!CheckInventory("RoboenzaInfected"))
-        CallACS1("RROBOENZ_INFECT", PlayerNumber());
-}
-
 script "RROBOENZ_INFECT" (int who, int alpha)
 {
     SetActivator(who + PLN_TID);
     Player_SetTeam(TEAM_INFECTED, true);
     CallACS1("core_hazardtag_clear", who);
     removeAssists();
+    CallACS0("RROBOENZ_APPLYZOMBIESKIN");
+
     GiveInventory("RoboenzaInfected", 1);
     SetAmmoCapacity("RoboenzaTimer", ZOMBIE_TIME);
     GiveInventory("RoboenzaTimer", ZOMBIE_TIME);
@@ -209,8 +208,6 @@ script "RROBOENZ_INFECT" (int who, int alpha)
     TakeInventory(weap, 1);
     GiveInventory(weap, 1);
     CallACS1("core_poss_runfuncs", who);
-
-    CallACS0("RROBOENZ_APPLYZOMBIESKIN");
 
     int zombieHealth = ZOMBIE_HP_BASE;
     int infectCount = playerCountTeam(TEAM_INFECTED);
@@ -246,6 +243,7 @@ script "RROBOENZ_MANAGEINFECTED" (void)
     while(GetActorProperty(0, APROP_Health) > 0 && CheckInventory("RoboenzaInfected") > 0)
     {
         int infectTime = timeStart - Timer();
+
         if(infectTime % 35 == 0) { // Tick down the timer
             TakeInventory("RoboenzaTimer", 1);
             if(CheckInventory("RoboenzaTimer") == 0) {
@@ -262,11 +260,13 @@ script "RROBOENZ_MANAGEINFECTED" (void)
             }
         }
 
+        // Enforce bots having the zombie weapon.
         if(PlayerIsBot(pln)) {
-            if(!CheckWeapon("RoboenzaWep")) // for some reason, bots don't seem to get the message
+            if(!CheckWeapon("RoboenzaWep"))
                 SetWeapon("RoboenzaWep");
         }
 
+        // Inventory bar-style timer. Doesn't work for spectators.
         if(GetUserCvar(pln,"rroboenz_timerbar") == 3) {
             CSetInventory("RoboenzaTimerInvBar", CheckInventory("RoboenzaTimer"));
         } else {
@@ -280,6 +280,7 @@ script "RROBOENZ_MANAGEINFECTED" (void)
             }
         }
 
+        // Custom landing sound logic.
         if(oldVelZ < 0 && GetActorVelZ(0) == 0.0) {
             if(GetActorZ(0) <= GetActorFloorZ(0)) {
                 if(oldVelZ <= -8.24) {
@@ -297,6 +298,10 @@ script "RROBOENZ_MANAGEINFECTED" (void)
         }
 
         oldVelZ = GetActorVelZ(0);
+
+        // Recoil delay.
+        if(CheckInventory("InfectRecoilTime") > 0)
+            TakeInventory("InfectRecoilTime", 1);
 
         delay(1);
     }
@@ -322,6 +327,7 @@ script "RROBOENZ_INFECTDROPS" DEATH
     }
 }
 
+// Handles the ER ghost that follows patient zero.
 script "RROBOENZ_GHOSTWARPER" (void) CLIENTSIDE
 {
 	int Player = ACS_NamedExecuteWithResult("core_gettarget",0);
@@ -371,9 +377,11 @@ script "RROBOENZ_CURE" (void)
     CSetInventory("RoboenzaWep", 0);
     returnAssists();
     SpawnSpotForced("RoboenzaCureEffect", 0, 0, 0);
-    CallACS1("core_poss_runfuncs", who);
+
     SetActorVelocity(0, 0, 0, 0, 0, 0);
+    CallACS2("core_freezeplayer", 0, true);
     CallACS0("ROBOENZ_TRANSFORMFREEZE");
+    CallACS1("core_poss_runfuncs", who);
 
     setRoboenzaHealth(0, classHealth[who]);
 
@@ -396,13 +404,27 @@ script "ROBOENZ_TRANSFORMFREEZE" (void) {
 script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
 {
     if(ev == GAMEEVENT_ACTOR_DAMAGED) {
-        if(PlayerNumber() >= 0) {
+        int pln = PlayerNumber();
+        if(pln >= 0) {
             dmg = GetEventResult();
-            if(CheckInventory("RoboenzaInfected") && CheckInventory("RoboenzaAlphaInfected") == 0) {
+
+            if(CheckInventory("RoboenzaInfected")) {
+
                 GiveInventory("InfectRecoil", 1);
+
             } else {
                 if(dmg > 0 && StrICmp(type, "RoboenzaInfection") == 0) {
-                    CallACS0("RROBOENZ_INFECTME");
+
+                    int hp = GetActorProperty(0, APROP_Health);
+                    SetActivator(0, AAPTR_DAMAGE_SOURCE);
+
+                    if(dmg >= hp) { // if the scratch kills, add health and time.
+                        GiveInventory("RoboenzaTimer", 20);
+                        HealThing(20);
+                    } else {
+                        CallACS1("RROBOENZ_INFECT", pln);
+                        CallACS1("ROBOENZ_ADDPLAYERSCORE", PlayerNumber());
+                    }
                 }
             }
         }
