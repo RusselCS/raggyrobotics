@@ -60,6 +60,19 @@ script "RROBENZ_SURVIVORMANAGE" (void)
     }
 }
 
+script "RROBOENZ_GIVEFRENZY" (void) {
+    int maxPlr = CallACS0("RROBOENZ_MAXPLAYER");
+    for(int i = 0; i < maxPlr; i++) {
+        if(GetPlayerInfo(i, PLAYERINFO_TEAM) == TEAM_SURVIVOR) {
+            if(GetUserCvar(i, "rroboenz_autofrenzy")) {
+                GiveInventory("FrenzyBuff", 1);
+            } else {
+                GiveInventory("FrenzyBuffItem", 1);
+            }
+        }
+    }
+}
+
 script "RROBOENZ_FRENZYBUFF" (int to) {
     int from = CheckInventory("FrenzyBuffStack");
     if(from >= FRENZY_BUFFSTACK_MAX)

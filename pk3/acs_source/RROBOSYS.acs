@@ -7,6 +7,7 @@
 
 int maxPlayer = 0;
 int pickTime;
+int totalPlayers = 0;
 
 // Overall game management scripts here.
 // Uses `patientZero` world variable from `RROBCOMM.acs`.
@@ -32,12 +33,48 @@ script "RROBENZ_RESPAWN" RESPAWN
     }
 }
 
-script "RROBOENZ_PICKALPHA" OPEN
+script "RROBOENZ_RUNSYSTEM" OPEN
 {
+    delay(1);
+    CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_DISABLE);
     delay(35*3);
     if(canRoboenza()) {
+        totalPlayers = PlayerCount();
+
         infectAlpha();
-    }
+
+        delay(16);
+
+        bool bossActive = false;
+
+        while(true) {
+            if(playerCountTeam(TEAM_SURVIVOR) == 1) {
+                if(!bossActive) {
+                    bossActive = true;
+                    int ratio = FixedDiv(playerCountTeam(TEAM_INFECTED), totalPlayers);
+                    if(ratio >= 0.34) {
+                        CallACS0("RROBOENZ_GIVEFRENZY");
+                        CallACS2("core_bossmusicstate", RBNZ_BMSF_SETINTENSE, true);
+                    } else {
+                        CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_BOSS);
+                        SetMusic("RBNZAINT");
+                    }
+                }
+            }
+
+            if(playerCountTeam(TEAM_INFECTED)==0) {
+                CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVALMUS, RBNZ_BMS_VICTORY);
+                terminate;
+            }
+
+            if(playerCountTeam(TEAM_SURVIVOR)==0) { // If there are no survivors, no victory music. But maps should know the round ended.
+                CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_VICTORY);
+                terminate;
+            }
+
+            delay(1);
+        }
+    }  
 }
 
 script "RROBOENZ_PICKTIME" (void) { setResultValue(pickTime); }
