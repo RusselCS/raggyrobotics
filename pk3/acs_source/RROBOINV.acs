@@ -13,6 +13,43 @@ int frenzyFrags[FRENZY_BUFFSTACK_MAX] = {
     2, 5
 };
 
+bool itemsPulled = false;
+
+int jumpSlot = -1;
+int dashSlot = -1;
+int flightSlot = -1;
+int reloadSlot = -1;
+int attackSlot = -1;
+int giftSlot = -1;
+int passiveSlot = -1;
+
+script "RROBOENZ_LOADOUTBUILD" OPEN
+{
+    delay(2);
+    if(canRoboenza()) {
+        int roll;
+        roll = random(1, getAssistItemGroupCount(GRP_ATTACK) + getAssistItemGroupCount(GRP_GIFT));
+        if(roll <= getAssistItemGroupCount(GRP_GIFT)) {
+            giftSlot = randomAssistItemEx(GRP_GIFT, true);
+        } else {
+            attackSlot = randomAssistItemEx(GRP_ATTACK, true);
+        }
+
+        roll = random(1, getAssistItemGroupCount(GRP_JUMP) + getAssistItemGroupCount(GRP_DASH) + getAssistItemGroupCount(GRP_FLIGHT));
+        if(roll <= getAssistItemGroupCount(GRP_JUMP)) {
+            dashSlot = randomAssistItemEx(GRP_JUMP, true);
+        } else if(roll <= getAssistItemGroupCount(GRP_DASH)) {
+            jumpSlot = randomAssistItemEx(GRP_DASH, true);
+        } else {
+            flightSlot = randomAssistItemEx(GRP_FLIGHT, true);
+        }
+
+        reloadSlot = randomAssistItemEx(GRP_RELOAD, true);
+        passiveSlot = randomAssistItemEx(GRP_PASSIVE, true);
+        itemsPulled = true;
+    }
+}
+
 // Inventory management scripts, for infects and survivors.
 script "RROBENZ_PLAYERSTART" (void)
 {
@@ -46,9 +83,32 @@ script "RROBENZ_PLAYERSTART" (void)
 
 script "RROBENZ_SURVIVORMANAGE" (void)
 {
+    int pln = PlayerNumber();
     CallACS0("RROBOENZ_REVOKEZOMBIESKIN");
 
-    int pln = PlayerNumber();
+    until(itemsPulled)
+        delay(1);
+    
+    // Eddie?
+    if(giftSlot!=-1)
+        GiveInventory(getAssistItemActor(giftSlot), getAssistItemAmount(giftSlot));
+    
+    // W-Tank?
+    if(reloadSlot!=-1)
+        GiveInventory(getAssistItemActor(reloadSlot), 3); // this is likely gonna be just W-Tanks anyway.
+    
+    // Mobility
+    if(jumpSlot!=-1)
+        GiveInventory(getAssistItemActor(jumpSlot), max(3, getAssistItemAmount(jumpSlot)));
+    if(dashSlot!=-1)
+        GiveInventory(getAssistItemActor(dashSlot), max(3, getAssistItemAmount(dashSlot)));
+    if(attackSlot!=-1)
+        GiveInventory(getAssistItemActor(attackSlot), max(3, getAssistItemAmount(attackSlot)));
+    
+    // Energy Balancer?
+    if(passiveSlot!=-1)
+        GiveInventory(getAssistItemActor(passiveSlot), getAssistItemAmount(passiveSlot));
+
     int oldFrags = GetPlayerScore(pln, SCORE_FRAGS);
     int startFrags = oldFrags;
     while(GetActorProperty(0, APROP_Health) > 0 && CheckInventory("RoboenzaInfected") == 0) {

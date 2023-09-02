@@ -12,6 +12,18 @@
 #define RUNE_HIGHJUMP 8
 #define RUNE_HASTE 9
 
+#define GRP_JUMP		0
+#define GRP_DASH		1
+#define GRP_FLIGHT		2
+#define GRP_WEAPON		3
+#define GRP_GIFT		4
+#define GRP_ATTACK		5
+#define GRP_ESCAPE		6
+#define GRP_HEAL		7
+#define GRP_RELOAD		8
+#define GRP_FULLRESTORE 9
+#define GRP_PASSIVE		10
+
 // Script wrappers
 function int CallACS0(str scr) { return CallACS4(scr, 0, 0, 0, 0); }
 function int CallACS1(str scr, int a1) { return CallACS4(scr, a1, 0, 0, 0); }
