@@ -28,13 +28,18 @@ script "RROBOENZ_LOADOUTBUILD" OPEN
     delay(2);
     if(canRoboenza()) {
         int roll;
-        roll = random(1, getAssistItemGroupCount(GRP_ATTACK) + getAssistItemGroupCount(GRP_GIFT));
-        if(roll <= getAssistItemGroupCount(GRP_GIFT)) {
-            giftSlot = randomAssistItemEx(GRP_GIFT, true);
+
+        // Special item draw logic: roll for gift or attack type assist
+        // You get an attacking assist, or Eddie in vanilla.
+        roll = random(1, getAssistItemGroupCount(GRP_GIFT) + getAssistItemGroupCount(GRP_GIFT));
+        if(roll <= getAssistItemGroupCount(GRP_ATTACK)) {
+            giftSlot = randomAssistItemEx(GRP_ATTACK, true);
         } else {
-            attackSlot = randomAssistItemEx(GRP_ATTACK, true);
+            attackSlot = randomAssistItemEx(GRP_GIFT, true);
         }
 
+        // Special item draw logic: roll for gift or attack type assist
+        // You get any mobility item from vanilla.
         roll = random(1, getAssistItemGroupCount(GRP_JUMP) + getAssistItemGroupCount(GRP_DASH) + getAssistItemGroupCount(GRP_FLIGHT));
         if(roll <= getAssistItemGroupCount(GRP_JUMP)) {
             dashSlot = randomAssistItemEx(GRP_JUMP, true);
@@ -102,8 +107,12 @@ script "RROBENZ_SURVIVORMANAGE" (void)
         GiveInventory(getAssistItemActor(jumpSlot), max(3, getAssistItemAmount(jumpSlot)));
     if(dashSlot!=-1)
         GiveInventory(getAssistItemActor(dashSlot), max(3, getAssistItemAmount(dashSlot)));
+    if(flightSlot!=-1)
+        GiveInventory(getAssistItemActor(flightSlot), max(3, getAssistItemAmount(flightSlot)));
+    
+    // Bonus attack
     if(attackSlot!=-1)
-        GiveInventory(getAssistItemActor(attackSlot), max(3, getAssistItemAmount(attackSlot)));
+        GiveInventory(getAssistItemActor(attackSlot), getAssistItemAmount(attackSlot));
     
     // Energy Balancer?
     if(passiveSlot!=-1)
