@@ -13,12 +13,11 @@ script "RROBOENZ_DTADD" OPEN
 {
     DefineAssistDisplay("RROBOENZ_UIHANDLER");
 
+    delay(1);
+
     // Need to remake the possession script from vanilla because it triggers the color script that's impossible to disable once it's on
     // Sooooo I'll just define the same thing again, without that color script.
     // AddArtifactPickupFunc(DTADD_PFT_POSSESSION, "rroboenz_possession_gives");
-    delay(1);
-
-    // override vanilla's possession give script
     for(int i = 0; i < ArtiPickupFuncs_Max[DTADD_PFT_POSSESSION]; i++) {
         if(StrCmp(getArtifactPickupFunc(DTADD_PFT_POSSESSION, i), "core_possession_gives") == 0) {
             setArtifactPickupFunc(DTADD_PFT_POSSESSION, i, "rroboenz_possession_gives");
@@ -142,6 +141,7 @@ script "rroboenz_possession_gives" (void)
         ACS_NamedExecuteWithResult("core_flyplayer", 0, 2);
     }
 
+    // [Russ] Also. These are permanent item gives. They need to be cleared.
     delay(1);
     TakeInventory("WaterShieldStop", 1);
     TakeInventory("StopShield", 1);
