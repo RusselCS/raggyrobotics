@@ -2,3 +2,4 @@
 #include "decorate/infectwep.dec"
 #include "decorate/infectghost.dec"
 #include "decorate/frenzybonus.dec"
+#include "decorate/infectdrops.dec"
