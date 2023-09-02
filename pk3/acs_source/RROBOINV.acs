@@ -328,10 +328,11 @@ script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
 {
     if(ev == GAMEEVENT_ACTOR_DAMAGED) {
         if(PlayerNumber() >= 0) {
+            dmg = GetEventResult();
             if(CheckInventory("RoboenzaInfected") && CheckInventory("RoboenzaAlphaInfected") == 0) {
                 GiveInventory("InfectRecoil", 1);
             } else {
-                if(StrICmp(type, "RoboenzaInfection") == 0) {
+                if(dmg > 0 && StrICmp(type, "RoboenzaInfection") == 0) {
                     CallACS0("RROBOENZ_INFECTME");
                 }
             }
