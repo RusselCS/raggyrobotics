@@ -147,6 +147,8 @@ script "RROBOENZ_MANAGEINFECTED" (void)
 {
     int timeStart = Timer()-1;
     int pln = PlayerNumber();
+    int oldVelZ = GetActorVelZ(0);
+    bool onTheGround = true;
 
     while(GetActorProperty(0, APROP_Health) > 0 && CheckInventory("RoboenzaInfected") > 0)
     {
@@ -184,6 +186,24 @@ script "RROBOENZ_MANAGEINFECTED" (void)
                 GiveInventory("InfectedWalking", 1);
             }
         }
+
+        if(oldVelZ < 0 && GetActorVelZ(0) == 0.0) {
+            if(GetActorZ(0) <= GetActorFloorZ(0)) {
+                if(oldVelZ <= -8.24) {
+                    StopSound(0, CHAN_AUTO);
+                    PlaySound(0, "rroboenza/player/land", CHAN_7);
+                }
+            } else {
+                if(CallACS0("core_CheckFooting")) {
+                    if(oldVelZ <= -8.24) {
+                        StopSound(0, CHAN_AUTO);
+                        PlaySound(0, "rroboenza/player/land", CHAN_7);
+                    }
+                }
+            }
+        }
+
+        oldVelZ = GetActorVelZ(0);
 
         delay(1);
     }

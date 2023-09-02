@@ -1,8 +1,14 @@
 // Roboenza sounds
-rroboenza/player/slash          CLAW        // core
+rroboenza/player/slash          RBNZCLAW    // Shovel Knight
 rroboenza/player/infect         ZOMBIE      // core
 rroboenza/player/alphainfect    ERPOSSES    // core
-rroboenza/player/superjump      REFILL      // core
+$volume rroboenza/player/alphainfect 0.6
+rroboenza/player/superjump      RBNZLEAP    // Shovel Knight
+$volume rroboenza/player/superjump   0.8
+rroboenza/player/land           RBNZLAND    // Ninja Gaiden
+
+rroboenza/powerups/curespawn    RBNZCRSP    // Bayou Billy
+rroboenza/powerups/cureact      RBNZCRGO    // Bayou Billy
 
 rroboenza/ui/infect             RBINFECT    // core
 rroboenza/ui/cure               RBCURED     // core
