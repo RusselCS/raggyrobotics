@@ -28,6 +28,7 @@ script "RROBOENZ_ENTER" ENTER
 script "RROBENZ_RESPAWN" RESPAWN
 {
     CallACS0("RROBENZ_PLAYERSTART");
+    delay(1);
     if(canRoboenza()) {
         CallACS1("RROBOENZ_INFECT", PlayerNumber());
     }
@@ -45,13 +46,24 @@ script "RROBOENZ_RUNSYSTEM" OPEN
 
         delay(16);
 
-        bool bossActive = false;
+        bool musicChanged = false;
+        bool buffGiven = false;
+
+        int threshold = 0.34;
 
         while(true) {
             if(playerCountTeam(TEAM_SURVIVOR) == 1) {
-                if(!bossActive) {
-                    bossActive = true;
-                    int ratio = FixedDiv(playerCountTeam(TEAM_INFECTED), totalPlayers);
+                int ratio = FixedDiv(playerCountTeam(TEAM_INFECTED), totalPlayers);
+
+                if(!buffGiven) {
+                    buffGiven = true;
+                    if(ratio >= 0.34) {
+                        CallACS0("RROBOENZ_GIVEFRENZY");
+                    }
+                }
+
+                if(!musicChanged) {
+                    musicChanged = true;
                     if(ratio >= 0.34) {
                         CallACS0("RROBOENZ_GIVEFRENZY");
                         CallACS2("core_bossmusicstate", RBNZ_BMSF_SETINTENSE, true);
@@ -59,6 +71,12 @@ script "RROBOENZ_RUNSYSTEM" OPEN
                         CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_BOSS);
                         SetMusic("RBNZAINT");
                     }
+                }
+            }
+
+            if(buffGiven) { // if one of the zombies gets cured, and then someone else gets infected, may as well...
+                if(playerCountTeam(TEAM_SURVIVOR) == 2) {
+                    buffGiven = false;
                 }
             }
 

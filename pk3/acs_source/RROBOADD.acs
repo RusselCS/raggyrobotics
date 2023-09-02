@@ -35,9 +35,30 @@ script "RROBOENZ_DTADD_CLIENT" OPEN CLIENTSIDE
 script "rroboenz_possession_gives" (void)
 {
     // [Russ] also need to remove the notarget stacker, since this wasn't fixed
-    
     CSetInventory("PlayerPropertyNoTarget",1);
     ACS_NamedExecuteWithResult("core_notargetplayer",0,0);
+
+    // [Russ] gotta remove runes too...
+    CSetInventory("PlayerPropertyStrength", 1);
+    ACS_NamedExecuteWithResult("core_runeplayer", 0, false, RUNE_STRENGTH);
+    CSetInventory("PlayerPropertyRage", 1);
+    ACS_NamedExecuteWithResult("core_runeplayer", 0, false, RUNE_RAGE);
+    CSetInventory("PlayerPropertyDrain", 1);
+    ACS_NamedExecuteWithResult("core_runeplayer", 0, false, RUNE_DRAIN);
+    CSetInventory("PlayerPropertySpread", 1);
+    ACS_NamedExecuteWithResult("core_runeplayer", 0, false, RUNE_SPREAD);
+    CSetInventory("PlayerPropertyResistance", 1);
+    ACS_NamedExecuteWithResult("core_runeplayer", 0, false, RUNE_RESISTANCE);
+    CSetInventory("PlayerPropertyRegeneration", 1);
+    ACS_NamedExecuteWithResult("core_runeplayer", 0, false, RUNE_REGENERATION);
+    CSetInventory("PlayerPropertyProsperity", 1);
+    ACS_NamedExecuteWithResult("core_runeplayer", 0, false, RUNE_PROSPERITY);
+    CSetInventory("PlayerPropertyReflection", 1);
+    ACS_NamedExecuteWithResult("core_runeplayer", 0, false, RUNE_REFLECTION);
+    CSetInventory("PlayerPropertyHighJump", 1);
+    ACS_NamedExecuteWithResult("core_runeplayer", 0, false, RUNE_HIGHJUMP);
+    CSetInventory("PlayerPropertyHaste", 1);
+    ACS_NamedExecuteWithResult("core_runeplayer", 0, false, RUNE_HASTE);
 
     // [Russ] Also removing the "NoWeaponSwitchSound" since this script takes a bit to run
     // GiveInventory("NoWeaponSwitchSound", 1);
@@ -120,4 +141,8 @@ script "rroboenz_possession_gives" (void)
     if(CheckInventory("RushMarineCounter") > 0 && CheckInventory("IsUnderwater")) {
         ACS_NamedExecuteWithResult("core_flyplayer", 0, 2);
     }
+
+    delay(1);
+    TakeInventory("WaterShieldStop", 1);
+    TakeInventory("StopShield", 1);
 }

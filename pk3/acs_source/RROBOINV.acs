@@ -21,6 +21,17 @@ script "RROBENZ_PLAYERSTART" (void)
     GiveInventory("NoProjectileTeamTranslation", 1);
     CallACS0("RROBENZ_SURVIVORMANAGE");
 
+    // i do not think this will be looked upon kindly
+    // but also, i do not want to replace COLOTRNS.acs
+    str weap = GetWeapon();
+    CSetInventory(weap, 0);
+    GiveInventory(weap, 1);
+    SetWeapon(weap);
+    until(CheckWeapon(weap)) {
+        delay(1);
+        SetWeapon(weap);
+    }
+
     until(CheckInventory("LightTeamFlag") > 0 ||
           CheckInventory("WilyTeamFlag") > 0 ||
           CheckInventory("CossackTeamFlag") > 0 ||
@@ -48,11 +59,7 @@ script "RROBENZ_SURVIVORMANAGE" (void)
             while(CheckInventory("FrenzyBuffCount") < FRENZY_BUFFSTACK_MAX && diff >= frenzyFrags[CheckInventory("FrenzyBuffCount")])
             {
                 GiveInventory("FrenzyBuffCount", 1);
-                if(GetUserCvar(pln, "rroboenz_autofrenzy")) {
-                    GiveInventory("FrenzyBuff", 1);
-                } else {
-                    GiveInventory("FrenzyBuffItem", 1);
-                }
+                giveFrenzyBuff(pln);
             }
         }
 
@@ -64,12 +71,16 @@ script "RROBOENZ_GIVEFRENZY" (void) {
     int maxPlr = CallACS0("RROBOENZ_MAXPLAYER");
     for(int i = 0; i < maxPlr; i++) {
         if(GetPlayerInfo(i, PLAYERINFO_TEAM) == TEAM_SURVIVOR) {
-            if(GetUserCvar(i, "rroboenz_autofrenzy")) {
-                GiveInventory("FrenzyBuff", 1);
-            } else {
-                GiveInventory("FrenzyBuffItem", 1);
-            }
+            giveFrenzyBuff(i);
         }
+    }
+}
+
+function void giveFrenzyBuff(int pln) {
+    if(GetUserCvar(pln, "rroboenz_autofrenzy")) {
+        GiveActorInventory(pln + PLN_TID, "FrenzyBuff", 1);
+    } else {
+        GiveActorInventory(pln + PLN_TID, "FrenzyBuffItem", 1);
     }
 }
 

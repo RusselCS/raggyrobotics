@@ -162,64 +162,62 @@ script "RROBOENZ_UIHANDLER" (int cam) CLIENTSIDE
 {
     int cpn = ConsolePlayerNumber();
 
-    if(GetUserCvar(cpn,"rroboenz_timerbar") == 2) {
-        if(roboenzaBarCheck()) {
-            if(AssistDisplayBar_On()) {
-                SetHudSize(320,200,0);
-                int pos;
-                str img;
-                int x;
-                int y;
-                int timeSec;
+    if(roboenzaBarCheck()) {
+        if(AssistDisplayBar_On()) {
+            SetHudSize(320,200,0);
+            int pos;
+            str img;
+            int x;
+            int y;
+            int timeSec;
 
-                SetActivator(cam);
-                int time = CheckActorInventory(cam,"RoboenzaTimer");
-                int timeMax = GetAmmoCapacity("RoboenzaTimer");
-                SetActivator(0,AAPTR_NULL);
+            SetActivator(cam);
+            int time = CheckActorInventory(cam,"RoboenzaTimer");
+            int timeMax = GetAmmoCapacity("RoboenzaTimer");
+            SetActivator(0,AAPTR_NULL);
 
-                if(GetUserCvar(cpn,"rroboenz_timerbar") == 2 && CheckActorInventory(cam,"RoboenzaTimer")>0) {
-                    pos = Get_And_Inc_AssistBarCount();
-                    int barX = Get_AssistDisplayBar_X(pos);
-                    int barY = Get_AssistDisplayBar_Y(pos);
-                    x = barX - 4.0;
-                    y = barY - 4.0;
-                    img = "INFECT1";
-                    if(CheckActorInventory(cam, "RoboenzaTimer") <= 1 && Timer() % 8 <= 3) img = "TNT1A0";
-                    BasicImageDisplay(img,Get_And_Inc_AssistDisplayID(),x,y);
-                    DrawBasicBarAndNumber(
-                        "ASTBRRBZ","ASTBRRBE",
-                        "ASTVRRBZ","ASTVRRBE",
-                        barX,barY,
-                        Get_And_Inc_AssistDisplayID(),Get_And_Inc_AssistDisplayID(),Get_And_Inc_AssistDisplayID(),
-                        ((time * 8.0 / timeMax) + 0.5) >> 16,
-                        CheckActorInventory(cam,"AssistNumberFlag")>0,
-                        CheckActorInventory(cam,"RoboenzaTimer")
-                    );
-                }
+            if(GetUserCvar(cpn,"rroboenz_timerbar") == 2 && CheckActorInventory(cam,"RoboenzaTimer")>0) {
+                pos = Get_And_Inc_AssistBarCount();
+                int barX = Get_AssistDisplayBar_X(pos);
+                int barY = Get_AssistDisplayBar_Y(pos);
+                x = barX - 4.0;
+                y = barY - 4.0;
+                img = "INFECT1";
+                if(CheckActorInventory(cam, "RoboenzaTimer") <= 1 && Timer() % 8 <= 3) img = "TNT1A0";
+                BasicImageDisplay(img,Get_And_Inc_AssistDisplayID(),x,y);
+                DrawBasicBarAndNumber(
+                    "ASTBRRBZ","ASTBRRBE",
+                    "ASTVRRBZ","ASTVRRBE",
+                    barX,barY,
+                    Get_And_Inc_AssistDisplayID(),Get_And_Inc_AssistDisplayID(),Get_And_Inc_AssistDisplayID(),
+                    ((time * 8.0 / timeMax) + 0.5) >> 16,
+                    CheckActorInventory(cam,"AssistNumberFlag")>0,
+                    CheckActorInventory(cam,"RoboenzaTimer")
+                );
+            }
 
-                if(GetUserCvar(cpn, "rroboenz_alphabuffast") && CheckActorInventory(cam, "RoboenzaAlphaInfected")) {
-                    pos = Get_And_Inc_AssistBarCount();
-                    BasicImageDisplay("RBNZPZRI",Get_And_Inc_AssistDisplayID(),
-                        Get_AssistDisplayBar_X(pos),
-                        Get_AssistDisplayBar_Y(pos)
-                    );
-                }
+            if(GetUserCvar(cpn, "rroboenz_alphabuffast") && CheckActorInventory(cam, "RoboenzaAlphaInfected")) {
+                pos = Get_And_Inc_AssistBarCount();
+                BasicImageDisplay("RBNZPZRI",Get_And_Inc_AssistDisplayID(),
+                    Get_AssistDisplayBar_X(pos),
+                    Get_AssistDisplayBar_Y(pos)
+                );
+            }
 
-                if(GetUserCvar(cpn, "rroboenz_ragebuffast") && CheckActorInventory(cam, "FrenzyBuffStack") == 1) {
-                    pos = Get_And_Inc_AssistBarCount();
-                    BasicImageDisplay("RBNZRAGI",Get_And_Inc_AssistDisplayID(),
-                        Get_AssistDisplayBar_X(pos),
-                        Get_AssistDisplayBar_Y(pos)
-                    );
-                }
+            if(GetUserCvar(cpn, "rroboenz_ragebuffast") && CheckActorInventory(cam, "FrenzyBuffStack") == 1) {
+                pos = Get_And_Inc_AssistBarCount();
+                BasicImageDisplay("RBNZRAGI",Get_And_Inc_AssistDisplayID(),
+                    Get_AssistDisplayBar_X(pos),
+                    Get_AssistDisplayBar_Y(pos)
+                );
+            }
 
-                if(GetUserCvar(cpn, "rroboenz_spreadbuffast") && CheckActorInventory(cam, "FrenzyBuffStack") == 2) {
-                    pos = Get_And_Inc_AssistBarCount();
-                    BasicImageDisplay("RBNZBRZI",Get_And_Inc_AssistDisplayID(),
-                        Get_AssistDisplayBar_X(pos),
-                        Get_AssistDisplayBar_Y(pos)
-                    );
-                }
+            if(GetUserCvar(cpn, "rroboenz_spreadbuffast") && CheckActorInventory(cam, "FrenzyBuffStack") == 2) {
+                pos = Get_And_Inc_AssistBarCount();
+                BasicImageDisplay("RBNZBRZI",Get_And_Inc_AssistDisplayID(),
+                    Get_AssistDisplayBar_X(pos),
+                    Get_AssistDisplayBar_Y(pos)
+                );
             }
         }
     }
@@ -240,7 +238,10 @@ script "RROBOENZ_UIHANDLER" (int cam) CLIENTSIDE
 function bool roboenzaBarCheck(void) {
     int cpn = ConsolePlayerNumber();
 
-    int ret = GetUserCvar(cpn,"rroboenz_timerbar") == 2;
+    int ret = GetUserCvar(cpn,"rroboenz_timerbar") == 2 ||
+              GetUserCvar(cpn, "rroboenz_alphabuffast") ||
+              GetUserCvar(cpn, "rroboenz_ragebuffast") ||
+              GetUserCvar(cpn, "rroboenz_spreadbuffast");
     
     return ret;
 }
