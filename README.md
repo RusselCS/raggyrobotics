@@ -28,9 +28,9 @@ Graphic credits:
 - Infection claw sprites, weapon animation hands, cure sprites by Russel.
 - Assist Bar infection icon by Molly (from 8BDM Chapter 10 credits stinger).
 - Evil Robot alpha infection icon edited by Russel, originally by Pegg.
-- Duo rage rune icon edited by Russel, originally from MM8BDM.
+- Duo rage rune icon edited by Russel, originally sprited by Molly, based on Battle & Chase.
 - Original Duo spread rune icon edited by Russel, originally by Pegg.
-- Infection animation recolored by Russel, originally from MM8BDM.
+- Infection animation recolored by Russel, from 8BDM by Copy Robot.
 - Cure animation edited & expanded by Russel, originally from MMBN6.
 
 Sound credits:
