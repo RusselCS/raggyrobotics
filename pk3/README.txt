@@ -15,6 +15,15 @@ their attack power.
 
 Finally, defeated infected players have a chance of dropping a cure. Sometimes, miracles do happen.
 
+Changes from Rage Roboenza:
+- This is a full rebuild of the roboenza mode, taking heavy inspiration from Rage Roboenza.
+- Infections no longer use the Morph system. Instead, they are given a weapon they cannot deselect.
+- Player can select a skin they are swapped to when infected.
+- Newly redone graphical assets.
+- New sound effects.
+- Music choices now reflect the MM8BDM campaign.
+- Mode runs in TLMS instead of LMS, which makes it much easier to track players and allows for easier win/loss checking.
+
 Graphic credits:
 - Infection claw sprites, weapon animation hands, cure sprites by Russel.
 - Assist Bar infection icon by Molly (from 8BDM Chapter 10 credits stinger).
