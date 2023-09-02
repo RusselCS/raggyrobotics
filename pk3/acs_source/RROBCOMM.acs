@@ -36,6 +36,18 @@
 
 #define RBNZ_PLAYERLIMIT 64
 
+// ported flags
+#define RBNZ_BMSF_GETSTATE	0
+#define RBNZ_BMSF_SETVAL		1
+#define RBNZ_BMSF_SETVALMUS	2
+#define RBNZ_BMSF_GETINTENSE	3
+#define RBNZ_BMSF_SETINTENSE	4
+
+#define RBNZ_BMS_STAGE		0
+#define RBNZ_BMS_BOSS			1
+#define RBNZ_BMS_VICTORY		2
+#define RBNZ_BMS_DISABLE		100
+
 world int WRLD_PATIENTZERO: patientZero;
 
 function bool canRoboenza(void) { return getCVar("teamlms") && getGameModeState() == GAMESTATE_INPROGRESS && getCVar("sv_maxteams") == 2; }
