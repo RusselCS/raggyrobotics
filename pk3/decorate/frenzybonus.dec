@@ -10,7 +10,7 @@ actor FrenzyBuffItem : BaseMM8BDMUseItem
     inventory.maxamount 2
     inventory.pickupmessage "$PU_ITEM1"
     inventory.icon "RZFRZIA"
-    Tag "$TAG_ITEM1"
+    Tag "$TAG_FRENZYBUFF"
     States
     {
     Use:

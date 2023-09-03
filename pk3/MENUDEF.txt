@@ -1,22 +1,48 @@
+LISTMENU "MainMenu"
+{
+    StaticPatch 94, 2, "M_DOOM"
+    Position 97, 72
+    Font "BigFont", "Untranslated"
+    TextItem "SinglePlayer", "s", "PlayerclassMenu"
+    TextItem "Multiplayer", "m", "ZA_MultiplayerOptions"
+    TextItem "Player Setup", "p", "PlayerMenu"
+    TextItem "Options", "o", "OptionsMenu"
+    Font "BigFont", "MenuGreen" // [RBNZ]
+    TextItem "Roboenza Frenzy", "c", "menu_rroboenz" // [RBNZ]
+    Font "BigFont", "Untranslated" // [RBNZ]
+    TextItem "Quit Game", "q", "QuitMenu"
+}
+
 OptionMenu "menu_rroboenz"
 {
 	Title "$RBZN_MENU"
+
+	StaticText 	" "
+	StaticText	"$RBZN_SUBHEADER_SURVIVOR", 1
+	StaticText 	" "
+	Option		"$RBNZ_RAGEBUFFAST",		"rroboenz_ragebuffast",		"OnOff"
+	Option		"$RBNZ_SPREADBUFFAST",		"rroboenz_spreadbuffast",	"OnOff"
+	StaticText 	" "
+	Option		"$RBZN_AUTOFRENZY",			"rroboenz_autofrenzy",		"OnOff"
+	StaticText 	" "
+	StaticText 	"$RBZN_PANICBUTTONDESC"
+	Option		"$RBZN_PANICBUTTON",		"rroboenz_panicbutton",		"Menu_RROBOENZ_PanicBind"
+	Control 	"$RBZN_PANICBUTTONBIND",	"usepanicbutton"
+	Option		"$RBZN_PANICBUTTONICON",	"rroboenz_panicicon",		"OnOff"
 
 	StaticText 	" "
 	StaticText	"$RBZN_SUBHEADER_ZOMBIE", 1
 	StaticText 	" "
 	Option		"$RBZN_BARTYPE",			"rroboenz_timerbar",		"Menu_RROBOENZ_BarType"
 	Option		"$RBNZ_ALPHABUFFAST",		"rroboenz_alphabuffast",	"OnOff"
-	Option		"$RBNZ_RAGEBUFFAST",		"rroboenz_ragebuffast",		"OnOff"
-	Option		"$RBNZ_SPREADBUFFAST",		"rroboenz_spreadbuffast",	"OnOff"
-	Option		"$RBZN_AUTOFRENZY",			"rroboenz_autofrenzy",		"OnOff"
-
 	StaticText 	" "
 	TextField	"$RBZN_ZOMBIESKIN",			"rroboenz_zombieskin"
 	Command		"$RBZN_COPYSKIN",	 		"copyzombieskin"
 	Command		"$RBZN_RESETSKIN",	 		"resetzombieskin"
 	StaticText 	" "
-	Submenu		"Player Setup",				"PlayerMenu"
+	Submenu		"Goto Player Setup",		"PlayerMenu"
+	StaticText 	"$RBZN_ZOMBIESKINWARN1"
+	StaticText 	"$RBZN_ZOMBIESKINWARN2"
 
 	StaticText 	" "
 	StaticText	"$RBZN_SUBHEADER_ALERT", 1
@@ -25,29 +51,6 @@ OptionMenu "menu_rroboenz"
 	Option		"$RBZN_GLOBALCURESOUND",	"rroboenz_curedsound",		"OnOff"
 	Option		"$RBZN_GLOBALRAGESOUND",	"rroboenz_enragesound",		"OnOff"
 	Option		"$RBZN_GLOBALBERSERKSOUND",	"rroboenz_berserksound",	"OnOff"
-	Option		"$RBZN_PANICBUTTONICON",	"rroboenz_panicicon",		"OnOff"
-	Option		"$RBZN_PANICBUTTON",		"rroboenz_panicbutton",		"Menu_RROBOENZ_PanicBind"
-	Control 	"$RBZN_PANICBUTTONBIND",	"usepanicbutton"
-
-	// SubMenu		"Offline Skirmish",			"8BDM_Skirmish"
-	// SubMenu		"Player Setup",				"8BDM_PlayerMenu"
-	// SubMenu		"Log in",					"ZA_LoginMenu"
-	// StaticText	" "
-	// SubMenu		"Server Administration",	"ZA_ServerSetupMenu"
-	// StaticText	" "
-	// Command		"Spectate",					"menu_spectate"
-	// Command		"Switch teams",				"menu_changeteam"
-	// Command		"Disconnect",				"menu_disconnect"
-	// StaticText	" "
-	// SubMenu		"Call a vote",				"ZA_CallVote"
-	// SubMenu		"Ignore a player",			"ZA_IgnoreMenu"
-	// StaticText	" "
-	// SubMenu 	"Customize team colors",	"8BDM_ColorOptions"
-	// StaticText 	" "
-	// StaticText	"Passwords", 1
-	// TextField	"Connect To Server",		"cl_password"
-	// TextField	"Join Game",				"cl_joinpassword"
-	// StaticText 	" "
 }
 
 OptionValue "Menu_RROBOENZ_BarType"

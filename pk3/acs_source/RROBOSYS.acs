@@ -65,7 +65,6 @@ script "RROBOENZ_RUNSYSTEM" OPEN
                 if(!musicChanged) {
                     musicChanged = true;
                     if(ratio >= 0.34) {
-                        CallACS0("RROBOENZ_GIVEFRENZY");
                         CallACS2("core_bossmusicstate", RBNZ_BMSF_SETINTENSE, true);
                     } else {
                         CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_BOSS);
@@ -156,7 +155,6 @@ function int findFirstTeamMember(int team) {
     }
     return -1;
 }
-
 
 function int countAlive(void) {
     int ret = 0;

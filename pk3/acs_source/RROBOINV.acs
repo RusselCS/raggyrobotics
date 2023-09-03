@@ -40,9 +40,9 @@ script "RROBOENZ_LOADOUTBUILD" OPEN
         // You get an attacking assist, or Eddie in vanilla.
         roll = random(1, getAssistItemGroupCount(GRP_GIFT) + getAssistItemGroupCount(GRP_GIFT));
         if(roll <= getAssistItemGroupCount(GRP_ATTACK)) {
-            giftSlot = randomAssistItemEx(GRP_ATTACK, true);
+            attackSlot = randomAssistItemEx(GRP_ATTACK, true);
         } else {
-            attackSlot = randomAssistItemEx(GRP_GIFT, true);
+            giftSlot = randomAssistItemEx(GRP_GIFT, true);
         }
 
         // Special item draw logic: roll for gift or attack type assist
@@ -102,7 +102,7 @@ script "RROBENZ_SURVIVORMANAGE" (void)
 
     until(itemsPulled)
         delay(1);
-    
+
     // Eddie?
     if(giftSlot!=-1)
         GiveInventory(getAssistItemActor(giftSlot), getAssistItemAmount(giftSlot));
@@ -110,7 +110,7 @@ script "RROBENZ_SURVIVORMANAGE" (void)
     // W-Tank?
     if(reloadSlot!=-1)
         GiveInventory(getAssistItemActor(reloadSlot), 3); // this is likely gonna be just W-Tanks anyway.
-    
+
     // Mobility
     if(jumpSlot!=-1)
         GiveInventory(getAssistItemActor(jumpSlot), max(3, getAssistItemAmount(jumpSlot)));
@@ -163,6 +163,7 @@ script "RROBOENZ_GIVEFRENZY" (void) {
     for(int i = 0; i < maxPlr; i++) {
         if(GetPlayerInfo(i, PLAYERINFO_TEAM) == TEAM_SURVIVOR) {
             giveFrenzyBuff(i);
+            giveSurvivalItems(i);
         }
     }
 }
@@ -173,6 +174,11 @@ function void giveFrenzyBuff(int pln) {
     } else {
         GiveActorInventory(pln + PLN_TID, "FrenzyBuffItem", 1);
     }
+}
+
+function void giveSurvivalItems(int pln) {
+    GiveActorInventory(pln + PLN_TID, getAssistItemActor(reloadSlot), 3);
+    GiveActorInventory(pln + PLN_TID, "ExitUnitItem", 1);
 }
 
 script "RROBOENZ_FRENZYBUFF" (int to) {
@@ -415,6 +421,7 @@ script "RROBOENZ_CURE" (void)
     CSetInventory("RoboenzaTimer", 0);
     CSetInventory("RoboenzaWep", 0);
     returnAssists();
+    giveSurvivalItems(who);
     SpawnSpotForced("RoboenzaCureEffect", 0, 0, 0);
 
     SetActorVelocity(0, 0, 0, 0, 0, 0);

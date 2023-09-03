@@ -16,24 +16,32 @@ RBNZ_TIP_A3 = "\nHealth: \ci";
 RBZN_TITLE = "ROBOENZA";
 RBZN_MENU = "ROBOENZA OPTIONS";
 
+TAG_FRENZYBUFF = "Frenzy Bonus";
+
 OB_ROBOENZAWEP = "%o was eaten alive in %k's frenzy...";
 
 // Menu constants
-RBZN_SUBHEADER_ZOMBIE   = "Zombie Options";
-RBZN_BARTYPE            = "Zombie Timer Type";
-RBZN_ZOMBIESKIN         = "Zombie Skin";
-RBZN_SUBHEADER_SKINDISCLAIMER = "\ci(You must type the skin in)";
-RBZN_RESETSKIN          = "Reset Skin";
-RBZN_COPYSKIN           = "Copy Skin to Zombie";
-
-RBNZ_ALPHABUFFAST       = "Show Patient Zero buff on Assist Bar";
+RBZN_SUBHEADER_SURVIVOR = "-- Survivor Options --";
 RBNZ_RAGEBUFFAST        = "Show Rage buff on Assist Bar";
 RBNZ_SPREADBUFFAST      = "Show Berserk buff on Assist Bar";
+RBZN_AUTOFRENZY         = "Automatically apply frenzy buff";
 
-RBZN_AUTOFRENZY         = "Automatically apply frenzy powerups when available";
+RBZN_PANICBUTTONDESC    = "\cn(Use important survivor items)";
+RBZN_PANICBUTTON        = "Panic Button";
+RBZN_PANICBUTTONICON    = "Show Panic Item on Assist Bar";
+RBZN_PANICBUTTONBIND    = "Custom Bind";
 
-RBZN_SUBHEADER_ALERT    = "Global Alert Sounds";
-RBZN_GLOBALINFECTSOUND  = "Infection Alert";
-RBZN_GLOBALCURESOUND    = "Cure Alert";
-RBZN_GLOBALRAGESOUND    = "Enrage Alert";
-RBZN_GLOBALBERSERKSOUND = "Berserk Alert";
+RBZN_SUBHEADER_ZOMBIE   = "-- Infected Options-- ";
+RBZN_BARTYPE            = "Infection Timer Type";
+RBNZ_ALPHABUFFAST       = "Show Patient Zero buff on Assist Bar";
+RBZN_ZOMBIESKIN         = "Infected Skin";
+RBZN_COPYSKIN           = "Copy base skin to Infected Skin";
+RBZN_RESETSKIN          = "Clear Infected Skin";
+RBZN_ZOMBIESKINWARN1    = "\ckCareful! Modifying player settings";
+RBZN_ZOMBIESKINWARN2    = "\ckwith zombie skin may cause kicking!";
+
+RBZN_SUBHEADER_ALERT    = "-- Alert Sounds-- ";
+RBZN_GLOBALINFECTSOUND  = "Infection";
+RBZN_GLOBALCURESOUND    = "Cure";
+RBZN_GLOBALRAGESOUND    = "Enraged";
+RBZN_GLOBALBERSERKSOUND = "Berserk";
