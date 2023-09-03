@@ -52,8 +52,12 @@ script "RROBOENZ_RUNSYSTEM" OPEN
         int threshold = 0.34;
 
         while(true) {
-            if(playerCountTeam(TEAM_SURVIVOR) == 1) {
-                int ratio = FixedDiv(playerCountTeam(TEAM_INFECTED), totalPlayers);
+
+            int survCount = playerCountTeam(TEAM_SURVIVOR);
+            int infcCount = playerCountTeam(TEAM_INFECTED);
+
+            if(survCount == 1) {
+                int ratio = FixedDiv(infcCount, totalPlayers);
 
                 if(!buffGiven) {
                     buffGiven = true;
@@ -74,17 +78,25 @@ script "RROBOENZ_RUNSYSTEM" OPEN
             }
 
             if(buffGiven) { // if one of the zombies gets cured, and then someone else gets infected, may as well...
-                if(playerCountTeam(TEAM_SURVIVOR) == 2) {
+                if(survCount == 2) {
                     buffGiven = false;
                 }
             }
 
-            if(playerCountTeam(TEAM_INFECTED)==0) {
+            if(GetTeamProperty(TEAM_SURVIVOR, TPROP_WinCount) != survCount) {
+                ChangeTeamScore(TEAM_SURVIVOR, SCORE_WINS, survCount);
+            }
+
+            if(GetTeamProperty(TEAM_INFECTED, TPROP_WinCount) != infcCount) {
+                ChangeTeamScore(TEAM_INFECTED, SCORE_WINS, infcCount);
+            }
+
+            if(survCount==0) {
                 CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVALMUS, RBNZ_BMS_VICTORY);
                 terminate;
             }
 
-            if(playerCountTeam(TEAM_SURVIVOR)==0) { // If there are no survivors, no victory music. But maps should know the round ended.
+            if(infcCount==0) { // If there are no survivors, no victory music. But maps should know the round ended.
                 CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_VICTORY);
                 terminate;
             }

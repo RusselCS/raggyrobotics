@@ -26,7 +26,7 @@
 //     }
 // }
 
-Script "RROBOENZ_COUNTER" OPEN CLIENTSIDE
+Script "RROBOENZ_COUNTER" (void) //OPEN CLIENTSIDE
 {
 	PrintBold(s:"");
 	Delay(5);
