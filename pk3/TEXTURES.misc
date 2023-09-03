@@ -1,3 +1,11 @@
+graphic M_DOOM, 1000, 1000
+{
+	Offset 20, -32
+    XScale 1.5
+    YScale 1.5
+    Patch RBNZMEGM, 0, 0
+}
+
 texture ASTBRRBE, 5, 16{patch ASSTBARE, 0, 0 {Translation "0:0=176:176"}}
 texture ASTVRRBE, 16, 5{patch ASSTBARE, 0, 0 {rotate 90 Translation "0:0=176:176"}}
 
