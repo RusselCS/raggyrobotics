@@ -7,7 +7,7 @@ TeamLMS
     LockedGameSettings {
         compat_clientssendfullbuttoninfo = true
 		sv_norespawninvul = true
-		sv_maxlives = 2
+		sv_maxteams = 2
 		sv_noteamselect = true
         sv_noteamswitch = true
         sv_nocrouch = true
