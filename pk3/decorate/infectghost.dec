@@ -59,14 +59,6 @@ actor RoboenzaGhostWarper : BasicShieldWarper
 	}
 }
 
-// Gibs and Gore
-// MGIB BCDEFG are good to use
-// 
-// TO DO:
-// SCOREBOARD
-// Claw angles
-// you'll remember what you mean
-// also menu reorgnizing. it's a mess atm.
 
 const int GORE_HORIZ_RANGE = 32;
 const int GORE_VERTI_RANGE = 16;

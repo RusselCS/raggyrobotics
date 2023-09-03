@@ -174,12 +174,12 @@ actor InfectClawWarper : BasicProjectile
 actor InfectClawWarperSmallLeft : InfectClawWarper
 {
     scale 1.25
-    args -10, 38, 56
+    args -20, 38, 56
 }
 
 actor InfectClawWarperSmallRight : InfectClawWarperSmallLeft
 {
-    args 10, 26, 56
+    args 20, 26, 56
 }
 
 actor InfectClawWarperR : BasicProjectile
@@ -199,12 +199,12 @@ actor InfectClawWarperR : BasicProjectile
 actor InfectClawWarperSmallLeftR : InfectClawWarperR
 {
     scale 1.25
-    args -10, 26, 56
+    args -20, 26, 56
 }
 
 actor InfectClawWarperSmallRightR : InfectClawWarperSmallLeftR
 {
-    args 10, 36, 56
+    args 20, 36, 56
 }
 
 actor InfectClawWarper_P : CustomInventory
@@ -214,7 +214,7 @@ actor InfectClawWarper_P : CustomInventory
     Pickup:
         TNT1 A 0
         TNT1 A 0 A_SetPitch(CallACS("core_GetPtrPitch", AAPTR_TARGET))
-        TNT1 A 0 A_Warp(AAPTR_TARGET, cos(-pitch)*args[2],args[0],args[1]+(sin(-pitch)*48),-args[0],WARPF_INTERPOLATE)
+        TNT1 A 0 A_Warp(AAPTR_TARGET, cos(-pitch)*args[2],args[0],args[1]+(sin(-pitch)*48),0,WARPF_INTERPOLATE)
         stop
     }
 }
