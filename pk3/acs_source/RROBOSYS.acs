@@ -97,9 +97,8 @@ script "RROBOENZ_RUNSYSTEM" OPEN
 script "RROBOENZ_PICKTIME" (void) { setResultValue(pickTime); }
 script "RROBOENZ_MAXPLAYER" (void) { setResultValue(maxPlayer); }
 
-int infectScores[RBNZ_PLAYERLIMIT];
-script "ROBOENZ_GETPLAYERSCORE" (int pln) { SetResultValue(infectScores[pln]); }
-script "ROBOENZ_ADDPLAYERSCORE" (int pln) { infectScores[pln]++; }
+script "ROBOENZ_GETPLAYERSCORE" (int pln) { SetResultValue(GetCustomPlayerValue("Infections", pln)); }
+script "ROBOENZ_ADDPLAYERSCORE" (int pln) { SetCustomPlayerValue("Infections", pln, GetCustomPlayerValue("Infections", pln)+1); }
 
 function void infectAlpha(void) {
 

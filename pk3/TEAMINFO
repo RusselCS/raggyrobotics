@@ -2,9 +2,9 @@ ClearTeams
 
 Team "Survivors"
 {
-   PlayerColor "00 70 E8"
+   PlayerColor "00 88 94"
    TextColor "Cyan"
-   RailColor "00 70 E8"
+   RailColor "00 88 94"
    FlagItem "MegaBlueFlag"
    SkullItem "MegaBlueHat"
    SmallFlagHUDIcon "LFLG"
@@ -21,9 +21,9 @@ Team "Survivors"
 
 Team "Infected"
 {
-	PlayerColor "E0 00 58"
+	PlayerColor "37 73 2B"
 	TextColor "DarkGreen"
-	RailColor "E0 00 58"
+	RailColor "37 73 2B"
 	FlagItem "MegaRedFlag"
 	SkullItem "MegaRedHat"
 	SmallFlagHUDIcon "WFLG"

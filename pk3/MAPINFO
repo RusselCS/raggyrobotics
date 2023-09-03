@@ -1,0 +1,4 @@
+GameInfo
+{
+    AddCustomData = "Infections", "int", 0
+}
