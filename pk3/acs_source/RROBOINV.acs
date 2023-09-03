@@ -240,6 +240,7 @@ script "RROBOENZ_INFECT" (int who, int alpha)
     SpawnSpotForced("InfectionEffect", 0, 0, 0);
     Thing_SetTranslation(0, CLR_INFECTED);
     SetActorVelocity(0, 0, 0, 0, 0, 0);
+    GiveInventory("RoboenzaGoreWatcherStart_P", 1);
     CallACS0("ROBOENZ_TRANSFORMFREEZE");
     SetWeapon("RoboenzaWep");
     str weap = GetWeapon();
