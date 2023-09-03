@@ -4,6 +4,8 @@ user noarchive string rroboenz_compskin = "";
 
 user bool   rroboenz_autofrenzy      = true;
 
+user int    rroboenz_panicbutton     = 2;
+user bool   rroboenz_panicicon       = true;
 user int    rroboenz_timerbar        = 1;
 user bool   rroboenz_alphabuffast    = true;
 user bool   rroboenz_ragebuffast     = true;

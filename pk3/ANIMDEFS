@@ -1,1 +1,5 @@
 texture INFECT1 range INFECT6 tics 4
+
+texture RZFRZIA range RZFRZID tics 4
+texture RZFRZA range RZFRZD tics 4
+texture RZEXTA range RZEXTB tics 6

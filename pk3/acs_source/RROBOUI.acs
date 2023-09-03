@@ -158,6 +158,15 @@ script "DrawBar_RoboenzaWep" (void) CLIENTSIDE
     }
 }
 
+#define BTN_TIME 8
+
+str panicButtonCommands[4] = {
+    "usepanicbutton",
+    "+reload",
+    "+use",
+    "+crouch"
+};
+
 script "RROBOENZ_UIHANDLER" (int cam) CLIENTSIDE
 {
     int cpn = ConsolePlayerNumber();
@@ -219,6 +228,34 @@ script "RROBOENZ_UIHANDLER" (int cam) CLIENTSIDE
                     Get_AssistDisplayBar_Y(pos)
                 );
             }
+
+            if(GetUserCvar(cpn, "rroboenz_panicicon") && hasPanicItem(cam)) {
+                pos = Get_And_Inc_AssistBarCount();
+                int bindIdx = GetUserCvar(cpn, "rroboenz_panicbutton")-1;
+                if(bindIdx >= 0) {
+                    str bindStr;
+                    x = Get_AssistDisplayBar_X(pos);
+                    y = Get_AssistDisplayBar_Y(pos);
+                    int tX = x-2.0;
+                    int tY = y+10.0;
+
+                    if(timer() % (BTN_TIME * 2) < BTN_TIME) {
+                        bindStr = StrParam(s:"\c[BTNAL1]", k:panicButtonCommands[GetUserCvar(cpn, "rroboenz_panicbutton")-1]);
+                    } else {
+                        bindStr = StrParam(s:"\c[BTNAL2]", k:panicButtonCommands[GetUserCvar(cpn, "rroboenz_panicbutton")-1]);
+                    }
+                    
+                    if(GetChar(bindStr, 0) != '?') {
+                        BasicTextDisplay("SMALLFONT", bindStr, Get_And_Inc_AssistDisplayID(),tX,tY);
+                    }
+                }
+
+                if(CheckActorInventory(cam, "ExitUnitItem") > 0) {
+                    BasicImageDisplay("RZEXTA",Get_And_Inc_AssistDisplayID(),x,y);
+                } else if(CheckActorInventory(cam, "FrenzyBuffItem") > 0) {
+                    BasicImageDisplay("RZFRZA",Get_And_Inc_AssistDisplayID(),x,y);
+                }
+            }
         }
     }
 
@@ -241,7 +278,12 @@ function bool roboenzaBarCheck(void) {
     int ret = GetUserCvar(cpn,"rroboenz_timerbar") == 2 ||
               GetUserCvar(cpn, "rroboenz_alphabuffast") ||
               GetUserCvar(cpn, "rroboenz_ragebuffast") ||
-              GetUserCvar(cpn, "rroboenz_spreadbuffast");
+              GetUserCvar(cpn, "rroboenz_spreadbuffast") ||
+              GetUserCvar(cpn, "rroboenz_panicicon");
     
     return ret;
+}
+
+function bool hasPanicItem(int tid) {
+    return CheckActorInventory(tid, "ExitUnitItem") > 0 || CheckActorInventory(tid, "FrenzyBuffItem") > 0;
 }

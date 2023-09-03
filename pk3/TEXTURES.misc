@@ -7,3 +7,16 @@ texture ASTVRRBZ, 2, 5{patch ASSTVARP, 0, 0 {Translation "192:192=228:228", "198
 graphic RBNZPZRI, 32, 32 {xscale 2.0 yscale 2.0 patch RBNZINPZ,0,0}
 graphic RBNZRAGI, 32, 32 {xscale 2.0 yscale 2.0 patch RBNZENRG,0,0}
 graphic RBNZBRZI, 32, 32 {xscale 2.0 yscale 2.0 patch RBNZBERZ,0,0}
+
+graphic RZFRZIA, 30, 30 {XScale 2.0 YScale 2.0 Patch RZFNA0, 0, 0}
+graphic RZFRZIB, 30, 30 {XScale 2.0 YScale 2.0 Patch RZFNB0, 0, 0}
+graphic RZFRZIC, 30, 30 {XScale 2.0 YScale 2.0 Patch RZFNC0, 0, 0}
+graphic RZFRZID, 30, 30 {XScale 2.0 YScale 2.0 Patch RZFND0, 0, 0}
+
+graphic RZFRZA, 16, 16 {Patch RZFNA0, 0, 0}
+graphic RZFRZB, 16, 16 {Patch RZFNB0, 0, 0}
+graphic RZFRZC, 16, 16 {Patch RZFNC0, 0, 0}
+graphic RZFRZD, 16, 16 {Patch RZFND0, 0, 0}
+
+graphic RZEXTA, 16, 16 {Patch EXITB0, -3, -2}
+graphic RZEXTB, 16, 16 {Patch EXITC0, -3, -2}

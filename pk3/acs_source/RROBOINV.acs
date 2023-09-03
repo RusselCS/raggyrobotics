@@ -13,6 +13,13 @@ int frenzyFrags[FRENZY_BUFFSTACK_MAX] = {
     2, 5
 };
 
+int panicButtons[3] = {
+    BT_RELOAD,
+    BT_USE,
+    BT_CROUCH
+};
+#define PANICBUTTON_OFFSET 2
+
 bool itemsPulled = false;
 
 int jumpSlot = -1;
@@ -122,6 +129,9 @@ script "RROBENZ_SURVIVORMANAGE" (void)
 
     int oldFrags = GetPlayerScore(pln, SCORE_FRAGS);
     int startFrags = oldFrags;
+    int buttons = GetPlayerInput(-1, INPUT_BUTTONS);
+    int oldButtons = GetPlayerInput(-1, INPUT_OLDBUTTONS);
+
     while(GetActorProperty(0, APROP_Health) > 0 && CheckInventory("RoboenzaInfected") == 0) {
         if(oldFrags != GetPlayerScore(pln, SCORE_FRAGS)) {
             oldFrags = GetPlayerScore(pln, SCORE_FRAGS);
@@ -134,7 +144,17 @@ script "RROBENZ_SURVIVORMANAGE" (void)
             }
         }
 
+        int btn = GetUserCvar(pln, "rroboenz_panicbutton");
+        if(btn >= PANICBUTTON_OFFSET) {
+            if((buttons & panicButtons[btn-PANICBUTTON_OFFSET]) && !(oldButtons & panicButtons[btn-PANICBUTTON_OFFSET])) {
+                CallACS0("RROBOENZ_PANICBUTTON");
+            }
+        }
+        
         delay(1);
+
+        oldButtons = buttons;
+        buttons = GetPlayerInput(-1, INPUT_BUTTONS);
     }
 }
 
@@ -187,6 +207,22 @@ script "RROBOENZ_FRENZYBUFF" (int to) {
     CSetInventory("FrenzyBuffStack", to);
 }
 
+script "RROBOENZ_PANICBUTTON" (void) NET CLIENTSIDE
+{
+    if(PlayerNumber() != ConsolePlayerNumber())
+        terminate;
+    
+    if(CheckInventory("ExitUnitItem") > 0) {
+        ConsoleCommand("Use ExitUnitItem");
+        terminate;
+    }
+
+    if(CheckInventory("FrenzyBuffItem") > 0) {
+        ConsoleCommand("Use FrenzyBuffItem");
+        terminate;
+    }
+}
+
 script "RROBOENZ_INFECT" (int who, int alpha)
 {
     SetActivator(who + PLN_TID);
@@ -195,6 +231,8 @@ script "RROBOENZ_INFECT" (int who, int alpha)
     removeAssists();
     CallACS0("RROBOENZ_APPLYZOMBIESKIN");
 
+    CSetInventory("FrenzyBuffStack", 0);
+    CSetInventory("FrenzyBuffCount", 0);
     GiveInventory("RoboenzaInfected", 1);
     SetAmmoCapacity("RoboenzaTimer", ZOMBIE_TIME);
     GiveInventory("RoboenzaTimer", ZOMBIE_TIME);

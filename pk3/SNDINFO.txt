@@ -7,6 +7,9 @@ rroboenza/player/superjump      RBNZLEAP    // Shovel Knight
 $volume rroboenza/player/superjump   0.8
 rroboenza/player/land           RBNZLAND    // Ninja Gaiden
 
+rroboenza/player/frenzyitem     RBNZFRIT    // Batman: Return of the Joker
+$volume rroboenza/player/frenzyitem 0.6
+
 rroboenza/powerups/curespawn    RBNZCRSP    // Bayou Billy
 rroboenza/powerups/cureact      RBNZCRGO    // Bayou Billy
 

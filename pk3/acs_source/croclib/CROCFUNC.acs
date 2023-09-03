@@ -93,3 +93,14 @@ function int checkPlayerCameraPln(int pln)
 {
 	return getPlnFromTid(CheckPlayerCamera(pln));
 }
+
+function void BasicTextDisplay(str font, str text, int id, int x, int y)
+{
+BasicTextDisplay2(font, text, id, x, y, 0.1, 1.0);
+}
+
+function void BasicTextDisplay2(str font, str text, int id, int x, int y, int holdtime, int alpha)
+{
+SetFont(font);
+HudMessageBold(s:text;HUDMSG_PLAIN,id,CR_UNTRANSLATED,x,y,holdtime,alpha);
+}

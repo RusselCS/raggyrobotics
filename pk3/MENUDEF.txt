@@ -25,6 +25,9 @@ OptionMenu "menu_rroboenz"
 	Option		"$RBZN_GLOBALCURESOUND",	"rroboenz_curedsound",		"OnOff"
 	Option		"$RBZN_GLOBALRAGESOUND",	"rroboenz_enragesound",		"OnOff"
 	Option		"$RBZN_GLOBALBERSERKSOUND",	"rroboenz_berserksound",	"OnOff"
+	Option		"$RBZN_PANICBUTTONICON",	"rroboenz_panicicon",		"OnOff"
+	Option		"$RBZN_PANICBUTTON",		"rroboenz_panicbutton",		"Menu_RROBOENZ_PanicBind"
+	Control 	"$RBZN_PANICBUTTONBIND",	"usepanicbutton"
 
 	// SubMenu		"Offline Skirmish",			"8BDM_Skirmish"
 	// SubMenu		"Player Setup",				"8BDM_PlayerMenu"
@@ -53,4 +56,13 @@ OptionValue "Menu_RROBOENZ_BarType"
 	1, "Weapon Bar"
 	2, "Assist Bar (Rush Jet style)"
 	3, "Inventory Bar (Old style)"
+}
+
+OptionValue "Menu_RROBOENZ_PanicBind"
+{
+	0, "None"
+	1, "Custom Bind"
+	2, "Reload"
+	3, "Use/Open"
+	4, "Crouch (Hold)"
 }
