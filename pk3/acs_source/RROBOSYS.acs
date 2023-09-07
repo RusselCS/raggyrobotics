@@ -91,13 +91,16 @@ script "RROBOENZ_RUNSYSTEM" OPEN
                 ChangeTeamScore(TEAM_INFECTED, SCORE_WINS, infcCount);
             }
 
-            if(survCount==0) {
-                CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVALMUS, RBNZ_BMS_VICTORY);
-                terminate;
-            }
+            if(GetGameModeState() == GAMESTATE_INRESULTSEQUENCE) {
+                SetGameModeLimit(GAMELIMIT_WINS, max(survCount, infcCount)-1);
 
-            if(infcCount==0) { // If there are no survivors, no victory music. But maps should know the round ended.
-                CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_VICTORY);
+                if(survCount==0) { // If there are no survivors, no victory music. But maps should know the round ended.
+                    CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_VICTORY);
+                }
+
+                if(infcCount==0) {
+                    CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVALMUS, RBNZ_BMS_VICTORY);
+                }
                 terminate;
             }
 
@@ -114,6 +117,7 @@ script "ROBOENZ_ADDPLAYERSCORE" (int pln) { SetCustomPlayerValue("Infections", p
 
 script "RROBOENZ_SCORE_UNLOADING" UNLOADING
 {
+    SetGameModeLimit(GAMELIMIT_WINS, 0);
     for(int i = 0; i < maxPlayer; i++) {
         ResetCustomDataToDefault("Infections", i);
     }
