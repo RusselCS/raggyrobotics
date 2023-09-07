@@ -1,16 +1,16 @@
 LISTMENU "MainMenu"
 {
-    StaticPatch 94, 2, "M_DOOM"
-    Position 97, 72
-    Font "BigFont", "Untranslated"
-    TextItem "SinglePlayer", "s", "PlayerclassMenu"
-    TextItem "Multiplayer", "m", "ZA_MultiplayerOptions"
-    TextItem "Player Setup", "p", "PlayerMenu"
-    TextItem "Options", "o", "OptionsMenu"
+	StaticPatch 94, 2, "M_DOOM"
+	Position 97, 72
+	Font "DBIGFONT", 			"MenuWhite"
+	TextItem "SinglePlayer", 	"s", "PlayerclassMenu"
+	TextItem "Multiplayer", 	"m", "8BDM_Multiplayer"
+	TextItem "Player Setup", 	"p", "8BDM_PlayerMenu"
+	TextItem "Settings", 		"t", "8BDM_Settings"
     Font "BigFont", "MenuGreen" // [RBNZ]
     TextItem "Roboenza Frenzy", "c", "menu_rroboenz" // [RBNZ]
     Font "BigFont", "Untranslated" // [RBNZ]
-    TextItem "Quit Game", "q", "QuitMenu"
+	TextItem "Quit Game", 		"q", "QuitMenu"
 }
 
 OptionMenu "menu_rroboenz"
