@@ -15,6 +15,7 @@ int totalPlayers = 0;
 script "RROBOENZ_ENTER" ENTER
 {
     maxPlayer = max(maxPlayer, PlayerNumber()+1);
+    ResetCustomDataToDefault("Infections", PlayerNumber());
     CallACS0("RROBENZ_PLAYERSTART");
     
     if(canRoboenza()) {
@@ -124,9 +125,6 @@ script "ROBOENZ_ADDPLAYERSCORE" (int pln) { SetCustomPlayerValue("Infections", p
 script "RROBOENZ_SCORE_UNLOADING" UNLOADING
 {
     SetGameModeLimit(GAMELIMIT_WINS, 0);
-    for(int i = 0; i < maxPlayer; i++) {
-        ResetCustomDataToDefault("Infections", i);
-    }
 }
 
 function void infectAlpha(void) {
