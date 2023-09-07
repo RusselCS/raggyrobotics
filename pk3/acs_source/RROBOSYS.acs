@@ -78,7 +78,7 @@ script "RROBOENZ_RUNSYSTEM" OPEN
             }
 
             if(buffGiven) { // if one of the zombies gets cured, and then someone else gets infected, may as well...
-                if(survCount == 2) {
+                if(survCount >= 2) {
                     buffGiven = false;
                 }
             }
