@@ -91,6 +91,7 @@ actor FrenzyBlast_P : CustomInventory
 
 actor FrenzyBlast : BasicExplosion
 {
+    Obituary "$OB_FRENZYBLAST"
     Damagetype "FrenzyBlast"
     States
     {

@@ -20,6 +20,8 @@ TAG_FRENZYBUFF = "Frenzy Bonus";
 
 OB_ROBOENZAWEP = "%o was eaten alive in %k's frenzy...";
 
+OB_FRENZYBLAST = "%o was repelled by %k's empower blast.";
+
 // Menu constants
 RBZN_SUBHEADER_SURVIVOR = "-- Survivor Options --";
 RBNZ_RAGEBUFFAST        = "Show Rage buff on Assist Bar";

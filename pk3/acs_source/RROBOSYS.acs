@@ -97,7 +97,7 @@ script "RROBOENZ_RUNSYSTEM" OPEN
             }
 
             if(GetGameModeState() == GAMESTATE_INRESULTSEQUENCE) {
-                SetGameModeLimit(GAMELIMIT_WINS, max(survCount, infcCount)-1);
+                SetGameModeLimit(GAMELIMIT_WINS, max(survCount, infcCount));
 
                 if(survCount==0) { // If there are no survivors, no victory music. But maps should know the round ended.
                     CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_VICTORY);
