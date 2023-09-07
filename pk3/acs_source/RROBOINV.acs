@@ -38,7 +38,7 @@ script "RROBOENZ_LOADOUTBUILD" OPEN
 
         // Special item draw logic: roll for gift or attack type assist
         // You get an attacking assist, or Eddie in vanilla.
-        roll = random(1, getAssistItemGroupCount(GRP_GIFT) + getAssistItemGroupCount(GRP_GIFT));
+        roll = random(1, getAssistItemGroupCount(GRP_GIFT) + getAssistItemGroupCount(GRP_ATTACK));
         if(roll <= getAssistItemGroupCount(GRP_ATTACK)) {
             attackSlot = randomAssistItemEx(GRP_ATTACK, true);
         } else {
