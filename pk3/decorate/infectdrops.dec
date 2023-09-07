@@ -94,7 +94,8 @@ actor RoboenzaCure : CustomInventory
     {
     Spawn:
         RZCR A 0
-        RZCR A 0 A_ChangeVelocity(frandom(0, 8), frandom(0, 8), frandom(0, 10), CVF_RELATIVE|CVF_REPLACE)
+        RZCR A 0 A_ChangeVelocity(frandom(-8, 8), frandom(-8, 8), frandom(0, 8), CVF_RELATIVE|CVF_REPLACE)
+        RZCR A 0 A_SpawnItemEx("RoboenzaCureMarker")
         RZCR A 0 A_PlaySoundEx("rroboenza/powerups/curespawn", "voice")
     SpawnLoop:
         RZCR AAABBBCCCDDDEEEFFFGGGHHH 1 A_Countdown
@@ -108,6 +109,37 @@ actor RoboenzaCure : CustomInventory
         fail
     CureMe:
         RZCR A 0 ACS_NamedExecuteWithResult("RROBOENZ_CURE")
+        stop
+    }
+}
+
+actor RoboenzaCureMarker : MapMarker
+{
+    reactiontime 1050
+    +MISSILE
+    +NOINTERACTION
+    States
+    {
+    Spawn:
+        RZCR AAABBBCCCDDDEEEFFFGGGHHH 1 A_GiveInventory("RoboenzaCureMarker_P", 1)
+        loop
+    Death:
+        RZCR A 0
+        stop
+    }
+}
+
+actor RoboenzaCureMarker_P : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_Countdown
+        TNT1 A 0 A_Warp(AAPTR_TARGET, 0, 0, 0, 0, WARPF_NOCHECKPOSITION, "Succeed")
+        TNT1 A 0 Thing_Remove(0)
+        stop
+    Succeed:
+        TNT1 A 0
         stop
     }
 }
