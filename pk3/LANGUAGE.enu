@@ -47,3 +47,6 @@ RBZN_GLOBALINFECTSOUND  = "Infection";
 RBZN_GLOBALCURESOUND    = "Cure";
 RBZN_GLOBALRAGESOUND    = "Enraged";
 RBZN_GLOBALBERSERKSOUND = "Berserk";
+
+// Changelog
+RBZN_SUBHEADER_V1B_CHANGES = "-- v1b Changes --";

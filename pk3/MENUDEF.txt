@@ -17,6 +17,8 @@ OptionMenu "menu_rroboenz"
 {
 	Title "$RBZN_MENU"
 
+	Submenu "Changelog", "RBNZ_Changelog"
+
 	StaticText 	" "
 	StaticText	"$RBZN_SUBHEADER_SURVIVOR", 1
 	StaticText 	" "
@@ -69,3 +71,39 @@ OptionValue "Menu_RROBOENZ_PanicBind"
 	3, "Use/Open"
 	4, "Crouch (Hold)"
 }
+
+Optionmenu "RBNZ_Changelog"
+{
+	StaticText 	" "
+	StaticText	"$RBZN_SUBHEADER_V1B_CHANGES", 1
+	StaticText 	" "
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_01"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_02"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_03"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_04"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_05"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_06"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_07"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_08"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_09"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_10"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_11"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_12"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_13"
+	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_14"
+}
+
+OptionValue RBNZ_CL_1B_01 {0, "Cured and final survivors now blast away close Infected."}
+OptionValue RBNZ_CL_1B_02 {0, "Cure now appears on automap."}
+OptionValue RBNZ_CL_1B_03 {0, "Options menu no longer jumps to Legacy settings."}
+OptionValue RBNZ_CL_1B_04 {0, "Assist Bar now shows this mod's buffs."}
+OptionValue RBNZ_CL_1B_05 {0, "Fixed map voting playing poorly with this mod."}
+OptionValue RBNZ_CL_1B_06 {0, "Infected can no longer pick up ammo."}
+OptionValue RBNZ_CL_1B_07 {0, "Scoreboard infections now reset on map change."}
+OptionValue RBNZ_CL_1B_08 {0, "Shield effects stick around after infection"}
+OptionValue RBNZ_CL_1B_09 {0, "Fixed infected/spectators damaging survivors."}
+OptionValue RBNZ_CL_1B_10 {0, "Infected landing should be more reliable."}
+OptionValue RBNZ_CL_1B_11 {0, "Infected health regen should be more reliable."}
+OptionValue RBNZ_CL_1B_12 {0, "Players should no longer get kicked for user info flood."}
+OptionValue RBNZ_CL_1B_13 {0, "Intense/Victory music should now play at correct times."}
+OptionValue RBNZ_CL_1B_14 {0, "Infected should no longer be able to use copyweps."}

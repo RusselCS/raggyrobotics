@@ -3,6 +3,8 @@ user string rroboenz_zombieskin = "";
 local noarchive string rroboenz_tempskin = "";
 local noarchive string rroboenz_compskin = "";
 
+user noarchive bool RBNZ_MENU_NULL = false;
+
 user bool   rroboenz_autofrenzy      = true;
 
 user int    rroboenz_panicbutton     = 2;
