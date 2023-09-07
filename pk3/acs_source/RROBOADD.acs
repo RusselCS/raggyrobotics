@@ -11,8 +11,6 @@
 
 script "RROBOENZ_DTADD" OPEN
 {
-    DefineAssistDisplay("RROBOENZ_UIHANDLER");
-
     delay(1);
 
     // Need to remake the possession script from vanilla because it triggers the color script that's impossible to disable once it's on
@@ -27,6 +25,7 @@ script "RROBOENZ_DTADD" OPEN
 
 script "RROBOENZ_DTADD_CLIENT" OPEN CLIENTSIDE
 {
+    DefineAssistDisplay("RROBOENZ_UIHANDLER");
     CreatePlayerTranslationGlow(CLR_INFECTED, CLR_INF_CYAN, CLR_INF_BLUE, CLR_INF_BLACK);
 }
 
