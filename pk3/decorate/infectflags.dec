@@ -31,13 +31,14 @@ actor InfectRecoil : CustomInventory
     States
     {
     Pickup:
-        TNT1 A 0 A_JumpIfInventory("RoboenzaAlphaInfected", 1, "None")
+        TNT1 A 0 A_JumpIfInventory("RoboenzaAlphaInfected", 1, "Forward")
         TNT1 A 0 A_JumpIfInventory("InfectRecoilTime", 1, "None")
         TNT1 A 0 A_GiveInventory("InfectRecoilTime", 2)
         TNT1 A 0 A_Recoil(6)
         stop
-    None:
-        TNT1 A 0
+    Forward: // Cancels the "standard" hitstun
+        TNT1 A 0 A_Recoil(-1)
+        TNT1 A 0 A_ScaleVelocity(1.33)
         stop
     }
 }

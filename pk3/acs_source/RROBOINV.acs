@@ -447,29 +447,50 @@ script "ROBOENZ_TRANSFORMFREEZE" (void) {
 }
 
 // DAMAGE EVENT (for zombie recoil and infection)
+// Damage event script needs to:
+// - If user is spectator, disable damage.
+// - If victim is survivor, (does not have "RoboenzaInfected")
+// ---- If damagetype is "RoboenzaInfection"
+// ------- Kill or infect
+// ---- Else damagetype, if inflictor is not of type BasicACSDamager, disable damage.
+
 script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
 {
     if(ev == GAMEEVENT_ACTOR_DAMAGED) {
-        int pln = PlayerNumber();
-        if(pln >= 0) {
-            dmg = GetEventResult();
+        int victim = PlayerNumber();
+        dmg = GetEventResult();
 
-            if(CheckInventory("RoboenzaInfected")) {
+        if(victim >= 0 && dmg > 0) { // Victim is a player and damage is more than 0
+            bool victimInfected = CheckInventory("RoboenzaInfected") > 0;
+            int victimHp = GetActorProperty(0, APROP_Health);
 
-                GiveInventory("InfectRecoil", 1);
+            SetActivator(0, AAPTR_DAMAGE_SOURCE);
+            int attacker = PlayerNumber();
+            int attackerHp = GetActorProperty(0, APROP_Health);
 
+            if(victiminfected) {
+                GiveActorInventory(victim + PLN_TID, "InfectRecoil", 1);
             } else {
-                if(dmg > 0 && StrICmp(type, "RoboenzaInfection") == 0) {
-
-                    int hp = GetActorProperty(0, APROP_Health);
-                    SetActivator(0, AAPTR_DAMAGE_SOURCE);
-
-                    if(dmg >= hp) { // if the scratch kills, add health and time.
-                        GiveInventory("RoboenzaTimer", 20);
-                        HealThing(20);
+                if(attacker >= 0) {
+                    if(!PlayerInGame(attacker)) {
+                        SetResultValue(0);
                     } else {
-                        CallACS1("RROBOENZ_INFECT", pln);
-                        CallACS1("ROBOENZ_ADDPLAYERSCORE", PlayerNumber());
+                        SetActivator(0, AAPTR_DAMAGE_INFLICTOR);
+                        bool isDamager = (CheckFlag(0, "MISSILE") && CheckForActorVar(0, "user_damage"));
+
+                        if(StrICmp(type, "RoboenzaInfection") == 0) {
+                            if(dmg >= victimHp) {
+                                GiveActorInventory(attacker + PLN_TID, "RoboenzaTimer", 20);
+                                healActor(attacker + PLN_TID, 20);
+                            } else {
+                                CallACS1("RROBOENZ_INFECT", victim);
+                                CallACS1("ROBOENZ_ADDPLAYERSCORE", attacker);
+                            }
+                        } else {
+                            if(!isDamager) {
+                                SetResultValue(0);
+                            }
+                        }
                     }
                 }
             }
@@ -502,4 +523,18 @@ function void returnAssists(void) {
     }
 }
 
+function bool CheckForActorVar(int tid, str theVar) {
+	SetUserVariable(tid,theVar,1);
+	return (GetUserVariable(tid,theVar)==1);
+}
 
+function void healActor(int tid, int amount) {
+    CallACS2("RROBOENZ_HEAL", tid, amount);
+}
+
+script "RROBOENZ_HEAL" (int tid, int amount) {
+    SetActivator(tid);
+    if(GetActorProperty(0, APROP_Health) > 0) {
+        HealThing(amount);
+    }
+}
