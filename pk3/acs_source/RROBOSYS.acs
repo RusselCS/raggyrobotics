@@ -83,11 +83,16 @@ script "RROBOENZ_RUNSYSTEM" OPEN
                 }
             }
 
+            // [Russ] This is gonna get annoying to read back on in the server log
+            // Aaaaaaand will probably flag TSPG mods or something? idk.
+            // But I need to know what's going on, so I'm just gonna. Spam logs.
             if(GetTeamProperty(TEAM_SURVIVOR, TPROP_WinCount) != survCount) {
+                Log(s:"Updating survivor wins to: ", i:survCount);
                 ChangeTeamScore(TEAM_SURVIVOR, SCORE_WINS, survCount);
             }
 
             if(GetTeamProperty(TEAM_INFECTED, TPROP_WinCount) != infcCount) {
+                Log(s:"Updating infected wins to: ", i:infcCount);
                 ChangeTeamScore(TEAM_INFECTED, SCORE_WINS, infcCount);
             }
 
@@ -106,7 +111,8 @@ script "RROBOENZ_RUNSYSTEM" OPEN
 
             delay(1);
         }
-    }  
+        Log(s:"This line should never run.");
+    }
 }
 
 script "RROBOENZ_PICKTIME" (void) { setResultValue(pickTime); }
