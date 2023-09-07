@@ -89,37 +89,38 @@ script "RROBOENZ_TOOLTIP" (int hp, int alpha) CLIENTSIDE
 
 script "RROBOENZ_APPLYZOMBIESKIN" (void) CLIENTSIDE
 {
+    delay(1);
     int cpn = ConsolePlayerNumber();
 	if(cpn!=PlayerNumber()){terminate;}
 
-    str skin = GetUserCvarString(cpn, "rroboenz_zombieskin");
+    str skin = GetCvarString("rroboenz_zombieskin");
 
     if(StrICmp(skin, "") != 0) {
-        ConsoleCommand("rroboenz_tempskin $skin");
-        ConsoleCommand(StrParam(s:"skin ", s:skin));
+        LogConsoleCommand("rroboenz_tempskin $skin");
+        LogConsoleCommand(StrParam(s:"skin ", s:skin));
     }
 }
 
 script "RROBOENZ_REVOKEZOMBIESKIN" (void) CLIENTSIDE
 {
+    delay(1);
     int cpn = ConsolePlayerNumber();
 	if(cpn!=PlayerNumber()){terminate;}
 
-    ConsoleCommand("rroboenz_compskin $skin");
-    delay(1);
-
-    str zombie = GetUserCvarString(cpn, "rroboenz_zombieskin");
-    str temp = GetUserCvarString(cpn, "rroboenz_tempskin");
-    str comp = GetUserCvarString(cpn, "rroboenz_compskin");
-
-    //Log(s:"Revoke Skin\nzombie: ", s:zombie, s:"\ntemp: ", s:temp, s:"\ncomp: ", s:comp);
+    str zombie = GetCvarString("rroboenz_zombieskin");
 
     if(StrICmp(zombie, "") == 0) {
-        SetUserCvarString(cpn, "rroboenz_tempskin", "");
+        SetCvarString("rroboenz_tempskin", "");
     } else {
+        LogConsoleCommand("rroboenz_compskin $skin");
+        delay(1);
+
+        str temp = GetCvarString("rroboenz_tempskin");
+        str comp = GetCvarString("rroboenz_compskin");
+
         if(StrICmp(temp, "") != 0) {
             if(StrICmp(zombie, comp) == 0) { // If the player changed their skin in the middle of this, it should just accept the new skin as uninfect.
-                ConsoleCommand("skin $rroboenz_tempskin");
+                LogConsoleCommand("skin $rroboenz_tempskin");
             }
             SetUserCvarString(cpn, "rroboenz_tempskin", "");
         }
@@ -134,7 +135,7 @@ script "rroboenz_resetzombieskin" (void) NET CLIENTSIDE
 	if(cpn!=PlayerNumber()){terminate;}
 
     SetUserCvarString(cpn, "rroboenz_zombieskin", "");
-    ConsoleCommand("openmenu menu_rroboenz");
+    LogConsoleCommand("openmenu menu_rroboenz");
 }
 
 script "rroboenz_copyskintozombie" (void) NET CLIENTSIDE
@@ -143,8 +144,15 @@ script "rroboenz_copyskintozombie" (void) NET CLIENTSIDE
 
 	int cpn = ConsolePlayerNumber();
 	if(cpn!=PlayerNumber()){terminate;}
-    ConsoleCommand("rroboenz_zombieskin $skin");
-    ConsoleCommand("openmenu menu_rroboenz");
+    LogConsoleCommand("rroboenz_zombieskin_stage $skin");
+    delay(1);
+    SetUserCvarString(cpn, "rroboenz_zombieskin", GetCvarString("rroboenz_zombieskin_stage"));
+    LogConsoleCommand("openmenu menu_rroboenz");
+}
+
+function void LogConsoleCommand(str cmd) {
+    // Log(s:"Running console command: ", s:cmd);
+    ConsoleCommand(cmd);
 }
 
 script "DrawBar_RoboenzaWep" (void) CLIENTSIDE
