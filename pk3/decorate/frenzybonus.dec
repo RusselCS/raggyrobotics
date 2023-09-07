@@ -15,7 +15,6 @@ actor FrenzyBuffItem : BaseMM8BDMUseItem
     {
     Use:
         TNT1 A 0
-        TNT1 A 0 A_PlaySoundEx("rroboenza/player/frenzyitem", "voice")
         TNT1 A 0 ACS_NamedExecuteWithResult("RROBOENZ_FRENZYBUFF")
         TNT1 A 0 A_JumpIfInventory("FrenzyAuraActive", 1, "End")
         TNT1 A 0 A_SpawnItemEx("FrenzyAuraWatcher")

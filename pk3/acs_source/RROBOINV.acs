@@ -113,11 +113,11 @@ script "RROBENZ_SURVIVORMANAGE" (void)
 
     // Mobility
     if(jumpSlot!=-1)
-        GiveInventory(getAssistItemActor(jumpSlot), max(3, getAssistItemAmount(jumpSlot)));
+        GiveInventory(getAssistItemActor(jumpSlot), getAssistItemAmount(jumpSlot));
     if(dashSlot!=-1)
-        GiveInventory(getAssistItemActor(dashSlot), max(3, getAssistItemAmount(dashSlot)));
+        GiveInventory(getAssistItemActor(dashSlot), getAssistItemAmount(dashSlot));
     if(flightSlot!=-1)
-        GiveInventory(getAssistItemActor(flightSlot), max(3, getAssistItemAmount(flightSlot)));
+        GiveInventory(getAssistItemActor(flightSlot), getAssistItemAmount(flightSlot));
     
     // Bonus attack
     if(attackSlot!=-1)
@@ -211,6 +211,7 @@ script "RROBOENZ_FRENZYBUFF" (int to) {
             CallACS2("RROBOENZ_ALERT", PlayerNumber(), MSG_BERSERK);
             break;
     }
+    LocalAmbientSound("rroboenza/player/frenzyitem", 128);
     CSetInventory("FrenzyBuffStack", to);
 }
 
