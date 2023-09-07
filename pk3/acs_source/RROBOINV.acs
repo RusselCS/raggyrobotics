@@ -300,9 +300,9 @@ script "RROBOENZ_MANAGEINFECTED" (void)
             }
         }
 
-        if(infectTime % (35 * 3) == 0) { // Gradual health regen
+        if(infectTime % 52 == 0) { // Gradual health regen
             if(GetActorProperty(0, APROP_HEALTH) < GetActorProperty(0, APROP_SPAWNHEALTH)) {
-                HealThing(clamp(getCvar("sv_maxlives") * 5, 5, 30) + playerCountTeam(TEAM_SURVIVOR));
+                HealThing((clamp(getCvar("sv_maxlives") * 5, 5, 30) + playerCountTeam(TEAM_SURVIVOR)) / 2);
             }
         }
 
