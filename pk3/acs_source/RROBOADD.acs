@@ -141,7 +141,7 @@ script "rroboenz_possession_gives" (void)
     }
 
     // [Russ] Also. These are permanent item gives. They need to be cleared.
-    delay(1);
+    delay(35);
     TakeInventory("WaterShieldStop", 1);
     TakeInventory("StopShield", 1);
 }
