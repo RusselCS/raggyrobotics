@@ -251,7 +251,6 @@ script "RROBOENZ_INFECT" (int who, int alpha)
     SetWeapon("RoboenzaWep");
     str weap = GetWeapon();
     TakeInventory(weap, 1);
-    GiveInventory(weap, 1);
     CallACS1("core_poss_runfuncs", who);
 
     int zombieHealth = ZOMBIE_HP_BASE;
@@ -277,6 +276,10 @@ script "RROBOENZ_INFECT" (int who, int alpha)
 
     CallACS0("RROBOENZ_MANAGEINFECTED");
     CallACS0("RROBOENZ_INFECTED_CLIENTEFFECTS");
+    CallACS0("RROBOENZ_SELECTWEP");
+
+    delay(1);
+    GiveInventory(weap, 1);
 }
 
 script "RROBOENZ_MANAGEINFECTED" (void)
@@ -306,12 +309,6 @@ script "RROBOENZ_MANAGEINFECTED" (void)
             }
         }
 
-        // Enforce bots having the zombie weapon.
-        if(PlayerIsBot(pln)) {
-            if(!CheckWeapon("RoboenzaWep"))
-                SetWeapon("RoboenzaWep");
-        }
-
         // Inventory bar-style timer. Doesn't work for spectators.
         if(GetUserCvar(pln,"rroboenz_timerbar") == 3) {
             CSetInventory("RoboenzaTimerInvBar", CheckInventory("RoboenzaTimer"));
@@ -331,11 +328,27 @@ script "RROBOENZ_MANAGEINFECTED" (void)
             TakeInventory("InfectRecoilTime", 1);
 
         delay(1);
+
+        // Enforce bots having the zombie weapon.
+        if(!CheckWeapon("RoboenzaWep")) {
+            str weap = GetWeapon();
+            SetWeapon("RoboenzaWep");
+            CallACS0("RROBOENZ_SELECTWEP");
+            TakeInventory(weap, 1);
+            delay(1);
+            GiveInventory(weap, 1);
+        }
     }
 }
 
-script "RROBOENZ_INFECTED_CLIENTEFFECTS" (void) CLIENTSIDE
+script "RROBOENZ_SELECTWEP" (void) CLIENTSIDE
 {
+    if(PlayerNumber() == ConsolePlayerNumber())
+        ConsoleCommand("use RoboenzaWep");
+}
+
+script "RROBOENZ_INFECTED_CLIENTEFFECTS" (void) CLIENTSIDE
+{    
     int oldVelZ = GetActorVelZ(0);
 
     while(GetActorProperty(0, APROP_Health) > 0 && CheckInventory("RoboenzaInfected") > 0) {
