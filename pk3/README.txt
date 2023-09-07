@@ -42,6 +42,6 @@ Based on:
 - Roboenza-2.wad by Cutman Mike
 - Rageroboenza by Deathwind/Messatsu
 
-Disclaimer: If any information on this is incorrect, please reach out. RusselCS on Discord, or post an issue to the GitHub, linked below.
+Disclaimer: If any crediting information on this is incorrect, please reach out. RusselCS on Discord, or post an issue to the GitHub, linked below.
 
 github.com/russelcs/raggyrobotics
