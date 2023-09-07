@@ -112,6 +112,13 @@ script "RROBOENZ_MAXPLAYER" (void) { setResultValue(maxPlayer); }
 script "ROBOENZ_GETPLAYERSCORE" (int pln) { SetResultValue(GetCustomPlayerValue("Infections", pln)); }
 script "ROBOENZ_ADDPLAYERSCORE" (int pln) { SetCustomPlayerValue("Infections", pln, GetCustomPlayerValue("Infections", pln)+1); }
 
+script "RROBOENZ_SCORE_UNLOADING" UNLOADING
+{
+    for(int i = 0; i < maxPlayer; i++) {
+        ResetCustomDataToDefault("Infections", i);
+    }
+}
+
 function void infectAlpha(void) {
 
     // set the stage by ensuring survivor team can spare their infected member
