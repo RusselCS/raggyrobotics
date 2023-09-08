@@ -98,7 +98,7 @@ script "RROBOENZ_RUNSYSTEM" OPEN
             }
 
             if(GetGameModeState() == GAMESTATE_INRESULTSEQUENCE) {
-                if(Timer() < contingencyTimer()) { // if the alpha is just one and they suicide immediately, reset.
+                if(Timer() < contingencyTimer() && infcCount == 0) { // if the alpha is just one and they suicide immediately, reset.
                     ChangeTeamScore(TEAM_SURVIVOR, SCORE_WINS, 0);
                     ChangeTeamScore(TEAM_INFECTED, SCORE_WINS, 0);
                     SetGameModeLimit(GAMELIMIT_WINS, 0);
