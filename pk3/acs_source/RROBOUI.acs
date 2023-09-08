@@ -96,18 +96,14 @@ script "RROBOENZ_TOOLTIP" (int hp, int alpha, int who) CLIENTSIDE
 script "RROBOENZ_YOUINFECTED" (int attacker, int victim) CLIENTSIDE
 {
     int cln = ConsolePlayerNumber();
-    if(attacker != cln) {
-        Log(s:"Killed msg: cln");
+    if(attacker != cln)
         terminate;
-    }
 
     str fragMsg = StrParam(s:"YOU INFECTED ", n:victim+1, s:"!");
     Log(s:fragMsg);
 
-    if(!GetCvar("CL_ShowLargeFragMessages")) {
-        Log(s:"Killed msg: cvar");
+    if(!GetCvar("CL_ShowLargeFragMessages"))
         terminate;
-    }
 
     SetFont("BIGFONT");
     HudMessageBold(s:fragMsg; HUDMSG_FADEOUT, MSGID_YOUINFECTED1, CR_DARKGREEN, 1.5, 0.325, 2.5, 0.5);
