@@ -6,6 +6,7 @@ RBNZ_AL_ENRAGE = " \ckhas become \cgenraged!";
 RBNZ_AL_BERSERK = " \ckhas gone \cgberserk!";
 
 RBNZ_TIP_1 = "You have contracted Roboenza!";
+RBNZ_TIP_1F = " infected you with Roboenza!";
 RBNZ_TIP_2 = "Infect the remaining players!\n\n\cdAim at a wall and attack to climb it!\n\cdPress Alt-Fire to jump up high!";
 RBNZ_TIP_3 = "Health: \ci";
 

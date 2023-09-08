@@ -70,7 +70,7 @@ script "RROBOENZ_ALERT" (int who, int type, int del) CLIENTSIDE
     }
 }
 
-script "RROBOENZ_TOOLTIP" (int hp, int alpha) CLIENTSIDE
+script "RROBOENZ_TOOLTIP" (int hp, int alpha, int who) CLIENTSIDE
 {
     SetFont("SMALLFONT");
     if(alpha) {
@@ -80,12 +80,39 @@ script "RROBOENZ_TOOLTIP" (int hp, int alpha) CLIENTSIDE
         Print(l:"RBNZ_TIP_A1", s:"\n", l:"RBNZ_TIP_A2", s:"\n", l:"RBNZ_TIP_A3", i:hp);
         Print(s:"");
     } else {
-        HudMessage(l:"RBNZ_TIP_1"; HUDMSG_FADEOUT, MSGID_ZOMBIETIP1, CR_YELLOW,0.5, 0.14, 3.0,2.0);
+        if(who > 0) {
+            Print(n:who, l:"RBNZ_TIP_1F", s:"\n", l:"RBNZ_TIP_2", s:"\n", l:"RBNZ_TIP_3", i:hp);
+            HudMessage(n:who, l:"RBNZ_TIP_1F"; HUDMSG_FADEOUT, MSGID_ZOMBIETIP1, CR_YELLOW,0.5, 0.14, 3.0,2.0);
+        } else {
+            Print(l:"RBNZ_TIP_1", s:"\n", l:"RBNZ_TIP_2", s:"\n", l:"RBNZ_TIP_3", i:hp);
+            HudMessage(l:"RBNZ_TIP_1"; HUDMSG_FADEOUT, MSGID_ZOMBIETIP1, CR_YELLOW,0.5, 0.14, 3.0,2.0);
+        }
         HudMessage(l:"RBNZ_TIP_2"; HUDMSG_FADEOUT, MSGID_ZOMBIETIP2, CR_RED,1.5, 0.18, 3.0,2.0);
         HudMessage(l:"RBNZ_TIP_3", i:hp; HUDMSG_FADEOUT, MSGID_ZOMBIETIP3, CR_WHITE,0.5, 0.26, 3.0,2.0);
-        Print(l:"RBNZ_TIP_1", s:"\n", l:"RBNZ_TIP_2", s:"\n", l:"RBNZ_TIP_3", i:hp);
         Print(s:"");
     }
+}
+
+script "RROBOENZ_YOUINFECTED" (int attacker, int victim) CLIENTSIDE
+{
+    int cln = ConsolePlayerNumber();
+    if(attacker != cln) {
+        Log(s:"Killed msg: cln");
+        terminate;
+    }
+
+    str fragMsg = StrParam(s:"YOU INFECTED ", n:victim+1, s:"!");
+    Log(s:fragMsg);
+
+    if(!GetCvar("CL_ShowLargeFragMessages")) {
+        Log(s:"Killed msg: cvar");
+        terminate;
+    }
+
+    SetFont("BIGFONT");
+    HudMessageBold(s:fragMsg; HUDMSG_FADEOUT, MSGID_YOUINFECTED1, CR_DARKGREEN, 1.5, 0.325, 2.5, 0.5);
+    SetFont("SMALLFONT");
+    HudMessageBold(i:playerCountTeam(TEAM_SURVIVOR), s:" SURVIVORS REMAIN."; HUDMSG_FADEOUT, MSGID_YOUINFECTED2, CR_YELLOW, 1.5, 0.375, 2.5, 0.5);
 }
 
 script "RROBOENZ_APPLYZOMBIESKIN" (void) CLIENTSIDE

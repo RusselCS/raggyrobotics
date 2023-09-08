@@ -242,7 +242,7 @@ script "RROBOENZ_PANICBUTTON" (void) NET CLIENTSIDE
     }
 }
 
-script "RROBOENZ_INFECT" (int who, int alpha, int msgDel)
+script "RROBOENZ_INFECT" (int who, int alpha, int msgDel, int atk)
 {
     SetActivator(who + PLN_TID);
     Player_SetTeam(TEAM_INFECTED, true);
@@ -285,7 +285,7 @@ script "RROBOENZ_INFECT" (int who, int alpha, int msgDel)
     setRoboenzaHealth(0, zombieHealth);
 
     CallACS3("RROBOENZ_ALERT", who, MSG_INFECTED, msgDel);
-    CallACS2("RROBOENZ_TOOLTIP", zombieHealth, alpha);
+    CallACS3("RROBOENZ_TOOLTIP", zombieHealth, alpha, atk);
 
     CallACS0("RROBOENZ_MANAGEINFECTED");
     CallACS0("RROBOENZ_INFECTED_CLIENTEFFECTS");
@@ -549,8 +549,9 @@ script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
                                 int hdc = GetUserCvar(victim, "handicap");
                                 if(hdc > 0) {
                                     if(victimHp == max(1, GetActorProperty(victim + PLN_TID, APROP_SpawnHealth) - hdc)) {
-                                        CallACS1("RROBOENZ_INFECT", victim);
+                                        CallACS4("RROBOENZ_INFECT", victim, false, 0, attacker+1);
                                         CallACS1("ROBOENZ_ADDPLAYERSCORE", attacker);
+                                        CallACS2("RROBOENZ_YOUINFECTED", attacker, victim);
                                     } else {
                                         GiveActorInventory(attacker + PLN_TID, "RoboenzaTimer", 20);
                                         healActor(attacker + PLN_TID, 20);
@@ -563,8 +564,9 @@ script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
                                 if(CheckActorInventory(attacker + PLN_TID, "RoboenzaAlphaInfected") > 0)
                                     revokeAlpha(attacker);
 
-                                CallACS1("RROBOENZ_INFECT", victim);
+                                CallACS4("RROBOENZ_INFECT", victim, false, 0, attacker+1);
                                 CallACS1("ROBOENZ_ADDPLAYERSCORE", attacker);
+                                CallACS2("RROBOENZ_YOUINFECTED", attacker, victim);
                             }
                         } else {
                             if(!isDamager) {
