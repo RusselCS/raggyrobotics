@@ -259,7 +259,6 @@ script "RROBOENZ_INFECT" (int who, int alpha, int msgDel, int atk)
     SpawnSpotForced("InfectionEffect", 0, 0, 0);
     Thing_SetTranslation(0, CLR_INFECTED);
     SetActorVelocity(0, 0, 0, 0, 0, 0);
-    GiveInventory("RoboenzaGoreWatcherStart_P", 1);
     CallACS0("ROBOENZ_TRANSFORMFREEZE");
     SetWeapon("RoboenzaWep");
     str weap = GetWeapon();
@@ -303,6 +302,7 @@ script "RROBOENZ_MANAGEINFECTED" (void)
     int oldVelZ = GetActorVelZ(0);
     bool onTheGround = true;
     int hp = GetActorProperty(0, APROP_Health);
+    bool goreStarted = false;
 
     while(hp > 0 && CheckInventory("RoboenzaInfected") > 0)
     {
@@ -352,6 +352,14 @@ script "RROBOENZ_MANAGEINFECTED" (void)
                 if(CallACS0("core_checkfooting")) {
                     CSetInventory("InfectedSuperjump", 1);
                 }
+            }
+        }
+
+        // Gore Spawner
+        if(CheckInventory("RoboenzaTimer") <= 20) {
+            if(!goreStarted) {
+                GiveInventory("RoboenzaGoreWatcherStart_P", 1);
+                goreStarted = true;
             }
         }
 
