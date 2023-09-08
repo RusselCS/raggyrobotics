@@ -30,16 +30,23 @@ int attackSlot = -1;
 int giftSlot = -1;
 int passiveSlot = -1;
 
+int assistCounts[11];
+
 script "RROBOENZ_LOADOUTBUILD" OPEN
 {
     delay(2);
     if(canRoboenza()) {
+        for(int i = 0; i < MAX_ITEMS_GLOBAL; i++) {
+            if(isAssistItemMapValid(i))
+                assistCounts[clamp(getAssistItemGroup(i), 0, 10)]++;
+        }
+
         int roll;
 
         // Special item draw logic: roll for gift or attack type assist
         // You get an attacking assist, or Eddie in vanilla.
-        roll = random(1, getAssistItemGroupCount(GRP_GIFT) + getAssistItemGroupCount(GRP_ATTACK));
-        if(roll <= getAssistItemGroupCount(GRP_ATTACK)) {
+        roll = random(1, assistCounts[GRP_GIFT] + assistCounts[GRP_ATTACK]);
+        if(roll <= assistCounts[GRP_ATTACK]) {
             attackSlot = randomAssistItemEx(GRP_ATTACK, true);
         } else {
             giftSlot = randomAssistItemEx(GRP_GIFT, true);
@@ -47,10 +54,14 @@ script "RROBOENZ_LOADOUTBUILD" OPEN
 
         // Special item draw logic: roll for gift or attack type assist
         // You get any mobility item from vanilla.
-        roll = random(1, getAssistItemGroupCount(GRP_JUMP) + getAssistItemGroupCount(GRP_DASH) + getAssistItemGroupCount(GRP_FLIGHT));
-        if(roll <= getAssistItemGroupCount(GRP_JUMP)) {
+        int j = assistCounts[GRP_JUMP];
+        int d = assistCounts[GRP_DASH];
+        int f = assistCounts[GRP_FLIGHT];
+
+        roll = random(1, j + d + f);
+        if(roll <= j) {
             dashSlot = randomAssistItemEx(GRP_JUMP, true);
-        } else if(roll <= getAssistItemGroupCount(GRP_DASH)) {
+        } else if(roll <= j + d) {
             jumpSlot = randomAssistItemEx(GRP_DASH, true);
         } else {
             flightSlot = randomAssistItemEx(GRP_FLIGHT, true);
@@ -252,7 +263,7 @@ script "RROBOENZ_INFECT" (int who, int alpha, int msgDel)
     CallACS0("ROBOENZ_TRANSFORMFREEZE");
     SetWeapon("RoboenzaWep");
     str weap = GetWeapon();
-    Log(n:who+1, s:" ", i:msgDel, s:": Taking weapon.");
+    // Log(n:who+1, s:" ", i:msgDel, s:": Taking weapon.");
     TakeInventory(weap, 1);
     CallACS1("core_poss_runfuncs", who);
 
@@ -281,7 +292,7 @@ script "RROBOENZ_INFECT" (int who, int alpha, int msgDel)
     CallACS0("RROBOENZ_SELECTWEP");
 
     delay(1);
-    Log(n:who+1, s:" ", i:msgDel, s:": Giving weapon.");
+    // Log(n:who+1, s:" ", i:msgDel, s:": Giving weapon.");
     GiveInventory(weap, 1);
 }
 
