@@ -17,6 +17,12 @@ actor RoboenzaWep : MegaBuster
         stop
     Ready:
         ZOMA D 0 ACS_NamedExecuteWithResult("core_weaponcolor", CLR_INFECTED)
+        ZOMA C 0 A_JumpIf(momz != 0, 3)
+        ZOMA C 0 A_JumpIfHealthLower(15, 2)
+        ZOMA C 0 A_JumpIf(true, "Ready2")
+        ZOMA D 1 A_WeaponReady(WRF_DISABLESWITCH|WRF_NOSECONDARY)
+        Goto Ready+1
+    Ready2:
         ZOMA D 1 A_WeaponReady(WRF_DISABLESWITCH)
         Goto Ready+1
     Deselect:
@@ -49,17 +55,10 @@ actor RoboenzaWep : MegaBuster
         ZOMA ABC 2
         Goto Ready+1
     AltFire:
-        ZOMA C 1 A_JumpIf(momz!=0, "Nope")
-        ZOMA C 0 A_JumpIfInventory("RoboenzaTimer", 6, "SupaJump")
-        ZOMA C 0 A_JumpIfHealthLower(15, "Nope")
-        Goto SupaJump
-    Nope:
-        Goto Ready+1
-    SupaJump:
         ZOMA C 0 A_PlaySoundEx("rroboenza/player/superjump","Voice")
         ZOMA C 0 ThrustThingZ(0, 80, 0, 0)
-        ZOMA C 0 A_TakeInventory("JumpCancler",1)
-        ZOMA C 0 A_TakeInventory("RoboenzaTimer",5)
+        // ZOMA C 0 A_TakeInventory("JumpCancler",1)
+        // ZOMA C 0 A_TakeInventory("RoboenzaTimer",5)
         ZOMA C 0 ACS_NamedExecuteWithResult("RROBOENZ_HEALTHSPEND")
         ZOMA CBA 1
         TNT1 A 10
