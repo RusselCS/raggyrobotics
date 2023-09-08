@@ -36,6 +36,8 @@
 
 #define RBNZ_PLAYERLIMIT 64
 
+#define RBNZ_PICK_SURVIVOR 1
+
 // ported flags
 #define RBNZ_BMSF_GETSTATE	0
 #define RBNZ_BMSF_SETVAL		1

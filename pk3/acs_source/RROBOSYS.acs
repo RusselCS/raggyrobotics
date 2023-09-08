@@ -98,7 +98,13 @@ script "RROBOENZ_RUNSYSTEM" OPEN
             }
 
             if(GetGameModeState() == GAMESTATE_INRESULTSEQUENCE) {
-                SetGameModeLimit(GAMELIMIT_WINS, max(survCount, infcCount));
+                if(Timer() < contingencyTimer()) { // if the alpha is just one and they suicide immediately, reset.
+                    ChangeTeamScore(TEAM_SURVIVOR, SCORE_WINS, 0);
+                    ChangeTeamScore(TEAM_INFECTED, SCORE_WINS, 0);
+                    SetGameModeLimit(GAMELIMIT_WINS, 0);
+                } else {
+                    SetGameModeLimit(GAMELIMIT_WINS, max(survCount, infcCount));
+                }
 
                 if(survCount==0) { // If there are no survivors, no victory music. But maps should know the round ended.
                     CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_VICTORY);
@@ -128,6 +134,29 @@ script "RROBOENZ_SCORE_UNLOADING" UNLOADING
 
 int patientsZero[RBNZ_PLAYERLIMIT];
 int alphaCount = 0;
+
+script "RROBOENZ_ALPHA_CONT_DEATH" DEATH
+{
+    CallACS1("RROBOENZ_ALPHA_CONTINGENCY", PlayerNumber());
+}
+
+script "RROBOENZ_ALPHA_CONTINGENCY" (int who) DISCONNECT
+{
+    if(alphaCount > 1) { // only do this if there are more alphas than 1
+        if(Timer() < contingencyTimer()) { // only do this if close to start of round
+            int pz = findInPatientsZero(who);
+            if(pz != -1 && playerCountTeam(TEAM_SURVIVOR) > 2) { // only do this if the player isn't already a patient zero, and there are 2 or more remaining survivors.
+                int replace = pickAPlayerEx(RBNZ_PICK_SURVIVOR);
+                patientsZero[pz] = replace;
+                CallACS2("RROBOENZ_INFECT", replace, true);
+            }
+        }
+    }
+}
+
+function int contingencyTimer(void) {
+    return pickTime + (35 * GetCvar("rroboenz_sv_alphacontingency"));
+}
 
 function void infectAlpha(int count) {
 
@@ -172,7 +201,11 @@ function int findInPatientsZero(int n)
     return -1;
 }
 
-function int pickAPlayer(void)
+function int pickAPlayer(void) {
+    return pickAPlayerEx(0);
+}
+
+function int pickAPlayerEx(int flags)
 {
     int target;
     if(PlayerCount() == 2) { // handle the 1v1 scenario
@@ -187,6 +220,10 @@ function int pickAPlayer(void)
             
             if(findInPatientsZero(i) != -1)
                 continue;
+
+            if(flags & RBNZ_PICK_SURVIVOR)
+                if(GetPlayerInfo(i, PLAYERINFO_TEAM) != TEAM_SURVIVOR)
+                    continue;
 
             choice--;
             if(choice == 0) {
