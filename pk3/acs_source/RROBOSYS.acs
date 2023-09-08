@@ -43,7 +43,9 @@ script "RROBOENZ_RUNSYSTEM" OPEN
     if(canRoboenza()) {
         totalPlayers = PlayerCount();
 
-        infectAlpha();
+        int alphaCount = clamp(totalPlayers / GetCvar("rroboenz_sv_alphathreshold") + 1, 1, GetCvar("rroboenz_sv_maxalphas"));
+
+        infectAlpha(alphaCount);
 
         delay(16);
 
@@ -124,7 +126,10 @@ script "RROBOENZ_SCORE_UNLOADING" UNLOADING
     SetGameModeLimit(GAMELIMIT_WINS, 0);
 }
 
-function void infectAlpha(void) {
+int patientsZero[RBNZ_PLAYERLIMIT];
+int alphaCount = 0;
+
+function void infectAlpha(int count) {
 
     // set the stage by ensuring survivor team can spare their infected member
     if(playerCountTeam(TEAM_INFECTED) > playerCountTeam(TEAM_SURVIVOR)) {
@@ -132,13 +137,22 @@ function void infectAlpha(void) {
         Player_SetTeam(TEAM_SURVIVOR, true);
     }
 
-    int who = pickAPlayer();
-
-    storePatient(who);
-    CallACS2("RROBOENZ_INFECT", who, true);
+    if(count > 0) {
+        while(alphaCount < count) {
+            int who = pickAPlayer();
+            if(alphaCount == 0) {
+                storePatient(who);
+            }
+            patientsZero[alphaCount++] = who;
+        }
+    }
+    
+    int whichInfect = 0;
 
     for(int i = 0; i < maxPlayer; i++) {
-        if(i != who) {
+        if(findInPatientsZero(i) != -1) {
+            CallACS3("RROBOENZ_INFECT", i, true, (whichInfect++) * 20);
+        } else {
             SetActivator(i + PLN_TID);
             Player_SetTeam(TEAM_SURVIVOR, true);
         }
@@ -146,6 +160,16 @@ function void infectAlpha(void) {
 
     SetActivator(-1);
     pickTime = timer();
+}
+
+function int findInPatientsZero(int n)
+{
+    for(int i = 0; i < alphaCount; i++) {
+        if(patientsZero[i] == n) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 function int pickAPlayer(void)
@@ -159,6 +183,9 @@ function int pickAPlayer(void)
 
         for(int i = 0; i < maxPlayer; i++) {
             if(!PlayerInGame(i))
+                continue;
+            
+            if(findInPatientsZero(i) != -1)
                 continue;
 
             choice--;

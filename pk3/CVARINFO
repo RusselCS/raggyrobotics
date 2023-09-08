@@ -1,3 +1,6 @@
+server noarchive int rroboenz_sv_maxalphas = 2;
+server noarchive int rroboenz_sv_alphathreshold = 5;
+
 local noarchive string rroboenz_zombieskin_stage = "";
 user string rroboenz_zombieskin = "";
 local noarchive string rroboenz_tempskin = "";

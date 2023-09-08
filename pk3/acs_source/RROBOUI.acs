@@ -43,11 +43,12 @@ Script "RROBOENZ_COUNTER" (void) //OPEN CLIENTSIDE
 	}
 }
 
-script "RROBOENZ_ALERT" (int who, int type) CLIENTSIDE
+script "RROBOENZ_ALERT" (int who, int type, int del) CLIENTSIDE
 {
     int cln = ConsolePlayerNumber();
     int cam = checkPlayerCameraPln(cln);
     SetFont("BIGFONT");
+    delay(del);
     switch(type) {
         default:
         case MSG_INFECTED:

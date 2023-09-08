@@ -231,7 +231,7 @@ script "RROBOENZ_PANICBUTTON" (void) NET CLIENTSIDE
     }
 }
 
-script "RROBOENZ_INFECT" (int who, int alpha)
+script "RROBOENZ_INFECT" (int who, int alpha, int msgDel)
 {
     SetActivator(who + PLN_TID);
     Player_SetTeam(TEAM_INFECTED, true);
@@ -252,6 +252,7 @@ script "RROBOENZ_INFECT" (int who, int alpha)
     CallACS0("ROBOENZ_TRANSFORMFREEZE");
     SetWeapon("RoboenzaWep");
     str weap = GetWeapon();
+    Log(n:who+1, s:" ", i:msgDel, s:": Taking weapon.");
     TakeInventory(weap, 1);
     CallACS1("core_poss_runfuncs", who);
 
@@ -259,7 +260,6 @@ script "RROBOENZ_INFECT" (int who, int alpha)
     int infectCount = playerCountTeam(TEAM_INFECTED);
 
     if(!alpha) {
-        CallACS0("RROBOENZ_ALPHADISABLE");
         zombieHealth = ZOMBIE_HP_START + (PlayerCount() * ZOMBIE_HP_MIN - infectCount * ZOMBIE_HP_MAX);
         if(zombieHealth < ZOMBIE_HP_MIN) zombieHealth = ZOMBIE_HP_MIN;
         if(zombieHealth > ZOMBIE_HP_MAX) zombieHealth = ZOMBIE_HP_MAX;
@@ -273,7 +273,7 @@ script "RROBOENZ_INFECT" (int who, int alpha)
 
     setRoboenzaHealth(0, zombieHealth);
 
-    CallACS2("RROBOENZ_ALERT", who, MSG_INFECTED);
+    CallACS3("RROBOENZ_ALERT", who, MSG_INFECTED, msgDel);
     CallACS2("RROBOENZ_TOOLTIP", zombieHealth, alpha);
 
     CallACS0("RROBOENZ_MANAGEINFECTED");
@@ -281,6 +281,7 @@ script "RROBOENZ_INFECT" (int who, int alpha)
     CallACS0("RROBOENZ_SELECTWEP");
 
     delay(1);
+    Log(n:who+1, s:" ", i:msgDel, s:": Giving weapon.");
     GiveInventory(weap, 1);
 }
 
@@ -333,6 +334,8 @@ script "RROBOENZ_MANAGEINFECTED" (void)
 
         // Enforce bots having the zombie weapon.
         if(!CheckWeapon("RoboenzaWep")) {
+            if(CheckInventory("RoboenzaWep") == 0)
+                GiveInventory("RoboenzaWep", 1);
             str weap = GetWeapon();
             SetWeapon("RoboenzaWep");
             CallACS0("RROBOENZ_SELECTWEP");
@@ -412,18 +415,10 @@ script "RROBOENZ_GHOSTWARPER" (void) CLIENTSIDE
 	SetActorState(0, "Fade");
 }
 
-script "RROBOENZ_ALPHADISABLE" (void)
+function void revokeAlpha(int who)
 {
-    SetActivator(-1);
-    int maxPlayer = CallACS0("RROBOENZ_MAXPLAYER");
-    for(int i = 0; i < maxPlayer; i++) {
-        if(PlayerInGame(i)) {
-            if(CheckActorInventory(i + PLN_TID, "RoboenzaAlphaInfected") > 0) {
-                TakeActorInventory(i + PLN_TID, "RoboenzaAlphaInfected", 1);
-                GiveActorInventory(i + PLN_TID, "RoboenzaDoRip", 1);
-            }
-        }
-    }
+    TakeActorInventory(who + PLN_TID, "RoboenzaAlphaInfected", 1);
+    GiveActorInventory(who + PLN_TID, "RoboenzaDoRip", 1);
 }
 
 Script "RROBOENZ_HEALTHSPEND" (void)
@@ -538,6 +533,9 @@ script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
                                     healActor(attacker + PLN_TID, 20);
                                 }
                             } else {
+                                if(CheckActorInventory(attacker + PLN_TID, "RoboenzaAlphaInfected") > 0)
+                                    revokeAlpha(attacker);
+
                                 CallACS1("RROBOENZ_INFECT", victim);
                                 CallACS1("ROBOENZ_ADDPLAYERSCORE", attacker);
                             }
