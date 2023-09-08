@@ -302,8 +302,9 @@ script "RROBOENZ_MANAGEINFECTED" (void)
     int pln = PlayerNumber();
     int oldVelZ = GetActorVelZ(0);
     bool onTheGround = true;
+    int hp = GetActorProperty(0, APROP_Health);
 
-    while(GetActorProperty(0, APROP_Health) > 0 && CheckInventory("RoboenzaInfected") > 0)
+    while(hp > 0 && CheckInventory("RoboenzaInfected") > 0)
     {
         int infectTime = timeStart - Timer();
 
@@ -341,6 +342,19 @@ script "RROBOENZ_MANAGEINFECTED" (void)
         if(CheckInventory("InfectRecoilTime") > 0)
             TakeInventory("InfectRecoilTime", 1);
 
+        // Super Jump check
+        if(GetActorVelZ(0) != 0.0 || hp < 15) {
+            if(CheckInventory("InfectedSuperjump") > 0) {
+                CSetInventory("InfectedSuperjump", 0);
+            }
+        } else {
+            if(CheckInventory("InfectedSuperjump") == 0) {
+                if(CallACS0("core_checkfooting")) {
+                    CSetInventory("InfectedSuperjump", 1);
+                }
+            }
+        }
+
         delay(1);
 
         // Enforce bots having the zombie weapon.
@@ -354,6 +368,8 @@ script "RROBOENZ_MANAGEINFECTED" (void)
             delay(1);
             GiveInventory(weap, 1);
         }
+
+        hp = GetActorProperty(0, APROP_Health);
     }
 }
 

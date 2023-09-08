@@ -1,5 +1,7 @@
 actor RoboenzaWep_ScriptBar : ScriptBar {}
 
+actor InfectedSuperjump : Once {}
+
 actor RoboenzaWep : MegaBuster
 {
     Weapon.AmmoUse 0
@@ -17,9 +19,7 @@ actor RoboenzaWep : MegaBuster
         stop
     Ready:
         ZOMA D 0 ACS_NamedExecuteWithResult("core_weaponcolor", CLR_INFECTED)
-        ZOMA C 0 A_JumpIf(momz != 0, 3)
-        ZOMA C 0 A_JumpIfHealthLower(15, 2)
-        ZOMA C 0 A_JumpIf(true, "Ready2")
+        ZOMA C 0 A_JumpIfInventory("InfectedSuperjump", 1, "Ready2")
         ZOMA D 1 A_WeaponReady(WRF_DISABLESWITCH|WRF_NOSECONDARY)
         Goto Ready+1
     Ready2:
