@@ -384,8 +384,8 @@ script "RROBOENZ_INFECTDROPS" DEATH
         int infectCount = playerCountTeam(TEAM_INFECTED);
         if(infectCount >= 3) {
             int cureRoll = random(1, 100);
-            // Cure chance: +5 per 3 players, up to 20%
-            int infectChance = clamp(10, (5*infectCount/3) + 5, 20);
+            // Cure chance: +5 per 3 players, up to 15%
+            int infectChance = clamp(5, (5*infectCount/3), 15);
             // Cure chance: ramps up to +5, based on timer loss
             int timerChance = FixedMul(FixedDiv(ZOMBIE_TIME - CheckInventory("RoboenzaTimer"), ZOMBIE_TIME), 5.0) >> 16;
 
