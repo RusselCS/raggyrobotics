@@ -147,6 +147,7 @@ function void infectAlpha(void) {
         }
     }
 
+    SetActivator(-1);
     pickTime = timer();
 }
 
