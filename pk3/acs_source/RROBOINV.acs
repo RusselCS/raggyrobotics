@@ -524,8 +524,19 @@ script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
 
                         if(StrICmp(type, "RoboenzaInfection") == 0) {
                             if(dmg >= victimHp) {
-                                GiveActorInventory(attacker + PLN_TID, "RoboenzaTimer", 20);
-                                healActor(attacker + PLN_TID, 20);
+                                int hdc = GetUserCvar(victim, "handicap");
+                                if(hdc > 0) {
+                                    if(victimHp == max(1, GetActorProperty(victim + PLN_TID, APROP_SpawnHealth) - hdc)) {
+                                        CallACS1("RROBOENZ_INFECT", victim);
+                                        CallACS1("ROBOENZ_ADDPLAYERSCORE", attacker);
+                                    } else {
+                                        GiveActorInventory(attacker + PLN_TID, "RoboenzaTimer", 20);
+                                        healActor(attacker + PLN_TID, 20);
+                                    }
+                                } else {
+                                    GiveActorInventory(attacker + PLN_TID, "RoboenzaTimer", 20);
+                                    healActor(attacker + PLN_TID, 20);
+                                }
                             } else {
                                 CallACS1("RROBOENZ_INFECT", victim);
                                 CallACS1("ROBOENZ_ADDPLAYERSCORE", attacker);
