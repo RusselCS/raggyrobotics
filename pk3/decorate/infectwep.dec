@@ -218,18 +218,41 @@ actor InfectClawWarper_P : CustomInventory
     }
 }
 
-actor FireInfectMorpher_P : CustomInventory { States { Pickup: TNT1 A 0 A_SpawnItemEx ("InfectMorpher",cos(-pitch)*56,0,32+(sin(-pitch)*48), momx, momy, 0,0,SXF_ABSOLUTEMOMENTUM,0) stop }}
+actor FireInfectMorpher_P : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_SpawnItemEx ("InfectMorpher",cos(-pitch)*56,0,32+(sin(-pitch)*48), momx, momy, 0,0,SXF_ABSOLUTEMOMENTUM,0)
+        TNT1 A 0 A_SpawnItemEx ("InfectBody",0, 0, 0, momx, momy, momz, 0, SXF_ABSOLUTEMOMENTUM, 0)
+        stop
+    }
+}
 
 actor InfectMorpher : BasicProjectile
 {
     Obituary "$OB_ROBOENZAWEP"
     Renderstyle "None"
     Speed 20
-    radius 10
+    radius 12
     height 6
     damage (20)
     +RIPPER
+    +THRUGHOST
     damagetype "RoboenzaInfection"
+    States
+    {
+    Spawn:
+        RZCL A 3
+        stop
+    }
+}
+
+// for when the players bodies are inside one another
+actor InfectBody : InfectMorpher
+{
+    height 54
+    radius 15
     States
     {
     Spawn:
