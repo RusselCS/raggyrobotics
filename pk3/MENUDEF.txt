@@ -91,7 +91,6 @@ Optionmenu "RBNZ_Changelog"
 	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_12"
 	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_13"
 	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_14"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_15"
 
 	StaticText 	" "
 	StaticText	"$RBZN_SUBHEADER_V1B_CHANGES", 1
@@ -116,17 +115,16 @@ OptionValue RBNZ_CL_1C_01 {0, "Infected super jump no longer consumes time."}
 OptionValue RBNZ_CL_1C_02 {0, "Fixed a bug where the game manager would die."}
 OptionValue RBNZ_CL_1C_03 {0, "Max cure percentage reduced to 20%."}
 OptionValue RBNZ_CL_1C_04 {0, "Infected/Patient Zero knockback now has a 4-tick delay."}
-OptionValue RBNZ_CL_1C_05 {0, "Players with Handicapped hp below 20 are now infected anyway."}
-OptionValue RBNZ_CL_1C_06 {0, "Roboenza Frenzy options now links to correct Player Setup."}
-OptionValue RBNZ_CL_1C_07 {0, "Server can now pick more patients zero w/ high player counts."}
+OptionValue RBNZ_CL_1C_05 {0, "Players w/ Handicapped HP below 20 get infected."}
+OptionValue RBNZ_CL_1C_06 {0, "Roboenza Frenzy options links to correct Player Setup."}
+OptionValue RBNZ_CL_1C_07 {0, "More patients zero are picked w/ high player counts."}
 OptionValue RBNZ_CL_1C_08 {0, "Patient Zero instant spectate/suicide no longer skips map."}
-OptionValue RBNZ_CL_1C_09 {0, ""}
-OptionValue RBNZ_CL_1C_10 {0, "Survivors now properly draw Dash-type items (Item-2)."}
-OptionValue RBNZ_CL_1C_11 {0, "Infected now properly heal when above 100 HP."}
-OptionValue RBNZ_CL_1C_12 {0, "Infecteds now begin to visibly fall apart when near timeout."}
-OptionValue RBNZ_CL_1C_13 {0, "Added a message to display if you infect someone."}
-OptionValue RBNZ_CL_1C_14 {0, "Infection claw now infects people inside the user."}
-OptionValue RBNZ_CL_1C_15 {0, "Infection claw is slightly bigger and also ignores shields."}
+OptionValue RBNZ_CL_1C_09 {0, "Survivors now properly draw Dash-type items (Item-2)."}
+OptionValue RBNZ_CL_1C_10 {0, "Infected now properly heal when above 100 HP."}
+OptionValue RBNZ_CL_1C_11 {0, "Infecteds now visibly fall apart when near timeout."}
+OptionValue RBNZ_CL_1C_12 {0, "Added a message to display if you infect someone."}
+OptionValue RBNZ_CL_1C_13 {0, "Infection claw now infects people inside the user."}
+OptionValue RBNZ_CL_1C_14 {0, "Infection claw is slightly bigger + ignores shields."}
 
 OptionValue RBNZ_CL_1B_01 {0, "Cured and final survivors now blast away close Infected."}
 OptionValue RBNZ_CL_1B_02 {0, "Cure now appears on automap."}
