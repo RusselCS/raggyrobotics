@@ -42,7 +42,7 @@ OptionMenu "menu_rroboenz"
 	Command		"$RBZN_COPYSKIN",	 		"copyzombieskin"
 	Command		"$RBZN_RESETSKIN",	 		"resetzombieskin"
 	StaticText 	" "
-	Submenu		"Goto Player Setup",		"PlayerMenu"
+	Submenu		"Goto Player Setup",		"8BDM_PlayerMenu"
 	StaticText 	"$RBZN_ZOMBIESKINWARN1"
 	StaticText 	"$RBZN_ZOMBIESKINWARN2"
 
