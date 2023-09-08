@@ -2,3 +2,6 @@ alias robooptions "openmenu menu_rroboenz"
 alias resetzombieskin "closemenu; pukename rroboenz_resetzombieskin"
 alias copyzombieskin "closemenu; pukename rroboenz_copyskintozombie"
 alias usepanicbutton "pukename rroboenz_panicbutton"
+
+alias robochangelog_v1c "closemenu; pukename rroboenz_changes_v1c"
+alias robochangelog_v1b "closemenu; pukename rroboenz_changes_v1b"

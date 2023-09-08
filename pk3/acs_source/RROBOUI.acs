@@ -319,3 +319,43 @@ function bool roboenzaBarCheck(void) {
 function bool hasPanicItem(int tid) {
     return CheckActorInventory(tid, "ExitUnitItem") > 0 || CheckActorInventory(tid, "FrenzyBuffItem") > 0;
 }
+
+script "rroboenz_changes_v1c" (void) NET CLIENTSIDE
+{
+    Log(s:"====================== v1c ======================");
+    Log(s:"* Infected super jump no longer consumes time.");
+    Log(s:"* Fixed a bug where the game manager would die.");
+    Log(s:"* Max cure percentage reduced to 20%.");
+    Log(s:"* Infected/Patient Zero knockback now has a 4-tick delay.");
+    Log(s:"* Players w/ Handicapped HP below 20 get infected.");
+    Log(s:"* Roboenza Frenzy options links to correct Player Setup.");
+    Log(s:"* More patients zero are picked w/ high player counts.");
+    Log(s:"* Patient Zero instant spectate/suicide no longer skips map.");
+    Log(s:"* Survivors now properly draw Dash-type items (Item-2).");
+    Log(s:"* Infected now properly heal when above 100 HP.");
+    Log(s:"* Infecteds now visibly fall apart when near timeout.");
+    Log(s:"* Added a message to display if you infect someone.");
+    Log(s:"* Infection claw now infects people inside the user.");
+    Log(s:"* Infection claw is slightly bigger + ignores shields.");
+    Log(s:"=================================================");
+}
+
+script "rroboenz_changes_v1b" (void) NET CLIENTSIDE
+{
+    Log(s:"====================== v1b ======================");
+    Log(s:"* Cured and final survivors now blast away close Infected.");
+    Log(s:"* Cure now appears on automap.");
+    Log(s:"* Options menu no longer jumps to Legacy settings.");
+    Log(s:"* Assist Bar now shows this mod's buffs.");
+    Log(s:"* Fixed map voting playing poorly with this mod.");
+    Log(s:"* Infected can no longer pick up ammo.");
+    Log(s:"* Scoreboard infections now reset on map change.");
+    Log(s:"* Shield effects stick around after infection");
+    Log(s:"* Fixed infected/spectators damaging survivors.");
+    Log(s:"* Infected landing should be more reliable.");
+    Log(s:"* Infected health regen should be more reliable.");
+    Log(s:"* Players should no longer get kicked for user info flood.");
+    Log(s:"* Intense/Victory music should now play at correct times.");
+    Log(s:"* Infected should no longer be able to use copyweps.");
+    Log(s:"==============================================");
+}

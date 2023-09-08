@@ -77,66 +77,10 @@ Optionmenu "RBNZ_Changelog"
 	StaticText 	" "
 	StaticText	"$RBZN_SUBHEADER_V1C_CHANGES", 1
 	StaticText 	" "
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_01"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_02"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_03"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_04"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_05"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_06"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_07"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_08"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_09"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_10"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_11"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_12"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_13"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1C_14"
+	Command "View in console", "robochangelog_v1c"
 
 	StaticText 	" "
 	StaticText	"$RBZN_SUBHEADER_V1B_CHANGES", 1
 	StaticText 	" "
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_01"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_02"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_03"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_04"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_05"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_06"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_07"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_08"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_09"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_10"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_11"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_12"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_13"
-	Option "", "RBNZ_MENU_NULL", "RBNZ_CL_1B_14"
+	Command "View in console", "robochangelog_v1b"
 }
-
-OptionValue RBNZ_CL_1C_01 {0, "Infected super jump no longer consumes time."}
-OptionValue RBNZ_CL_1C_02 {0, "Fixed a bug where the game manager would die."}
-OptionValue RBNZ_CL_1C_03 {0, "Max cure percentage reduced to 20%."}
-OptionValue RBNZ_CL_1C_04 {0, "Infected/Patient Zero knockback now has a 4-tick delay."}
-OptionValue RBNZ_CL_1C_05 {0, "Players w/ Handicapped HP below 20 get infected."}
-OptionValue RBNZ_CL_1C_06 {0, "Roboenza Frenzy options links to correct Player Setup."}
-OptionValue RBNZ_CL_1C_07 {0, "More patients zero are picked w/ high player counts."}
-OptionValue RBNZ_CL_1C_08 {0, "Patient Zero instant spectate/suicide no longer skips map."}
-OptionValue RBNZ_CL_1C_09 {0, "Survivors now properly draw Dash-type items (Item-2)."}
-OptionValue RBNZ_CL_1C_10 {0, "Infected now properly heal when above 100 HP."}
-OptionValue RBNZ_CL_1C_11 {0, "Infecteds now visibly fall apart when near timeout."}
-OptionValue RBNZ_CL_1C_12 {0, "Added a message to display if you infect someone."}
-OptionValue RBNZ_CL_1C_13 {0, "Infection claw now infects people inside the user."}
-OptionValue RBNZ_CL_1C_14 {0, "Infection claw is slightly bigger + ignores shields."}
-
-OptionValue RBNZ_CL_1B_01 {0, "Cured and final survivors now blast away close Infected."}
-OptionValue RBNZ_CL_1B_02 {0, "Cure now appears on automap."}
-OptionValue RBNZ_CL_1B_03 {0, "Options menu no longer jumps to Legacy settings."}
-OptionValue RBNZ_CL_1B_04 {0, "Assist Bar now shows this mod's buffs."}
-OptionValue RBNZ_CL_1B_05 {0, "Fixed map voting playing poorly with this mod."}
-OptionValue RBNZ_CL_1B_06 {0, "Infected can no longer pick up ammo."}
-OptionValue RBNZ_CL_1B_07 {0, "Scoreboard infections now reset on map change."}
-OptionValue RBNZ_CL_1B_08 {0, "Shield effects stick around after infection"}
-OptionValue RBNZ_CL_1B_09 {0, "Fixed infected/spectators damaging survivors."}
-OptionValue RBNZ_CL_1B_10 {0, "Infected landing should be more reliable."}
-OptionValue RBNZ_CL_1B_11 {0, "Infected health regen should be more reliable."}
-OptionValue RBNZ_CL_1B_12 {0, "Players should no longer get kicked for user info flood."}
-OptionValue RBNZ_CL_1B_13 {0, "Intense/Victory music should now play at correct times."}
-OptionValue RBNZ_CL_1B_14 {0, "Infected should no longer be able to use copyweps."}
