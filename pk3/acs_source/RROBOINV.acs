@@ -319,7 +319,7 @@ script "RROBOENZ_MANAGEINFECTED" (void)
 
         if(infectTime % 52 == 0) { // Gradual health regen
             if(GetActorProperty(0, APROP_HEALTH) < GetActorProperty(0, APROP_SPAWNHEALTH)) {
-                HealThing((clamp(getCvar("sv_maxlives") * 5, 5, 30) + playerCountTeam(TEAM_SURVIVOR)) / 2);
+                HealThing((clamp(getCvar("sv_maxlives") * 5, 5, 30) + playerCountTeam(TEAM_SURVIVOR)) / 2, GetActorProperty(0, APROP_SPAWNHEALTH));
             }
         }
 
@@ -599,6 +599,6 @@ function void healActor(int tid, int amount) {
 script "RROBOENZ_HEAL" (int tid, int amount) {
     SetActivator(tid);
     if(GetActorProperty(0, APROP_Health) > 0) {
-        HealThing(amount);
+        HealThing(amount, GetActorProperty(0, APROP_SPAWNHEALTH));
     }
 }
