@@ -64,8 +64,10 @@ script "RROBOENZ_RUNSYSTEM" OPEN
 
                 if(!buffGiven) {
                     buffGiven = true;
-                    if(ratio >= 0.34) {
-                        CallACS0("RROBOENZ_GIVEFRENZY");
+                    if(ratio >= 0.67) {
+                        CallACS1("RROBOENZ_GIVEFRENZY", 2);
+                    } else if(ratio >= 0.34) {
+                        CallACS1("RROBOENZ_GIVEFRENZY", 1);
                     }
                 }
 
