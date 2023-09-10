@@ -468,29 +468,26 @@ Script "RROBOENZ_HEALTHSPEND" (void)
 script "RROBOENZ_CURE" (void)
 {
     int who = PlayerNumber();
-
     CSetInventory("RoboenzaDoRip", 1);
     CSetInventory("RoboenzaAlphaInfected", 0);
     CSetInventory("RoboenzaInfected", 0);
     CSetInventory("RoboenzaTimer", 0);
-    CSetInventory("RoboenzaWep", 0);
-    returnAssists();
-    giveSurvivalItems(who);
     SpawnSpotForced("RoboenzaCureEffect", 0, 0, 0);
-
     SetActorVelocity(0, 0, 0, 0, 0, 0);
     CallACS2("core_freezeplayer", 0, true);
     CallACS0("ROBOENZ_TRANSFORMFREEZE");
     CallACS1("core_poss_runfuncs", who);
-
     setRoboenzaHealth(0, classHealth[who]);
-
+    returnAssists();
+    giveSurvivalItems(who);
     CallACS2("RROBOENZ_ALERT", who, MSG_CURED);
-    
     Player_SetTeam(TEAM_SURVIVOR, true);
     CallACS1("core_hazardtag_clear", who);
-
     CallACS0("RROBENZ_SURVIVORMANAGE");
+
+    delay(2);
+
+    CSetInventory("RoboenzaWep", 0);
 }
 
 script "ROBOENZ_TRANSFORMFREEZE" (void) {
