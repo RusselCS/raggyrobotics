@@ -67,6 +67,9 @@ script "rroboenz_possession_gives" (void)
     ACS_NamedExecuteWithResult("core_groundplayer", 0, false);
     CSetInventory("PlayerPropertyBuddha", 1);
     ACS_NamedExecuteWithResult("core_buddhaplayer", 0, false);
+    // [Russ] unsure if it's safe to remove these manually...
+    // CSetInventory("PlayerPropertyMonsterBlock", 1);
+    // ACS_NamedExecuteWithResult("core_monsterblockplayer", 0, false);
 
     // [Russ] Also removing the "NoWeaponSwitchSound" since this script takes a bit to run
     // GiveInventory("NoWeaponSwitchSound", 1);
