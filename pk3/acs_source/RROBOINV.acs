@@ -416,6 +416,10 @@ script "RROBOENZ_INFECTED_CLIENTEFFECTS" (void) CLIENTSIDE
             }
         }
 
+        if(!CheckWeapon("RoboenzaWep")) {
+            ConsoleCommand("use RoboenzaWep");
+        }
+
         oldVelZ = GetActorVelZ(0);
         delay(1);
     }
