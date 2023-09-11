@@ -134,7 +134,9 @@ script "RROBOENZ_SCORE_UNLOADING" UNLOADING
     SetGameModeLimit(GAMELIMIT_WINS, 0);
 }
 
-int patientsZero[RBNZ_PLAYERLIMIT];
+world int WRLD_PATIENTZERO: patientsZero[];
+int oldPatients[RBNZ_PLAYERLIMIT];
+int oldPatientCount = 0;
 int alphaCount = 0;
 
 script "RROBOENZ_ALPHA_CONT_DEATH" DEATH
@@ -144,11 +146,14 @@ script "RROBOENZ_ALPHA_CONT_DEATH" DEATH
 
 script "RROBOENZ_ALPHA_CONTINGENCY" (int who) DISCONNECT
 {
-    if(alphaCount > 1) { // only do this if there are more alphas than 1
+    if(getAlphaCount() > 1) { // only do this if there are more alphas than 1
         if(Timer() < contingencyTimer()) { // only do this if close to start of round
             int pz = findInPatientsZero(who);
             if(pz != -1 && playerCountTeam(TEAM_SURVIVOR) > 2) { // only do this if the player isn't already a patient zero, and there are 2 or more remaining survivors.
                 int replace = pickAPlayerEx(RBNZ_PICK_SURVIVOR);
+                while(replace == -1) {
+                    replace = pickAPlayerEx(RBNZ_PICK_SURVIVOR);
+                }
                 patientsZero[pz] = replace;
                 CallACS2("RROBOENZ_INFECT", replace, true);
             }
@@ -168,28 +173,42 @@ function void infectAlpha(int count) {
         Player_SetTeam(TEAM_SURVIVOR, true);
     }
 
+    // stage old data to array, then void it.
+    oldPatientCount = getAlphaCount();
+
+    // log( s:"count: ", i:count, s:" // oldPatientCount: ", i:oldPatientCount );
+    for(int i = 0; i < oldPatientCount; i++) {
+        oldPatients[i] = patientsZero[i];
+        patientsZero[i] = 0;
+    }
+
     if(count > 0) {
         while(alphaCount < count) {
             int who = pickAPlayer();
-            if(alphaCount == 0) {
-                storePatient(who);
+            if(who == -1) {
+                // Log(s:"This shouldn't have happened");
+            } else {
+                // Log(s:"Adding ", n:who+1, s:" to infection array.");
+                patientsZero[alphaCount++] = who;
             }
-            patientsZero[alphaCount++] = who;
         }
     }
-    
-    int whichInfect = 0;
 
-    for(int i = 0; i < maxPlayer; i++) {
-        if(findInPatientsZero(i) != -1) {
-            CallACS3("RROBOENZ_INFECT", i, true, (whichInfect++) * 20);
-        } else {
+    setAlphaCount(alphaCount);
+
+    for(i = 0; i < alphaCount; i++) {
+        CallACS3("RROBOENZ_INFECT", patientsZero[i], true, i * 20);
+    }
+
+    for(i = 0; i < maxPlayer; i++) {
+        if(findInPatientsZero(i) == -1) {
             SetActivator(i + PLN_TID);
             Player_SetTeam(TEAM_SURVIVOR, true);
         }
     }
 
     SetActivator(-1);
+    oldPatientCount = 0; // prevent rerolls from searching the temp staging array
     pickTime = timer();
 }
 
@@ -203,23 +222,39 @@ function int findInPatientsZero(int n)
     return -1;
 }
 
+function int findInOldPatients(int n)
+{
+    for(int i = 0; i < oldPatientCount; i++) {
+        if(oldPatients[i] == n) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function int getAlphaCount(void) { return getCvar("rroboenz_temp_alphacount"); }
+function void setAlphaCount(int count) { setCvar("rroboenz_temp_alphacount", count); }
+
 function int pickAPlayer(void) {
     return pickAPlayerEx(0);
 }
 
 function int pickAPlayerEx(int flags)
 {
-    int target;
+    int target = -1;
     if(PlayerCount() == 2) { // handle the 1v1 scenario
         target = findFirstTeamMember(TEAM_INFECTED);
     } else {
-        // choose a player who wasn't the last player
-        int choice = random(1, countAlive());
+        // choose a player who wasn't any of the last players, or any players staged
+        int choice = random(1, countAlive() - oldPatientCount - alphaCount);
 
         for(int i = 0; i < maxPlayer; i++) {
             if(!PlayerInGame(i))
                 continue;
             
+            if(findInOldPatients(i) != -1)
+                continue;
+
             if(findInPatientsZero(i) != -1)
                 continue;
 

@@ -53,8 +53,6 @@
 #define RBNZ_BMS_VICTORY		2
 #define RBNZ_BMS_DISABLE		100
 
-world int WRLD_PATIENTZERO: patientZero;
-
 function bool canRoboenza(void) { return getCVar("teamlms") && getGameModeState() == GAMESTATE_INPROGRESS && getCVar("sv_maxteams") == 2; }
 function int playerCountTeam(int team) { return GetTeamProperty(team, TPROP_NumLivePlayers); }
 function int max(int x, int y) { if(x > y) return x; return y; }
@@ -66,9 +64,6 @@ function int clamp(int n, int x, int y) {
         n = y;
     return n;
 }
-
-function int patientToPlayerNum(int ptn) { return ptn-1; }
-function void storePatient(int pln) { patientZero = pln+1; }
 
 function void setRoboenzaHealth(int tid, int amt) {
     SetActorProperty(tid, APROP_Health, amt);
