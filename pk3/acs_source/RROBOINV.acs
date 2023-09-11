@@ -170,7 +170,7 @@ script "RROBENZ_SURVIVORMANAGE" (void)
 
 script "RROBOENZ_GIVEFRENZY" (int to) {
     to = max(to, 1);
-    PrintBold(i:to);
+    // PrintBold(i:to);
     int maxPlr = CallACS0("RROBOENZ_MAXPLAYER");
     for(int i = 0; i < maxPlr; i++) {
         if(GetPlayerInfo(i, PLAYERINFO_TEAM) == TEAM_SURVIVOR) {
