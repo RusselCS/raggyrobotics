@@ -58,6 +58,16 @@ script "rroboenz_possession_gives" (void)
     CSetInventory("PlayerPropertyHaste", 1);
     ACS_NamedExecuteWithResult("core_runeplayer", 0, false, RUNE_HASTE);
 
+    // [Russ] Also missing stuff
+    CSetInventory("PlayerPropertyStopped", 1);
+    ACS_NamedExecuteWithResult("core_stopplayer", 0, false);
+    CSetInventory("PlayerPropertyInvulnerable", 1);
+    ACS_NamedExecuteWithResult("core_invulnerableplayer", 0, false);
+    CSetInventory("PlayerPropertyGrounded", 1);
+    ACS_NamedExecuteWithResult("core_groundplayer", 0, false);
+    CSetInventory("PlayerPropertyBuddha", 1);
+    ACS_NamedExecuteWithResult("core_buddhaplayer", 0, false);
+
     // [Russ] Also removing the "NoWeaponSwitchSound" since this script takes a bit to run
     // GiveInventory("NoWeaponSwitchSound", 1);
 
