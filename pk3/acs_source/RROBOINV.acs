@@ -299,7 +299,9 @@ script "RROBOENZ_INFECT" (int who, int alpha, int msgDel, int atk)
 
     delay(1);
     // Log(n:who+1, s:" ", i:msgDel, s:": Giving weapon.");
-    GiveInventory(weap, 1);
+    if(StrCmp(weap, "None") != 0) {
+        GiveInventory(weap, 1);
+    }
 }
 
 script "RROBOENZ_MANAGEINFECTED" (void)
@@ -379,9 +381,12 @@ script "RROBOENZ_MANAGEINFECTED" (void)
             str weap = GetWeapon();
             SetWeapon("RoboenzaWep");
             CallACS0("RROBOENZ_SELECTWEP");
-            TakeInventory(weap, 1);
-            delay(1);
-            GiveInventory(weap, 1);
+            
+            if(StrCmp(weap, "None") != 0) {
+                TakeInventory(weap, 1);
+                delay(1);
+                GiveInventory(weap, 1);
+            }
         }
 
         hp = GetActorProperty(0, APROP_Health);
