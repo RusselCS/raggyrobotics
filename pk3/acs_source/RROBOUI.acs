@@ -320,13 +320,26 @@ function bool hasPanicItem(int tid) {
     return CheckActorInventory(tid, "ExitUnitItem") > 0 || CheckActorInventory(tid, "FrenzyBuffItem") > 0;
 }
 
+script "rroboenz_changes_v1d" (void) NET CLIENTSIDE
+{
+    Log(s:"====================== v1d ======================");
+    Log(s:"* Fixed an issue where being cured would keep RoboenzaWep.");
+    Log(s:"* Last survivor is given +2 frenzy powerups if 66% of all players are infected.");
+    Log(s:"* Game no longer picks any previous alphas as new alphas, unless contingency happens.");
+    Log(s:"* Clients are told to select RoboenzaWep when infected. Should fix any remaining weapon desyncs.");
+    Log(s:"* Infected players knockback buffer reduced to 2 ticks (from 4)");
+    Log(s:"* Infection claw hitbox reworked to use explosions instead of projectiles. Removed player hitbox infector.");
+    Log(s:"* Infected players no longer have a special landing sound (it was too inconsistent).");
+    Log(s:"=================================================");
+}
+
 script "rroboenz_changes_v1c" (void) NET CLIENTSIDE
 {
     Log(s:"====================== v1c ======================");
     Log(s:"* Infected super jump no longer consumes time.");
     Log(s:"* Fixed a bug where the game manager would die.");
     Log(s:"* Max cure percentage reduced to 20%.");
-    Log(s:"* Infected/Patient Zero knockback now has a 4-tick delay.");
+    Log(s:"* Infected/Patient Zero knockback now has a 4-tick buffer.");
     Log(s:"* Players w/ Handicapped HP below 20 get infected.");
     Log(s:"* Roboenza Frenzy options links to correct Player Setup.");
     Log(s:"* More patients zero are picked w/ high player counts.");

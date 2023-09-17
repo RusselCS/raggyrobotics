@@ -51,4 +51,5 @@ RBZN_GLOBALBERSERKSOUND = "Berserk";
 
 // Changelog
 RBZN_SUBHEADER_V1B_CHANGES = "-- v1b Changes --";
-RBZN_SUBHEADER_V1B_CHANGES = "-- v1c Changes --";
+RBZN_SUBHEADER_V1C_CHANGES = "-- v1c Changes --";
+RBZN_SUBHEADER_V1D_CHANGES = "-- v1d Changes --";
