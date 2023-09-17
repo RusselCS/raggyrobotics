@@ -405,27 +405,27 @@ script "RROBOENZ_INFECTED_CLIENTEFFECTS" (void) CLIENTSIDE
 
     while(GetActorProperty(0, APROP_Health) > 0 && CheckInventory("RoboenzaInfected") > 0) {
         // Custom landing sound logic.
-        if(oldVelZ < 0 && GetActorVelZ(0) == 0.0) {
-            if(GetActorZ(0) <= GetActorFloorZ(0)) {
-                if(oldVelZ <= -8.24) {
-                    StopSound(0, CHAN_AUTO);
-                    PlaySound(0, "rroboenza/player/land", CHAN_7);
-                }
-            } else {
-                if(CallACS0("core_CheckFooting")) {
-                    if(oldVelZ <= -8.24) {
-                        StopSound(0, CHAN_AUTO);
-                        PlaySound(0, "rroboenza/player/land", CHAN_7);
-                    }
-                }
-            }
-        }
+        // if(oldVelZ < 0 && GetActorVelZ(0) == 0.0) {
+        //     if(GetActorZ(0) <= GetActorFloorZ(0)) {
+        //         if(oldVelZ <= -8.24) {
+        //             StopSound(0, CHAN_AUTO);
+        //             PlaySound(0, "rroboenza/player/land", CHAN_7);
+        //         }
+        //     } else {
+        //         if(CallACS0("core_CheckFooting")) {
+        //             if(oldVelZ <= -8.24) {
+        //                 StopSound(0, CHAN_AUTO);
+        //                 PlaySound(0, "rroboenza/player/land", CHAN_7);
+        //             }
+        //         }
+        //     }
+        // }
 
         if(!CheckWeapon("RoboenzaWep")) {
             ConsoleCommand("use RoboenzaWep");
         }
 
-        oldVelZ = GetActorVelZ(0);
+        // oldVelZ = GetActorVelZ(0);
         delay(1);
     }
 }
