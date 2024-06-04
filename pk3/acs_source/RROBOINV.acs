@@ -32,8 +32,11 @@ int passiveSlot = -1;
 
 int assistCounts[11];
 
+int ZOMBIE_TIME = 90;
+
 script "RROBOENZ_LOADOUTBUILD" OPEN
 {
+    ZOMBIE_TIME = GetCvar("rroboenz_sv_infectlifetime");
     delay(2);
     if(canRoboenza()) {
         for(int i = 0; i < MAX_ITEMS_GLOBAL; i++) {

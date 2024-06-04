@@ -7,7 +7,7 @@
 #define ZOMBIE_HP_ADD      5
 #define ZOMBIE_HP_SUB      20
 
-#define ZOMBIE_TIME     90
+// #define ZOMBIE_TIME     90
 
 #define MSG_INFECTED    0
 #define MSG_CURED       1
