@@ -73,10 +73,9 @@ Column "Kills"
 {
 	AddFlag NOSPECTATORS
 	AddFlag ALWAYSUSESHORTESTWIDTH
-	AddFlag CVARMUSTBEZERO
 
 	Alignment = Right
-	CVar = sv_awarddamageinsteadkills
+	CVar = sv_awarddamageinsteadkills, 0
 	EarnType = Kills
 	Size = 16
 }
