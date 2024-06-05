@@ -221,6 +221,18 @@ Column "Infections"
 	Size = 16
 }
 
+Column "Strain"
+{
+    AddFlag NOSPECTATORS
+	AddFlag ALWAYSUSESHORTESTWIDTH
+
+	Alignment = Right
+	GameType = Deathmatch, TeamGame
+	CVar = rroboenz_sv_trackstrains
+	ShortName = "Strn"
+	Size = 16
+}
+
 //*****************************************************************************
 //
 // SCOREBOARD BLOCK
@@ -345,8 +357,8 @@ Scoreboard
 	ColumnPadding = 1
 	HeaderHeight = -2
 	RowHeight = -2
-	ColumnOrder = "Index", "ReadyToGoAndStatusIcons", "Player", "Vote", "Handicap", "Frags", "Infections", "Time", "Ping"
-	RankOrder = "Frags", "Infections"
+	ColumnOrder = "Index", "ReadyToGoAndStatusIcons", "Player", "Vote", "Frags", "Infections", "Strain", "Time", "Ping"
+	RankOrder = "Frags", "Infections", "Strain"
 
 	AddFlag UseHeaderColorForBorders
 }

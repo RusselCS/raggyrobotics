@@ -254,6 +254,7 @@ script "RROBOENZ_PANICBUTTON" (void) NET CLIENTSIDE
 
 script "RROBOENZ_INFECT" (int who, int alpha, int msgDel, int atk)
 {
+    Log(n:who+1, s:" has contracted Roboenza!");
     SetActivator(who + PLN_TID);
     Player_SetTeam(TEAM_INFECTED, true);
     CallACS1("core_hazardtag_clear", who);
@@ -299,6 +300,9 @@ script "RROBOENZ_INFECT" (int who, int alpha, int msgDel, int atk)
     CallACS0("RROBOENZ_MANAGEINFECTED");
     CallACS0("RROBOENZ_INFECTED_CLIENTEFFECTS");
     CallACS0("RROBOENZ_SELECTWEP");
+
+    if(who > -1 && !alpha)
+        CallACS2("RROBOENZ_UPDATESTRAIN", who, atk);
 
     delay(1);
     // Log(n:who+1, s:" ", i:msgDel, s:": Giving weapon.");
@@ -487,6 +491,7 @@ Script "RROBOENZ_HEALTHSPEND" (void)
 script "RROBOENZ_CURE" (void)
 {
     int who = PlayerNumber();
+    CallACS1("RROBOENZ_CLEARDOWNLINES", who+1);
     CSetInventory("RoboenzaDoRip", 1);
     CSetInventory("RoboenzaAlphaInfected", 0);
     CSetInventory("RoboenzaInfected", 0);
@@ -600,6 +605,47 @@ script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
                     }
                 }
             }
+        }
+    }
+}
+
+// STRAIN UPDATES
+int upLines[MAX_PLAYERS];
+int maxDownline;
+
+script "RROBOENZ_UPDATESTRAIN" (int downLine, int upLine)
+{
+    if(!getCvar("rroboenz_sv_trackstrains")) // this is Just In Case something goes wrong
+        terminate;
+
+    if(downLine < 0 || upLine < 1) // this should never happen, but just in case.
+        terminate;
+
+    if(maxDownline < downLine+1)
+        maxDownline = downLine+1;
+
+    upLines[downLine] = upLine;
+    int watcher = 0;
+    while(upLine > 0) {
+        CallACS1("ROBOENZ_ADDPLAYERSTRAIN", upLine-1);
+        upLine = upLines[upLine-1];
+        watcher++;
+        if(watcher > MAX_PLAYERS * 2) {
+            Log(s:"WARNING: STRAIN UPDATE FAILED. DUMPING UPLINES.");
+            for(int i = 0; i < MAX_PLAYERS; i++) {
+                Log(n:upLines[i]);
+            }
+            Log(s:"Disabling strain tracking to prevent further issues.");
+            SetCvar("rroboenz_sv_trackstrains", false);
+        }
+    }
+}
+
+script "RROBOENZ_CLEARDOWNLINES" (int upline)
+{
+    for(int i = 0; i < maxDownline; i++) {
+        if(upLines[i] == upline) {
+            upLines[i] = 0;
         }
     }
 }

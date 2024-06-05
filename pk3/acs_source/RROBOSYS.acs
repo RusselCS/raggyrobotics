@@ -16,6 +16,7 @@ script "RROBOENZ_ENTER" ENTER
 {
     maxPlayer = max(maxPlayer, PlayerNumber()+1);
     ResetCustomDataToDefault("Infections", PlayerNumber());
+    ResetCustomDataToDefault("Strain", PlayerNumber());
     CallACS0("RROBENZ_PLAYERSTART");
     
     if(canRoboenza()) {
@@ -129,6 +130,9 @@ script "RROBOENZ_MAXPLAYER" (void) { setResultValue(maxPlayer); }
 script "ROBOENZ_GETPLAYERSCORE" (int pln) { SetResultValue(GetCustomPlayerValue("Infections", pln)); }
 script "ROBOENZ_ADDPLAYERSCORE" (int pln) { SetCustomPlayerValue("Infections", pln, GetCustomPlayerValue("Infections", pln)+1); }
 
+script "ROBOENZ_GETPLAYERSTRAIN" (int pln) { SetResultValue(GetCustomPlayerValue("Strain", pln)); }
+script "ROBOENZ_ADDPLAYERSTRAIN" (int pln) { SetCustomPlayerValue("Strain", pln, GetCustomPlayerValue("Strain", pln)+1); }
+
 script "RROBOENZ_SCORE_UNLOADING" UNLOADING
 {
     SetGameModeLimit(GAMELIMIT_WINS, 0);
@@ -160,6 +164,8 @@ script "RROBOENZ_ALPHA_CONTINGENCY" (int who) DISCONNECT
         }
     }
 }
+
+script "RROBOENZ_STRAIN_SPECTATE" (int who) DISCONNECT { CallACS1("RROBOENZ_CLEARDOWNLINES", who+1); }
 
 function int contingencyTimer(void) {
     return pickTime + (35 * GetCvar("rroboenz_sv_alphacontingency"));
