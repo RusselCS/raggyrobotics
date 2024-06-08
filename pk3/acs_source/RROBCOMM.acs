@@ -9,6 +9,10 @@
 
 // #define ZOMBIE_TIME     90
 
+#define ROBOSTATE_PREGAME    0
+#define ROBOSTATE_INPROGRESS 1
+#define ROBOSTATE_END        2
+
 #define MSG_INFECTED    0
 #define MSG_CURED       1
 #define MSG_ENRAGED     2
