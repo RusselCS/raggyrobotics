@@ -9,6 +9,8 @@ int maxPlayer = 0;
 int pickTime;
 int totalPlayers = 0;
 
+int roboenzaMode = ROBOSTATE_PREGAME;
+
 // Overall game management scripts here.
 // Uses `patientZero` world variable from `RROBCOMM.acs`.
 
@@ -38,6 +40,7 @@ script "RROBENZ_RESPAWN" RESPAWN
 
 script "RROBOENZ_RUNSYSTEM" OPEN
 {
+    roboenzaMode = ROBOSTATE_PREGAME;
     delay(1);
     CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_DISABLE);
     delay(35*3);
@@ -47,6 +50,7 @@ script "RROBOENZ_RUNSYSTEM" OPEN
         int alphaCount = clamp(totalPlayers / GetCvar("rroboenz_sv_alphathreshold") + 1, 1, GetCvar("rroboenz_sv_maxalphas"));
 
         infectAlpha(alphaCount);
+        roboenzaMode = ROBOSTATE_INPROGRESS;
 
         delay(16);
 
@@ -116,6 +120,7 @@ script "RROBOENZ_RUNSYSTEM" OPEN
                 if(infcCount==0) {
                     CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVALMUS, RBNZ_BMS_VICTORY);
                 }
+                roboenzaMode = ROBOSTATE_END;
                 terminate;
             }
 
@@ -132,6 +137,8 @@ script "ROBOENZ_ADDPLAYERSCORE" (int pln) { SetCustomPlayerValue("Infections", p
 
 script "ROBOENZ_GETPLAYERSTRAIN" (int pln) { SetResultValue(GetCustomPlayerValue("Strain", pln)); }
 script "ROBOENZ_ADDPLAYERSTRAIN" (int pln) { SetCustomPlayerValue("Strain", pln, GetCustomPlayerValue("Strain", pln)+1); }
+
+script "ROBOENZ_GETMODESTATE" (void) { SetResultValue(roboenzaMode); }
 
 script "RROBOENZ_SCORE_UNLOADING" UNLOADING
 {
