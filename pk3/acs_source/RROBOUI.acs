@@ -111,44 +111,24 @@ script "RROBOENZ_YOUINFECTED" (int attacker, int victim) CLIENTSIDE
     HudMessageBold(i:playerCountTeam(TEAM_SURVIVOR), s:" SURVIVORS REMAIN."; HUDMSG_FADEOUT, MSGID_YOUINFECTED2, CR_YELLOW, 1.5, 0.375, 2.5, 0.5);
 }
 
-script "RROBOENZ_APPLYZOMBIESKIN" (void) CLIENTSIDE
+script "RROBOENZ_APPLYZOMBIESKIN" (void) // CLIENTSIDE
 {
-    delay(1);
-    int cpn = ConsolePlayerNumber();
-	if(cpn!=PlayerNumber()){terminate;}
+    int pln = PlayerNumber();
 
-    str skin = GetCvarString("rroboenz_zombieskin");
+    str zombie = GetUserCvarString(pln, "rroboenz_zombieskin");
 
-    if(StrICmp(skin, "") != 0) {
-        LogConsoleCommand("rroboenz_tempskin $skin");
-        LogConsoleCommand(StrParam(s:"skin ", s:skin));
+    if(StrICmp(zombie, "") != 0) {
+        SetPlayerSkin(pln, zombie);
     }
 }
 
-script "RROBOENZ_REVOKEZOMBIESKIN" (void) CLIENTSIDE
+script "RROBOENZ_REVOKEZOMBIESKIN" (void) // CLIENTSIDE
 {
-    delay(1);
-    int cpn = ConsolePlayerNumber();
-	if(cpn!=PlayerNumber()){terminate;}
+    int pln = PlayerNumber();
 
     str zombie = GetCvarString("rroboenz_zombieskin");
 
-    if(StrICmp(zombie, "") == 0) {
-        SetCvarString("rroboenz_tempskin", "");
-    } else {
-        LogConsoleCommand("rroboenz_compskin $skin");
-        delay(1);
-
-        str temp = GetCvarString("rroboenz_tempskin");
-        str comp = GetCvarString("rroboenz_compskin");
-
-        if(StrICmp(temp, "") != 0) {
-            if(StrICmp(zombie, comp) == 0) { // If the player changed their skin in the middle of this, it should just accept the new skin as uninfect.
-                LogConsoleCommand("skin $rroboenz_tempskin");
-            }
-            SetUserCvarString(cpn, "rroboenz_tempskin", "");
-        }
-    }
+    SetPlayerSkin(pln, GetPlayerSkin(pln, PLAYERSKIN_USERINFO));
 }
 
 script "rroboenz_resetzombieskin" (void) NET CLIENTSIDE
