@@ -33,10 +33,12 @@ int passiveSlot = -1;
 int assistCounts[11];
 
 int ZOMBIE_TIME = 90;
+int ZOMBIE_HP_FACTOR = 1.0;
 
 script "RROBOENZ_LOADOUTBUILD" OPEN
 {
     ZOMBIE_TIME = GetCvar("rroboenz_sv_infectlifetime");
+    ZOMBIE_HP_FACTOR = GetCvar("rroboenz_sv_infectlifefactor");
     delay(2);
     if(canRoboenza()) {
         for(int i = 0; i < MAX_ITEMS_GLOBAL; i++) {
@@ -281,16 +283,14 @@ script "RROBOENZ_INFECT" (int who, int alpha, int msgDel, int atk)
     int infectCount = playerCountTeam(TEAM_INFECTED);
 
     if(!alpha) {
-        zombieHealth = ZOMBIE_HP_START + (PlayerCount() * ZOMBIE_HP_MIN - infectCount * ZOMBIE_HP_MAX);
-        if(zombieHealth < ZOMBIE_HP_MIN) zombieHealth = ZOMBIE_HP_MIN;
-        if(zombieHealth > ZOMBIE_HP_MAX) zombieHealth = ZOMBIE_HP_MAX;
+        zombieHealth = clamp(ZOMBIE_HP_START + (PlayerCount() * ZOMBIE_HP_ADD - infectCount * ZOMBIE_HP_SUB), ZOMBIE_HP_MIN, ZOMBIE_HP_MAX);
     } else {
         GiveInventory("RoboenzaDontRip", 1);
         GiveInventory("RoboenzaAlphaInfected", 1);
         GiveInventory("RoboenzaGhostStart_P", 1);
     }
 
-    zombieHealth = zombieHealth/3 + zombieHealth;
+    zombieHealth = FixedMul(zombieHealth, ZOMBIE_HP_FACTOR);
 
     setRoboenzaHealth(0, zombieHealth);
 
