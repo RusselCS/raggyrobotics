@@ -7,6 +7,7 @@
 script "rrobo_debug_enter" ENTER
 {
     if(!canDebug()) terminate;
+    populateDistances();
     delay(5);
     bool infected = false;
     int pln = PlayerNumber();
@@ -29,45 +30,49 @@ script "rrobo_debug_open" OPEN
 {
     if(!canDebug()) terminate;
     delay(10);
-    Log(s:"Player Density: ", i:averageDistances());
+
+    if(GetGameModeState() != GAMESTATE_INPROGRESS)
+        terminate;
+    Log(n:PRINTNAME_LEVEL, s:" - ", n: PRINTNAME_LEVELNAME, s:" -- Player Density: ", f:averageDistances());
 }
 
 
 int playerDistances[MAX_PLAYERS][MAX_PLAYERS];
 
 function void populateDistances(void) {
+    if(GetGameModeState() != GAMESTATE_INPROGRESS)
+        return;
     int p = PlayerNumber();
     if(p == -1)
         return;
     if(!PlayerInGame(p))
         return;
     
-    if(GetGameModeState() == GAMESTATE_INPROGRESS) {
-        for(int i = 0; i < MAX_PLAYERS; i++) {
-            if(!PlayerInGame(i))
-                continue;
-            if(playerDistances[p][i] != 0 && playerDistances[i][p] != 0)
-                continue;
-            
-            int px = GetActorX(0);
-            int py = GetActorY(0);
-            int pz = GetActorZ(0);
+    for(int i = 0; i < MAX_PLAYERS; i++) {
+        if(!PlayerInGame(i))
+            continue;
+        if(playerDistances[p][i] != 0 && playerDistances[i][p] != 0)
+            continue;
+        
+        int px = GetActorX(0);
+        int py = GetActorY(0);
+        int pz = GetActorZ(0);
 
-            SetActivatorToPlayer(i);
+        SetActivatorToPlayer(i);
 
-            int ix = GetActorX(0);
-            int iy = GetActorY(0);
-            int iz = GetActorZ(0);
+        int ix = GetActorX(0);
+        int iy = GetActorY(0);
+        int iz = GetActorZ(0);
 
-            SetActivatorToPlayer(p);
 
-            int dst = abs(VectorLength(VectorLength(px-ix, py-iy), pz-iz)) >> 16;
-            if(dst == 0) // we know the player exists. treat 0 as if they don't. 1mu is basically 0 in practical terms.
-                dst = 1;
+        int dst = abs(VectorLength(VectorLength(px-ix, py-iy), pz-iz));
+        if(dst == 0) // we know the player exists. treat 0 as if they don't. 1mu is basically 0 in practical terms.
+            dst = 1;
 
-            playerDistances[p][i] = dst;
-            playerDistances[i][p] = dst;
-        }
+        playerDistances[p][i] = dst;
+        playerDistances[i][p] = dst;
+
+        SetActivatorToPlayer(p);
     }
 }
 
@@ -84,15 +89,18 @@ function int averageDistances(void) {
         }
     }
 
+    if(count == 0)
+        return 0;
+
     for(i = 0; i < MAX_PLAYERS; i++) {
         for(ii = 0; i < MAX_PLAYERS; i++) {
             if(playerDistances[i][ii] != 0) {
-                ret = playerDistances[i][ii] / count;
+                ret += playerDistances[i][ii] / count;
             }
         }
     }
 
-    return ret;
+    return ret/count;
 }
 
 function int abs(int x)
