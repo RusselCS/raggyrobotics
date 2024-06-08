@@ -4,6 +4,8 @@ server noarchive int rroboenz_sv_alphacontingency = 10;
 server noarchive int rroboenz_sv_infectlifetime = 90;
 server noarchive bool rroboenz_sv_trackstrains = true;
 
+server noarchive bool rroboenz_sv_debugmode = true;
+
 server noarchive int rroboenz_temp_alphacount = 0;
 
 local noarchive string rroboenz_zombieskin_stage = "";

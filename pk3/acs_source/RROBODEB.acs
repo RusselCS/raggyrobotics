@@ -1,0 +1,106 @@
+#library "RROBODEB"
+
+#include "zcommon.acs"
+#include "CROCFUNC.acs"
+#include "RROBCOMM.acs"
+
+script "rrobo_debug_enter" ENTER
+{
+    if(!canDebug()) terminate;
+    delay(5);
+    bool infected = false;
+    int pln = PlayerNumber();
+
+    until(CallACS0("ROBOENZ_GETMODESTATE") == ROBOSTATE_INPROGRESS)
+        delay(1);
+
+    while(GetActorProperty(0, APROP_Health) > 0) {
+        if(GetPlayerInfo(pln, PLAYERINFO_TEAM) == TEAM_SURVIVOR) {
+            if(!infected && CheckInventory("RoboenzaWep") > 0) {
+                infected = true;
+                Log(s:"Player ", n:pln+1, s:" has RoboenzaWep but is not on infected team.");
+            }
+        }
+        delay(1);
+    }
+}
+
+script "rrobo_debug_open" OPEN
+{
+    if(!canDebug()) terminate;
+    delay(10);
+    Log(s:"Player Density: ", i:averageDistances());
+}
+
+
+int playerDistances[MAX_PLAYERS][MAX_PLAYERS];
+
+function void populateDistances(void) {
+    int p = PlayerNumber();
+    if(p == -1)
+        return;
+    if(!PlayerInGame(p))
+        return;
+    
+    if(GetGameModeState() == GAMESTATE_INPROGRESS) {
+        for(int i = 0; i < MAX_PLAYERS; i++) {
+            if(!PlayerInGame(i))
+                continue;
+            if(playerDistances[p][i] != 0 && playerDistances[i][p] != 0)
+                continue;
+            
+            int px = GetActorX(0);
+            int py = GetActorY(0);
+            int pz = GetActorZ(0);
+
+            SetActivatorToPlayer(i);
+
+            int ix = GetActorX(0);
+            int iy = GetActorY(0);
+            int iz = GetActorZ(0);
+
+            SetActivatorToPlayer(p);
+
+            int dst = abs(VectorLength(VectorLength(px-ix, py-iy), pz-iz)) >> 16;
+            if(dst == 0) // we know the player exists. treat 0 as if they don't. 1mu is basically 0 in practical terms.
+                dst = 1;
+
+            playerDistances[p][i] = dst;
+            playerDistances[i][p] = dst;
+        }
+    }
+}
+
+function int averageDistances(void) {
+    int ret = 0;
+    int count = 0;
+    int i, ii;
+
+    for(i = 0; i < MAX_PLAYERS; i++) {
+        for(ii = 0; i < MAX_PLAYERS; i++) {
+            if(playerDistances[i][ii] != 0) {
+                count++;
+            }
+        }
+    }
+
+    for(i = 0; i < MAX_PLAYERS; i++) {
+        for(ii = 0; i < MAX_PLAYERS; i++) {
+            if(playerDistances[i][ii] != 0) {
+                ret = playerDistances[i][ii] / count;
+            }
+        }
+    }
+
+    return ret;
+}
+
+function int abs(int x)
+{
+    if(x < 0)
+        return -x;
+    return x;
+}
+
+function bool canDebug(void) { return GetCvar("rroboenz_sv_debugmode"); }
+ 
