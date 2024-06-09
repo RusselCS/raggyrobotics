@@ -108,7 +108,13 @@ script "RROBOENZ_YOUINFECTED" (int attacker, int victim) CLIENTSIDE
     SetFont("BIGFONT");
     HudMessageBold(s:fragMsg; HUDMSG_FADEOUT, MSGID_YOUINFECTED1, CR_DARKGREEN, 1.5, 0.325, 2.5, 0.5);
     SetFont("SMALLFONT");
-    HudMessageBold(i:playerCountTeam(TEAM_SURVIVOR), s:" SURVIVORS REMAIN."; HUDMSG_FADEOUT, MSGID_YOUINFECTED2, CR_YELLOW, 1.5, 0.375, 2.5, 0.5);
+
+    int survivorCount = playerCountTeam(TEAM_SURVIVOR);
+    if(survivorCount == 1) {
+        HudMessageBold(s:"ONE SURVIVOR REMAINS!"; HUDMSG_FADEOUT, MSGID_YOUINFECTED2, CR_YELLOW, 1.5, 0.375, 2.5, 0.5);
+    } else {
+        HudMessageBold(i:survivorCount, s:" SURVIVORS REMAIN."; HUDMSG_FADEOUT, MSGID_YOUINFECTED2, CR_YELLOW, 1.5, 0.375, 2.5, 0.5);
+    }
 }
 
 script "RROBOENZ_APPLYZOMBIESKIN" (void) CLIENTSIDE
@@ -272,9 +278,9 @@ script "RROBOENZ_UIHANDLER" (int cam) CLIENTSIDE
                     int tY = y+10.0;
 
                     if(timer() % (BTN_TIME * 2) < BTN_TIME) {
-                        bindStr = StrParam(s:"\c[BTNAL1]", k:panicButtonCommands[GetUserCvar(cpn, "rroboenz_panicbutton")-1]);
+                        bindStr = StrParam(s:"\c[BTNAL1]", s:getInput(panicButtonCommands[GetUserCvar(cpn, "rroboenz_panicbutton")-1], 0));
                     } else {
-                        bindStr = StrParam(s:"\c[BTNAL2]", k:panicButtonCommands[GetUserCvar(cpn, "rroboenz_panicbutton")-1]);
+                        bindStr = StrParam(s:"\c[BTNAL2]", s:getInput(panicButtonCommands[GetUserCvar(cpn, "rroboenz_panicbutton")-1], 0));
                     }
                     
                     if(GetChar(bindStr, 0) != '?') {

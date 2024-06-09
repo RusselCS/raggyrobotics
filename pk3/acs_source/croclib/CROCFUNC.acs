@@ -104,3 +104,84 @@ function void BasicTextDisplay2(str font, str text, int id, int x, int y, int ho
 SetFont(font);
 HudMessageBold(s:text;HUDMSG_PLAIN,id,CR_UNTRANSLATED,x,y,holdtime,alpha);
 }
+
+function str getInput(str cmd, int idx)
+{
+	str s = StrParam(k:cmd);
+
+	if(GetChar(s, 0) == '?')
+		return "NO BIND";
+	
+	return s;
+
+	// Reserving this code for later. Turns out there's an "OR" here, not a comma.
+	//
+	// if(idx == -1)
+	// 	return s;
+	
+	// int pos = findChar(s, ',', 0);
+	// if(pos == -1)
+	// 	return s;
+	
+	// if(idx == 0)
+	// 	return StrLeft(s, pos);
+	// return StrRight(s, StrLen(s)-pos);
+}
+
+function int findChar(str s, int c, int start)
+{
+	int end = strlen(s);
+	for(int i = start; i < end; i++) {
+		if(getChar(s, i) == c)
+			return i;
+	}
+	return -1;
+}
+
+// Fake message items.
+#define MAX_COLORS 22
+str textColors[22] = {
+	"\ca", "\cb", "\cc", "\cd", "\ce",
+	"\cf", "\cg", "\ch", "\ci", "\cj",
+	"\ck", "\cl", "\cm", "\cn", "\co",
+	"\cp", "\cq", "\cr", "\cs", "\ct",
+	"\cu", "\cv"
+};
+
+str messageLevelCVars[6] = {
+	"msg0color",
+	"msg1color",
+	"msg2color",
+	"msg3color",
+	"msg4color",
+	"msg5color"
+};
+
+#define ML_ITEM_PICKUP 0
+#define ML_OBITUARIES  1
+#define ML_CRITICAL_MESSAGES 2
+#define ML_CHAT_MESSAGES 3
+#define ML_TEAM_MESSAGES 4
+#define ML_PRIVATE_MESSAGES 5
+
+function str colorIdToCode(int clrId) {
+	if(clrId < 0 || clrId >= MAX_COLORS)
+		return "\c-";
+	
+	return textColors[clrId];
+}
+
+function str messageTypeToColorCode(int msgLevel) {
+	return textColors[GetCVar(messageLevelCVars[msgLevel])];
+}
+
+function void sendSystemMessage(str msg, int msgLevel) { CallACS2("crocui_systemmessage", msg, msgLevel); }
+script "crocui_systemmessage" (int msg, int msgLevel) CLIENTSIDE { systemMessage(msg, msgLevel); }
+
+function void systemMessage(str msg, int msgLevel) {
+	if(msgLevel < getCvar("msg"))
+		terminate;
+	
+	// You need to format the message yourself. There's too much wackery with the color rules.
+	Log(s:msg);
+}

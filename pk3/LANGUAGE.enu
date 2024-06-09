@@ -40,8 +40,8 @@ RBNZ_ALPHABUFFAST       = "Show Patient Zero buff on Assist Bar";
 RBZN_ZOMBIESKIN         = "Infected Skin";
 RBZN_COPYSKIN           = "Copy base skin to Infected Skin";
 RBZN_RESETSKIN          = "Clear Infected Skin";
-RBZN_ZOMBIESKINWARN1    = "\ckCareful! Modifying player settings";
-RBZN_ZOMBIESKINWARN2    = "\ckwith zombie skin may cause kicking!";
+RBZN_ZOMBIESKINWARN1    = "\ckCareful! Modify these settings when";
+RBZN_ZOMBIESKINWARN2    = "\ckyou are not actively playing!";
 
 RBZN_SUBHEADER_ALERT    = "-- Alert Sounds-- ";
 RBZN_GLOBALINFECTSOUND  = "Infection";
