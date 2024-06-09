@@ -962,6 +962,12 @@
 #define GAMESTATE_INPROGRESS        2
 #define GAMESTATE_INRESULTSEQUENCE    3
 
+// GetPlayerSkin ------------------------------------------------------------
+#define PLAYERSKIN_USERINFO 0
+#define PLAYERSKIN_WEAPON   1
+#define PLAYERSKIN_ACS      2
+#define PLAYERSKIN_VISIBLE  3
+
 // Key modifiers (or'd with event type)
 
 #define GKM_SHIFT				256
