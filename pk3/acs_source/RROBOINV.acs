@@ -257,7 +257,7 @@ script "RROBOENZ_PANICBUTTON" (void) NET CLIENTSIDE
 script "RROBOENZ_INFECT" (int who, int alpha, int msgDel, int atk)
 {
     Log(n:who+1, s:" has contracted Roboenza!");
-    SetActivator(who + PLN_TID);
+    SetActivatorToPlayer(who);
     Player_SetTeam(TEAM_INFECTED, true);
     CallACS1("core_hazardtag_clear", who);
     removeAssists();
@@ -402,15 +402,19 @@ script "RROBOENZ_MANAGEINFECTED" (void)
 
 script "RROBOENZ_SELECTWEP" (void) CLIENTSIDE
 {
-    if(PlayerNumber() == ConsolePlayerNumber())
-        ConsoleCommand("use RoboenzaWep");
+    if(PlayerNumber() != ConsolePlayerNumber())
+        terminate;
+    ConsoleCommand("use RoboenzaWep");
 }
 
 script "RROBOENZ_INFECTED_CLIENTEFFECTS" (void) CLIENTSIDE
-{    
+{
+    if(PlayerNumber() != ConsolePlayerNumber())
+        terminate;
+
     int oldVelZ = GetActorVelZ(0);
 
-    while(GetActorProperty(0, APROP_Health) > 0 && CheckInventory("RoboenzaInfected") > 0) {
+    while(GetActorProperty(0, APROP_Health) > 0 && CheckInventory("RoboenzaInfected") > 0 && PlayerInGame(PlayerNumber())) {
         // Custom landing sound logic.
         // if(oldVelZ < 0 && GetActorVelZ(0) == 0.0) {
         //     if(GetActorZ(0) <= GetActorFloorZ(0)) {
