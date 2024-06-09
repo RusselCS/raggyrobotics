@@ -233,6 +233,17 @@ Column "Strain"
 	Size = 16
 }
 
+Column "LastRound"
+{
+    AddFlag NOSPECTATORS
+	AddFlag ALWAYSUSESHORTESTWIDTH
+
+	Alignment = Right
+	GameType = Deathmatch, TeamGame
+	ShortName = "Lrnd"
+	Size = 16
+}
+
 //*****************************************************************************
 //
 // SCOREBOARD BLOCK

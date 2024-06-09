@@ -179,6 +179,7 @@ function int contingencyTimer(void) {
 }
 
 function void infectAlpha(int count) {
+    // Log(s:"infectAlpha");
 
     // set the stage by ensuring survivor team can spare their infected member
     if(playerCountTeam(TEAM_INFECTED) > playerCountTeam(TEAM_SURVIVOR)) {
@@ -199,7 +200,8 @@ function void infectAlpha(int count) {
         while(alphaCount < count) {
             int who = pickAPlayer();
             if(who == -1) {
-                // Log(s:"This shouldn't have happened");
+                Log(s:"This shouldn't have happened");
+                return;
             } else {
                 // Log(s:"Adding ", n:who+1, s:" to infection array.");
                 patientsZero[alphaCount++] = who;
@@ -249,6 +251,8 @@ function int getAlphaCount(void) { return getCvar("rroboenz_temp_alphacount"); }
 function void setAlphaCount(int count) { setCvar("rroboenz_temp_alphacount", count); }
 
 function int pickAPlayer(void) {
+    if(GetCvar("rroboenz_sv_alphaqueue"))
+        return findNextPlayer();
     return pickAPlayerEx(0);
 }
 
@@ -300,5 +304,105 @@ function int countAlive(void) {
         if(playerInGame(i))
             ret++;
     }
+    return ret;
+}
+
+function int getCurrentRound(void) { return GetCvar("rroboenz_temp_roundnum"); }
+function void setCurrentRound(int val) { SetCvar("rroboenz_temp_roundnum", val); }
+
+function int getPlayerLastRound(int pln) { return GetCvar(StrParam(s:"rroboenz_temp_player", i:pln, s:"roundnum")); }
+function void setPlayerLastRound(int pln, int val) { SetCustomPlayerValue("LastRound", pln, val); SetCvar(StrParam(s:"rroboenz_temp_player", i:pln, s:"roundnum"), val); }
+
+function int getAlphaRange(void) { return GetCvar("rroboenz_sv_alpharand"); }
+
+int connectLowest = 0;
+
+script "rroboenz_roundcontroller" (int e, int who, int r) EVENT
+{
+    if(e == GAMEEVENT_LEVEL_INIT) {
+        setCurrentRound(getCurrentRound() + 1);
+    } else {
+        if(connectLowest == 0)
+            connectLowest = getLowestRound();
+        
+        connectLowest = max(connectLowest, getCurrentRound());
+
+        if(e == GAMEEVENT_PLAYERCONNECT) setPlayerLastRound(who, connectLowest+random(0, getAlphaRange()));
+        if(e == GAMEEVENT_PLAYERLEAVESSERVER) setPlayerLastRound(who, 0);
+    }
+}
+script "rroboenz_getcurrentround" (void) { SetResultValue(getCurrentRound()); }
+
+script "rroboenz_offlineplayer0queue" OPEN
+{
+    // // I should not need to do this. But I do.
+    // // Zandronum does not run the GAMEEVENT_PLAYERCONNECT or GAMEEVENT_PLAYERDISCONNECT events on the player
+    // // if you're playing in offline skirmish.
+    // // But it does run, for bots.
+    // // I do not understand why this is the case.
+    // if(!IsNetworkGame()) {
+    //     if(getPlayerLastRound(0) == 0) {
+    //         Log(s:"Force-setting player 0's value.");
+    //         CallACS3("rroboenz_roundcontroller", GAMEEVENT_PLAYERCONNECT, 0, 0);
+    //     }
+    // }
+}
+
+function int getLowestRound(void)
+{
+    int ret = getCurrentRound();
+    for(int i = 0; i < MAX_PLAYERS; i++) {
+        if(!playerInGame(i))
+            continue;
+
+        int r = getPlayerLastRound(i);
+        // Log(n:i+1, s:"'s round is ", i:r);
+
+        if(r < ret)
+            ret = r;
+    }
+
+    return ret;
+}
+
+function int getHighestRound(void)
+{
+    int ret = getCurrentRound();
+    for(int i = 0; i < MAX_PLAYERS; i++) {
+        if(!playerInGame(i))
+            continue;
+
+        int r = getPlayerLastRound(i);
+        // Log(n:i+1, s:"'s round is ", i:r);
+
+        if(r > ret)
+            ret = r;
+    }
+
+    return ret;
+}
+
+int playerQueue[MAX_PLAYERS];
+int playerQueueCount = 0;
+
+function int findNextPlayer(void) {
+    int low = getLowestRound();
+    int high = getHighestRound();
+    playerQueueCount = 0;
+
+    for(int i = 0; i < MAX_PLAYERS; i++)
+        if(getPlayerLastRound(i) == low)
+            playerQueue[playerQueueCount++] = i;
+    
+    if(playerQueueCount == 0)
+        return -1;
+    
+    int ret;
+    if(playerQueueCount == 1)
+        ret = playerQueue[0];
+    else
+        ret = playerQueue[random(0, playerQueueCount-1)];
+    
+    setPlayerLastRound(ret, high+random(0, getAlphaRange()));
     return ret;
 }

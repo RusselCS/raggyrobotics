@@ -57,7 +57,12 @@
 #define RBNZ_BMS_VICTORY		2
 #define RBNZ_BMS_DISABLE		100
 
-function bool canRoboenza(void) { return getCVar("teamlms") && getGameModeState() == GAMESTATE_INPROGRESS && getCVar("sv_maxteams") == 2; }
+function bool canRoboenza(void) { 
+    return getCVar("teamlms") &&
+           getGameModeState() == GAMESTATE_INPROGRESS &&
+           getCVar("sv_maxteams") == 2 &&
+           ACS_NamedExecuteWithResult("rroboenz_getcurrentround") > 0;
+}
 function int playerCountTeam(int team) { return GetTeamProperty(team, TPROP_NumLivePlayers); }
 function int max(int x, int y) { if(x > y) return x; return y; }
 function int min(int x, int y) { if(x < y) return x; return y; }
