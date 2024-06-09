@@ -24,6 +24,9 @@
 #define GRP_FULLRESTORE 9
 #define GRP_PASSIVE		10
 
+#define MAX_INT 2147483647
+#define MIN_INT -2147483648
+
 // Script wrappers
 function int CallACS0(str scr) { return CallACS4(scr, 0, 0, 0, 0); }
 function int CallACS1(str scr, int a1) { return CallACS4(scr, a1, 0, 0, 0); }
