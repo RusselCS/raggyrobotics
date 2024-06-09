@@ -33,7 +33,7 @@ script "rrobo_debug_open" OPEN
 
     if(GetGameModeState() != GAMESTATE_INPROGRESS)
         terminate;
-    Log(n:PRINTNAME_LEVEL, s:" - ", n: PRINTNAME_LEVELNAME, s:" -- Player Density: ", f:averageDistances());
+    Log(n:PRINTNAME_LEVEL, s:" - ", n: PRINTNAME_LEVELNAME, s:" -- Player Density: ", f:averageDistances(), s:" -- Player count: ", i:PlayerCount());
 }
 
 
