@@ -180,7 +180,7 @@ script "crocui_systemmessage" (int msg, int msgLevel) CLIENTSIDE { systemMessage
 
 function void systemMessage(str msg, int msgLevel) {
 	if(msgLevel < getCvar("msg"))
-		terminate;
+		return;
 	
 	// You need to format the message yourself. There's too much wackery with the color rules.
 	Log(s:msg);
