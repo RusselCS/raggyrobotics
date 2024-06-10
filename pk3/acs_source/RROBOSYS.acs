@@ -335,17 +335,17 @@ script "rroboenz_getcurrentround" (void) { SetResultValue(getCurrentRound()); }
 
 script "rroboenz_offlineplayer0queue" OPEN
 {
-    // // I should not need to do this. But I do.
-    // // Zandronum does not run the GAMEEVENT_PLAYERCONNECT or GAMEEVENT_PLAYERDISCONNECT events on the player
-    // // if you're playing in offline skirmish.
-    // // But it does run, for bots.
-    // // I do not understand why this is the case.
-    // if(!IsNetworkGame()) {
-    //     if(getPlayerLastRound(0) == 0) {
-    //         Log(s:"Force-setting player 0's value.");
-    //         CallACS3("rroboenz_roundcontroller", GAMEEVENT_PLAYERCONNECT, 0, 0);
-    //     }
-    // }
+    // I should not need to do this. But I do.
+    // Zandronum does not run the GAMEEVENT_PLAYERCONNECT or GAMEEVENT_PLAYERDISCONNECT events on the player
+    // if you're playing in offline skirmish.
+    // But it does run, for bots.
+    // I do not understand why this is the case.
+    if(!IsNetworkGame()) {
+        if(getPlayerLastRound(0) == 0) {
+            Log(s:"Force-setting player 0's value.");
+            CallACS3("rroboenz_roundcontroller", GAMEEVENT_PLAYERCONNECT, 0, 0);
+        }
+    }
 }
 
 function int getLowestRound(void)
