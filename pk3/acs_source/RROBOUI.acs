@@ -326,6 +326,25 @@ function bool hasPanicItem(int tid) {
     return CheckActorInventory(tid, "ExitUnitItem") > 0 || CheckActorInventory(tid, "FrenzyBuffItem") > 0;
 }
 
+script "rroboenz_changes_v1e" (void) NET CLIENTSIDE
+{
+    Log(s:"====================== v1dh ======================");
+    Log(s:"* Added \"Strain\": How many infections did you and your underlings score?");
+    Log(s:"* Updated infected health calculation to be less feast or famine.");
+    Log(s:"* Added a CVar \"rroboenz_sv_infectlifefactor\" to control infected health per server.");
+    Log(s:"* Added a queue system to choose Patient Zero instead of pure RNG.");
+    Log(s:"* Fixed a bug where a script would force everyone to select \"RoboenzaWep\" every tic.");
+    Log(s:"=================================================");
+}
+
+script "rroboenz_changes_v1dh1" (void) NET CLIENTSIDE
+{
+    Log(s:"====================== v1dh ======================");
+    Log(s:"* Fixed an issue introduced by the latest Zandronum beta.");
+    Log(s:"* Server CVar added to control zombie lifetime.");
+    Log(s:"=================================================");
+}
+
 script "rroboenz_changes_v1d" (void) NET CLIENTSIDE
 {
     Log(s:"====================== v1d ======================");

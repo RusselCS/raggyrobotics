@@ -75,6 +75,16 @@ OptionValue "Menu_RROBOENZ_PanicBind"
 Optionmenu "RBNZ_Changelog"
 {
 	StaticText 	" "
+	StaticText	"$RBZN_SUBHEADER_V1E_CHANGES", 1
+	StaticText 	" "
+	Command "View in console", "robochangelog_v1e"
+
+	StaticText 	" "
+	StaticText	"$RBZN_SUBHEADER_V1DH1_CHANGES", 1
+	StaticText 	" "
+	Command "View in console", "robochangelog_v1dh1"
+
+	StaticText 	" "
 	StaticText	"$RBZN_SUBHEADER_V1D_CHANGES", 1
 	StaticText 	" "
 	Command "View in console", "robochangelog_v1d"
