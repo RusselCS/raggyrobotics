@@ -34,11 +34,13 @@ int assistCounts[11];
 
 int ZOMBIE_TIME = 90;
 int ZOMBIE_HP_FACTOR = 1.0;
+int ZOMBIE_RESOLID = false;
 
 script "RROBOENZ_LOADOUTBUILD" OPEN
 {
     ZOMBIE_TIME = GetCvar("rroboenz_sv_infectlifetime");
     ZOMBIE_HP_FACTOR = GetCvar("rroboenz_sv_infectlifefactor");
+    ZOMBIE_RESOLID = getCvar("sv_unblockallies") && getCvar("rroboenz_sv_resolidinfect");
     delay(2);
     if(canRoboenza()) {
         for(int i = 0; i < MAX_ITEMS_GLOBAL; i++) {
@@ -258,7 +260,11 @@ script "RROBOENZ_INFECT" (int who, int alpha, int msgDel, int atk)
 {
     Log(n:who+1, s:" has contracted Roboenza!");
     SetActivatorToPlayer(who);
+    if(ZOMBIE_RESOLID)
+        CallACS2("core_unsolidplayer",0,true);
     Player_SetTeam(TEAM_INFECTED, true);
+    if(ZOMBIE_RESOLID)
+        CallACS2("core_unsolidplayer",0,false);
     CallACS1("core_hazardtag_clear", who);
     removeAssists();
     CallACS0("RROBOENZ_APPLYZOMBIESKIN");

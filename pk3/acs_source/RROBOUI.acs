@@ -334,6 +334,8 @@ script "rroboenz_changes_v1e" (void) NET CLIENTSIDE
     Log(s:"* Added a CVar \"rroboenz_sv_infectlifefactor\" to control infected health per server.");
     Log(s:"* Added a queue system to choose Patient Zero instead of pure RNG.");
     Log(s:"* Fixed a bug where a script would force everyone to select \"RoboenzaWep\" every tic.");
+    Log(s:"* Infected players now become unsolid temporarily when infected if \"sv_unblockplayers\" is active.");
+    Log(s:"* Added cvars to enable/disable potentially gamebreaking features.");
     Log(s:"=================================================");
 }
 

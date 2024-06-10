@@ -6,6 +6,7 @@ server noarchive float rroboenz_sv_infectlifefactor = 1.3;
 server noarchive bool rroboenz_sv_trackstrains = true;
 server noarchive bool rroboenz_sv_alphaqueue = true;
 server noarchive int rroboenz_sv_alpharand = 3;
+server noarchive int rroboenz_sv_resolidinfect = true;
 
 server noarchive bool rroboenz_sv_debugmode = true;
 
