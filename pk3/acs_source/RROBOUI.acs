@@ -328,7 +328,7 @@ function bool hasPanicItem(int tid) {
 
 script "rroboenz_changes_v1e" (void) NET CLIENTSIDE
 {
-    Log(s:"====================== v1dh ======================");
+    Log(s:"====================== v1e ======================");
     Log(s:"* Added \"Strain\": How many infections did you and your underlings score?");
     Log(s:"* Updated infected health calculation to be less feast or famine.");
     Log(s:"* Added a CVar \"rroboenz_sv_infectlifefactor\" to control infected health per server.");
