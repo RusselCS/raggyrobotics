@@ -335,7 +335,13 @@ script "rroboenz_changes_v1e" (void) NET CLIENTSIDE
     Log(s:"* Added a queue system to choose Patient Zero instead of pure RNG.");
     Log(s:"* Fixed a bug where a script would force everyone to select \"RoboenzaWep\" every tic.");
     Log(s:"* Infected players now become unsolid temporarily when infected if \"sv_unblockplayers\" is active.");
+    Log(s:"* If a player would dies from an infection attack, the attacker:");
+    Log(s:"*** Heals 20% of their max health");
+    Log(s:"*** Gains 20% lifetime");
+    Log(s:"*** Gains Patient Zero buff");
     Log(s:"* Added cvars to enable/disable potentially gamebreaking features.");
+    Log(s:"* Added something to fix broken map teleporters.");
+    Log(s:"* Scoring Infections now triggers death events on certain maps.");
     Log(s:"=================================================");
 }
 
