@@ -486,12 +486,16 @@ script "RROBOENZ_GHOSTWARPER" (void) CLIENTSIDE
 
 function void revokeAlpha(int who)
 {
+    if(CheckActorInventory(who + PLN_TID, "RoboenzaAlphaInfected") == 0)
+        return;
     TakeActorInventory(who + PLN_TID, "RoboenzaAlphaInfected", 1);
     GiveActorInventory(who + PLN_TID, "RoboenzaDoRip", 1);
 }
 
 function void applyAlpha(int who)
 {
+    if(CheckActorInventory(who + PLN_TID, "RoboenzaAlphaInfected") > 0)
+        return;
     GiveActorInventory(who + PLN_TID, "RoboenzaDontRip", 1);
     GiveActorInventory(who + PLN_TID, "RoboenzaAlphaInfected", 1);
     GiveActorInventory(who + PLN_TID, "RoboenzaGhostStart_P", 1);
