@@ -291,9 +291,7 @@ script "RROBOENZ_INFECT" (int who, int alpha, int msgDel, int atk)
     if(!alpha) {
         zombieHealth = clamp(ZOMBIE_HP_START + (PlayerCount() * ZOMBIE_HP_ADD - infectCount * ZOMBIE_HP_SUB), ZOMBIE_HP_MIN, ZOMBIE_HP_MAX);
     } else {
-        GiveInventory("RoboenzaDontRip", 1);
-        GiveInventory("RoboenzaAlphaInfected", 1);
-        GiveInventory("RoboenzaGhostStart_P", 1);
+        applyAlpha(who);
     }
 
     zombieHealth = FixedMul(zombieHealth, ZOMBIE_HP_FACTOR);
@@ -492,6 +490,13 @@ function void revokeAlpha(int who)
     GiveActorInventory(who + PLN_TID, "RoboenzaDoRip", 1);
 }
 
+function void applyAlpha(int who)
+{
+    GiveActorInventory(who + PLN_TID, "RoboenzaDontRip", 1);
+    GiveActorInventory(who + PLN_TID, "RoboenzaAlphaInfected", 1);
+    GiveActorInventory(who + PLN_TID, "RoboenzaGhostStart_P", 1);
+}
+
 Script "RROBOENZ_HEALTHSPEND" (void)
 {
 	Int ActorHealth = GetActorProperty(ActivatorTID(), APROP_Health);
@@ -541,7 +546,7 @@ script "ROBOENZ_TRANSFORMFREEZE" (void) {
 // ---- If damagetype is "RoboenzaInfection"
 // ------- Kill or infect
 // ---- Else damagetype, if inflictor is not of type BasicACSDamager, disable damage.
-
+// 
 script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
 {
     if(ev == GAMEEVENT_ACTOR_DAMAGED) {
@@ -595,12 +600,18 @@ script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
                                         CallACS1("ROBOENZ_ADDPLAYERSCORE", attacker);
                                         CallACS2("RROBOENZ_YOUINFECTED", attacker, victim);
                                     } else {
-                                        GiveActorInventory(attacker + PLN_TID, "RoboenzaTimer", 20);
-                                        healActor(attacker + PLN_TID, 20);
+                                        GiveActorInventory(attacker + PLN_TID, "RoboenzaTimer", FixedMul(ZOMBIE_TIME, 0.2));
+                                        healActor(attacker + PLN_TID, FixedMul(GetActorProperty(attacker + PLN_TID, AProp_SpawnHealth), 0.2));
+                                        if(GetCvar("rroboenz_sv_killsrealpha"))
+                                            applyAlpha(attacker);
+                                        SetResultValue(dmg * 100);
                                     }
                                 } else {
-                                    GiveActorInventory(attacker + PLN_TID, "RoboenzaTimer", 20);
-                                    healActor(attacker + PLN_TID, 20);
+                                    GiveActorInventory(attacker + PLN_TID, "RoboenzaTimer", FixedMul(ZOMBIE_TIME, 0.2));
+                                    healActor(attacker + PLN_TID, FixedMul(GetActorProperty(attacker + PLN_TID, AProp_SpawnHealth), 0.2));
+                                    if(GetCvar("rroboenz_sv_killsrealpha"))
+                                        applyAlpha(attacker);
+                                    SetResultValue(dmg * 100);
                                 }
                             } else {
                                 if(CheckActorInventory(attacker + PLN_TID, "RoboenzaAlphaInfected") > 0)
