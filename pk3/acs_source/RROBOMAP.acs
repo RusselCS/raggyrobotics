@@ -5,35 +5,50 @@
 
 int hasInfected = false;
 
-#define DEATHS_MAX 4
+#define DEATHS_MAX 6
 
 #define SCRIPT_MAP 0
 #define SCRIPT_NAME 1
+#define SCRIPT_TYPE 2
 
-str deathScripts[DEATHS_MAX][2] = {
-    { "MM10DW1", "death_music"}, //  MM10DW1 - Wily Station Archives          -- MM8BDM-v6b.pk3
-    {   "BON04", "death_music"}, //    BON04 - Welcome Home                   -- 8bdm_jampack-v5d.pk3
-    {"MME10DW1", "death_music"}, // MME10DW1 - Wily Station Archives: Encore! -- mm8bdm-encore-beta6h2-mapsonly.pk3
-    {  "MMEPRO", "death_music"}, //   MMEPRO - Proto Man                      -- mm8bdm-encore-beta6h2-mapsonly.pk3
+#define DEATH_FIRST 0
+#define DEATH_ALL   1
+
+str deathScripts[DEATHS_MAX][3] = {
+    { "MM10DW1", "death_music", DEATH_FIRST}, //  MM10DW1 - Wily Station Archives          -- MM8BDM-v6b.pk3
+    {   "BON04", "death_music", DEATH_FIRST}, //    BON04 - Welcome Home                   -- 8bdm_jampack-v5d.pk3
+    {   "MOM27", "MOM27_wrapper", DEATH_ALL}, //    MOM27 - Curse The Moon                 -- 8bdm_jampacktwo-v2b.pk3
+    {   "CSS28", "MOM27_wrapper", DEATH_ALL}, //    CSS28 - MOONLIT FORTRESS - MOM27       -- CSStationv3.0.pk3
+    {"MME10DW1", "death_music", DEATH_FIRST}, // MME10DW1 - Wily Station Archives: Encore! -- mm8bdm-encore-beta6h2-mapsonly.pk3
+    {  "MMEPRO", "death_music", DEATH_FIRST}, //   MMEPRO - Proto Man                      -- mm8bdm-encore-beta6h2-mapsonly.pk3
 };
 
+script "MOM27_wrapper" (void) { ACS_ExecuteWithResult(2); }
+
+int deathScript = -2;
 // runs the death scripts if on a map that needs them
 //
 script "rroboenz_map_infect" (void)
 {
-    if(hasInfected)
-        terminate;
-    
-    hasInfected = true;
-    str map = StrParam(n:PRINTNAME_LEVEL);
+    if(deathScript == -2) {
+        deathScript = -1;
 
-    for(int i = 0; i < DEATHS_MAX; i++) {
-        if(strICmp(deathScripts[i][SCRIPT_MAP], map) == 0) {
-            CallACS0(deathScripts[i][SCRIPT_NAME]);
-            terminate;
+        str map = StrParam(n:PRINTNAME_LEVEL);
+        for(int i = 0; i < DEATHS_MAX; i++) {
+            if(strICmp(deathScripts[i][SCRIPT_MAP], map) == 0) {
+                deathScript = i;
+                break;
+            }
         }
     }
-    Log(s:"Map not found.");
+
+    if(deathScript == -1)
+        terminate;
+    
+    CallACS0(deathScripts[deathScript][SCRIPT_NAME]);
+
+    if(deathScripts[deathScript][SCRIPT_TYPE] == DEATH_FIRST)
+        deathScript = -1;
 }
 
 // This is just a clone of vanilla 8bdm's teleport functionality to work in older maps.
@@ -46,7 +61,7 @@ script TPSAFE (int spot, int sect, int source)
 	if(CheckInventory("SafeTPFlag"))
 		terminate;
     
-    if(!CustomLevelCheck())
+    if(!tpScriptCheck())
         terminate;
 
 	GiveInventory("SafeTPFlag", 1);
@@ -54,31 +69,32 @@ script TPSAFE (int spot, int sect, int source)
 	Teleport(spot, sect, source);
 }
 
-int customLevel = -2;
-
 #define TP_MAX 1
 
 str teleportScripts[TP_MAX][2] = {
     {"EMIMAP09", "rroboenz_skeldcheck"} // EMIMAP09 - The Skeld --- emilianos-dumb-pack-v2.2a.pk3
 };
 
-function int customLevelCheck(void)
+int tpScript = -2;
+
+function int tpScriptCheck(void)
 {
-    if(customLevel == -2) {
-        customLevel = -1;
+    if(tpScript == -2) {
+        tpScript = -1;
 
         str map = StrParam(n:PRINTNAME_LEVEL);
-        for(int i = 0; i < TP_MAX && customLevel < 0; i++) {
+        for(int i = 0; i < TP_MAX; i++) {
             if(strICmp(teleportScripts[i][SCRIPT_MAP], map) == 0) {
-                customLevel = i;
+                tpScript = i;
+                break;
             }
         }
     }
 
-    if(customLevel == -1)
+    if(tpScript == -1)
         return true;
     
-    return CallACS0(teleportScripts[customLevel][SCRIPT_NAME]);
+    return CallACS0(teleportScripts[tpScript][SCRIPT_NAME]);
 }
 
 // On The Skeld, only infected players can use the vents.
