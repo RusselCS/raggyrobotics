@@ -1,0 +1,22 @@
+// Override old teleporters to use safer functions to prevent crashes.
+//
+const int TPSAFE = 2984; // MUST be a numbered script
+
+actor SafeTPFlag : PowerUp { powerup.duration 5 }
+
+actor TeleportFix : SecActHitFloor replaces SecActHitFloor
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0
+		TNT1 A 0 A_JumpIf(special == 70, "Remap")
+		goto End
+	Remap:
+		TNT1 A 0 A_SetSpecial(226, TPSAFE, 0, args[0], args[1], args[2])
+		goto End
+	End:
+		TNT1 A 0
+		goto Super::Spawn
+	}
+}

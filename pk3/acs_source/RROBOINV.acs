@@ -307,6 +307,9 @@ script "RROBOENZ_INFECT" (int who, int alpha, int msgDel, int atk)
     CallACS0("RROBOENZ_INFECTED_CLIENTEFFECTS");
     CallACS0("RROBOENZ_SELECTWEP");
 
+    if(!alpha)
+        CallACS0("rroboenz_map_infect");
+
     if(who > -1 && !alpha)
         CallACS2("RROBOENZ_UPDATESTRAIN", who, atk);
 
