@@ -188,3 +188,11 @@ function void systemMessage(str msg, int msgLevel) {
 	// You need to format the message yourself. There's too much wackery with the color rules.
 	Log(s:msg);
 }
+
+function bool checkActorExists(str act) {
+	int u = UniqueTID();
+	int ret = SpawnForced(act, 0, 0, 0, u, 0);
+	if(ret)
+		thing_Remove(u);
+	return ret;
+}

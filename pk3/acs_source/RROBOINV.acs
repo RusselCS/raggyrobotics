@@ -274,6 +274,7 @@ script "RROBOENZ_INFECT" (int who, int alpha, int msgDel, int atk)
     GiveInventory("RoboenzaInfected", 1);
     SetAmmoCapacity("RoboenzaTimer", ZOMBIE_TIME);
     GiveInventory("RoboenzaTimer", ZOMBIE_TIME);
+    if(checkActorExists("UIX_NoWeaponBar")) { CSetInventory("UIX_NoWeaponBar", 1); }
     GiveInventory("RoboenzaWep", 1);
     SpawnSpotForced("InfectionEffect", 0, 0, 0);
     Thing_SetTranslation(0, CLR_INFECTED);
@@ -518,6 +519,7 @@ script "RROBOENZ_CURE" (void)
     CSetInventory("RoboenzaAlphaInfected", 0);
     CSetInventory("RoboenzaInfected", 0);
     CSetInventory("RoboenzaTimer", 0);
+    if(checkActorExists("UIX_NoWeaponBar")) { CSetInventory("UIX_NoWeaponBar", 0); }
     SpawnSpotForced("RoboenzaCureEffect", 0, 0, 0);
     SetActorVelocity(0, 0, 0, 0, 0, 0);
     CallACS2("core_freezeplayer", 0, true);
