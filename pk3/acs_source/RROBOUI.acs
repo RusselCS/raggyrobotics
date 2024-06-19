@@ -342,6 +342,7 @@ script "rroboenz_changes_v1e" (void) NET CLIENTSIDE
     Log(s:"* Added cvars to enable/disable potentially gamebreaking features.");
     Log(s:"* Added something to fix broken map teleporters.");
     Log(s:"* Scoring Infections now triggers death events on certain maps.");
+    Log(s:"* UIX Weapon Bar is now hidden while infected.");
     Log(s:"=================================================");
 }
 
