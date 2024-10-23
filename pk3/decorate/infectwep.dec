@@ -2,7 +2,7 @@ actor RoboenzaWep_ScriptBar : ScriptBar {}
 
 actor InfectedSuperjump : Once {}
 
-actor RoboenzaWep : MegaBuster
+actor RoboenzaWep : BaseMM8BDMWep0
 {
     Weapon.AmmoUse 0
     Weapon.SlotNumber 1
@@ -10,6 +10,11 @@ actor RoboenzaWep : MegaBuster
     Obituary "%o was eaten alive by %k."
     Inventory.Pickupmessage "Infected!"
     +WEAPON.AMMO_OPTIONAL
+    +WEAPON.WIMPY_WEAPON
+    +WEAPON.ALLOW_WITH_RESPAWN_INVUL
+    weapon.ammotype "BusterAmmo"
+    inventory.icon "NULLICON"
+    Dropitem ""
     //inventory.icon "INFEWEP"
     Scale 2.0
     States
