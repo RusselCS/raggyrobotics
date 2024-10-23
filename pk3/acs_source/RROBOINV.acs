@@ -38,46 +38,47 @@ int ZOMBIE_RESOLID = false;
 
 script "RROBOENZ_LOADOUTBUILD" OPEN
 {
+    if(!canRoboenza())
+        terminate;
+
     ZOMBIE_TIME = GetCvar("rroboenz_sv_infectlifetime");
     ZOMBIE_HP_FACTOR = GetCvar("rroboenz_sv_infectlifefactor");
     ZOMBIE_RESOLID = getCvar("sv_unblockallies") && getCvar("rroboenz_sv_resolidinfect");
     delay(2);
-    if(canRoboenza()) {
-        for(int i = 0; i < MAX_ITEMS_GLOBAL; i++) {
-            if(isAssistItemMapValid(i))
-                assistCounts[clamp(getAssistItemGroup(i), 0, 10)]++;
-        }
-
-        int roll;
-
-        // Special item draw logic: roll for gift or attack type assist
-        // You get an attacking assist, or Eddie in vanilla.
-        roll = random(1, assistCounts[GRP_GIFT] + assistCounts[GRP_ATTACK]);
-        if(roll <= assistCounts[GRP_ATTACK]) {
-            attackSlot = randomAssistItemEx(GRP_ATTACK, true);
-        } else {
-            giftSlot = randomAssistItemEx(GRP_GIFT, true);
-        }
-
-        // Special item draw logic: roll for gift or attack type assist
-        // You get any mobility item from vanilla.
-        int j = assistCounts[GRP_JUMP];
-        int d = assistCounts[GRP_DASH];
-        int f = assistCounts[GRP_FLIGHT];
-
-        roll = random(1, j + d + f);
-        if(roll <= j) {
-            dashSlot = randomAssistItemEx(GRP_JUMP, true);
-        } else if(roll <= j + d) {
-            jumpSlot = randomAssistItemEx(GRP_DASH, true);
-        } else {
-            flightSlot = randomAssistItemEx(GRP_FLIGHT, true);
-        }
-
-        reloadSlot = randomAssistItemEx(GRP_RELOAD, true);
-        passiveSlot = randomAssistItemEx(GRP_PASSIVE, true);
-        itemsPulled = true;
+    for(int i = 0; i < MAX_ITEMS_GLOBAL; i++) {
+        if(isAssistItemMapValid(i))
+            assistCounts[clamp(getAssistItemGroup(i), 0, 10)]++;
     }
+
+    int roll;
+
+    // Special item draw logic: roll for gift or attack type assist
+    // You get an attacking assist, or Eddie in vanilla.
+    roll = random(1, assistCounts[GRP_GIFT] + assistCounts[GRP_ATTACK]);
+    if(roll <= assistCounts[GRP_ATTACK]) {
+        attackSlot = randomAssistItemEx(GRP_ATTACK, true);
+    } else {
+        giftSlot = randomAssistItemEx(GRP_GIFT, true);
+    }
+
+    // Special item draw logic: roll for gift or attack type assist
+    // You get any mobility item from vanilla.
+    int j = assistCounts[GRP_JUMP];
+    int d = assistCounts[GRP_DASH];
+    int f = assistCounts[GRP_FLIGHT];
+
+    roll = random(1, j + d + f);
+    if(roll <= j) {
+        dashSlot = randomAssistItemEx(GRP_JUMP, true);
+    } else if(roll <= j + d) {
+        jumpSlot = randomAssistItemEx(GRP_DASH, true);
+    } else {
+        flightSlot = randomAssistItemEx(GRP_FLIGHT, true);
+    }
+
+    reloadSlot = randomAssistItemEx(GRP_RELOAD, true);
+    passiveSlot = randomAssistItemEx(GRP_PASSIVE, true);
+    itemsPulled = true;
 }
 
 // Inventory management scripts, for infects and survivors.
@@ -451,6 +452,9 @@ script "RROBOENZ_INFECTED_CLIENTEFFECTS" (void) CLIENTSIDE
 
 script "RROBOENZ_INFECTDROPS" DEATH
 {
+    if(!canRoboenza())
+        terminate;
+
     if(CheckInventory("RoboenzaInfected") > 0) {
         GiveInventory("InfectedDrops", 1);
         
@@ -555,6 +559,9 @@ script "ROBOENZ_TRANSFORMFREEZE" (void) {
 // 
 script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
 {
+    if(!canRoboenza())
+        terminate;
+
     if(ev == GAMEEVENT_ACTOR_DAMAGED) {
         int victim = PlayerNumber();
         dmg = GetEventResult();

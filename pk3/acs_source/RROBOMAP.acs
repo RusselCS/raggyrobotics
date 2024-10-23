@@ -3,6 +3,8 @@
 #include "zcommon.acs"
 #include "CROCFUNC.acs"
 
+#include "RROBCOMM.acs"
+
 int hasInfected = false;
 
 #define DEATHS_MAX 6
@@ -81,12 +83,13 @@ function int tpScriptCheck(void)
 {
     if(tpScript == -2) {
         tpScript = -1;
-
-        str map = StrParam(n:PRINTNAME_LEVEL);
-        for(int i = 0; i < TP_MAX; i++) {
-            if(strICmp(teleportScripts[i][SCRIPT_MAP], map) == 0) {
-                tpScript = i;
-                break;
+        if(canRoboenza()) {
+            str map = StrParam(n:PRINTNAME_LEVEL);
+            for(int i = 0; i < TP_MAX; i++) {
+                if(strICmp(teleportScripts[i][SCRIPT_MAP], map) == 0) {
+                    tpScript = i;
+                    break;
+                }
             }
         }
     }

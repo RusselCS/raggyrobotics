@@ -16,17 +16,18 @@ int roboenzaMode = ROBOSTATE_PREGAME;
 
 script "RROBOENZ_ENTER" ENTER
 {
+    if(!canRoboenza())
+        terminate;
+
     maxPlayer = max(maxPlayer, PlayerNumber()+1);
     ResetCustomDataToDefault("Infections", PlayerNumber());
     ResetCustomDataToDefault("Strain", PlayerNumber());
     CallACS0("RROBENZ_PLAYERSTART");
     
-    if(canRoboenza()) {
-        CallACS2("core_invulnerableplayer", 0, true);
-        while(!pickTime)
-            delay(1);
-        CallACS2("core_invulnerableplayer", 0, false);
-    }
+    CallACS2("core_invulnerableplayer", 0, true);
+    while(!pickTime)
+        delay(1);
+    CallACS2("core_invulnerableplayer", 0, false);
 }
 
 script "RROBENZ_RESPAWN" RESPAWN
@@ -40,92 +41,93 @@ script "RROBENZ_RESPAWN" RESPAWN
 
 script "RROBOENZ_RUNSYSTEM" OPEN
 {
+    if(!canRoboenza())
+        terminate;
+
     roboenzaMode = ROBOSTATE_PREGAME;
     delay(1);
     CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_DISABLE);
     delay(35*3);
-    if(canRoboenza()) {
-        totalPlayers = PlayerCount();
+    totalPlayers = PlayerCount();
 
-        int alphaCount = clamp(totalPlayers / GetCvar("rroboenz_sv_alphathreshold") + 1, 1, GetCvar("rroboenz_sv_maxalphas"));
+    int alphaCount = clamp(totalPlayers / GetCvar("rroboenz_sv_alphathreshold") + 1, 1, GetCvar("rroboenz_sv_maxalphas"));
 
-        infectAlpha(alphaCount);
-        roboenzaMode = ROBOSTATE_INPROGRESS;
+    infectAlpha(alphaCount);
+    roboenzaMode = ROBOSTATE_INPROGRESS;
 
-        delay(16);
+    delay(16);
 
-        bool musicChanged = false;
-        bool buffGiven = false;
+    bool musicChanged = false;
+    bool buffGiven = false;
 
-        int threshold = 0.34;
+    int threshold = 0.34;
 
-        while(true) {
+    while(true) {
 
-            int survCount = playerCountTeam(TEAM_SURVIVOR);
-            int infcCount = playerCountTeam(TEAM_INFECTED);
+        int survCount = playerCountTeam(TEAM_SURVIVOR);
+        int infcCount = playerCountTeam(TEAM_INFECTED);
 
-            if(survCount == 1) {
-                int ratio = FixedDiv(infcCount, totalPlayers);
+        if(survCount == 1) {
+            int ratio = FixedDiv(infcCount, totalPlayers);
 
-                if(!buffGiven) {
-                    buffGiven = true;
-                    if(ratio >= 0.67) {
-                        CallACS1("RROBOENZ_GIVEFRENZY", 2);
-                    } else if(ratio >= 0.34) {
-                        CallACS1("RROBOENZ_GIVEFRENZY", 1);
-                    }
-                }
-
-                if(!musicChanged) {
-                    musicChanged = true;
-                    if(ratio >= 0.34) {
-                        CallACS2("core_bossmusicstate", RBNZ_BMSF_SETINTENSE, true);
-                    } else {
-                        CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_BOSS);
-                        SetMusic("RBNZAINT");
-                    }
+            if(!buffGiven) {
+                buffGiven = true;
+                if(ratio >= 0.67) {
+                    CallACS1("RROBOENZ_GIVEFRENZY", 2);
+                } else if(ratio >= 0.34) {
+                    CallACS1("RROBOENZ_GIVEFRENZY", 1);
                 }
             }
 
-            if(buffGiven) { // if one of the zombies gets cured, and then someone else gets infected, may as well...
-                if(survCount >= 2) {
-                    buffGiven = false;
-                }
-            }
-
-            // [Russ] This is gonna get annoying to read back on in the server log
-            // Aaaaaaand will probably flag TSPG mods or something? idk.
-            // But I need to know what's going on, so I'm just gonna. Spam logs.
-            if(GetTeamProperty(TEAM_SURVIVOR, TPROP_WinCount) != survCount) {
-                ChangeTeamScore(TEAM_SURVIVOR, SCORE_WINS, survCount);
-            }
-
-            if(GetTeamProperty(TEAM_INFECTED, TPROP_WinCount) != infcCount) {
-                ChangeTeamScore(TEAM_INFECTED, SCORE_WINS, infcCount);
-            }
-
-            if(GetGameModeState() == GAMESTATE_INRESULTSEQUENCE) {
-                if(Timer() < contingencyTimer() && infcCount == 0) { // if the alpha is just one and they suicide immediately, reset.
-                    ChangeTeamScore(TEAM_SURVIVOR, SCORE_WINS, 0);
-                    ChangeTeamScore(TEAM_INFECTED, SCORE_WINS, 0);
-                    SetGameModeLimit(GAMELIMIT_WINS, 0);
+            if(!musicChanged) {
+                musicChanged = true;
+                if(ratio >= 0.34) {
+                    CallACS2("core_bossmusicstate", RBNZ_BMSF_SETINTENSE, true);
                 } else {
-                    SetGameModeLimit(GAMELIMIT_WINS, max(survCount, infcCount));
+                    CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_BOSS);
+                    SetMusic("RBNZAINT");
                 }
+            }
+        }
 
-                if(survCount==0) { // If there are no survivors, no victory music. But maps should know the round ended.
-                    CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_VICTORY);
-                }
+        if(buffGiven) { // if one of the zombies gets cured, and then someone else gets infected, may as well...
+            if(survCount >= 2) {
+                buffGiven = false;
+            }
+        }
 
-                if(infcCount==0) {
-                    CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVALMUS, RBNZ_BMS_VICTORY);
-                }
-                roboenzaMode = ROBOSTATE_END;
-                terminate;
+        // [Russ] This is gonna get annoying to read back on in the server log
+        // Aaaaaaand will probably flag TSPG mods or something? idk.
+        // But I need to know what's going on, so I'm just gonna. Spam logs.
+        if(GetTeamProperty(TEAM_SURVIVOR, TPROP_WinCount) != survCount) {
+            ChangeTeamScore(TEAM_SURVIVOR, SCORE_WINS, survCount);
+        }
+
+        if(GetTeamProperty(TEAM_INFECTED, TPROP_WinCount) != infcCount) {
+            ChangeTeamScore(TEAM_INFECTED, SCORE_WINS, infcCount);
+        }
+
+        if(GetGameModeState() == GAMESTATE_INRESULTSEQUENCE) {
+            if(Timer() < contingencyTimer() && infcCount == 0) { // if the alpha is just one and they suicide immediately, reset.
+                ChangeTeamScore(TEAM_SURVIVOR, SCORE_WINS, 0);
+                ChangeTeamScore(TEAM_INFECTED, SCORE_WINS, 0);
+                SetGameModeLimit(GAMELIMIT_WINS, 0);
+            } else {
+                SetGameModeLimit(GAMELIMIT_WINS, max(survCount, infcCount));
             }
 
-            delay(1);
+            if(survCount==0) { // If there are no survivors, no victory music. But maps should know the round ended.
+                CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVAL, RBNZ_BMS_VICTORY);
+            }
+
+            if(infcCount==0) {
+                CallACS2("core_bossmusicstate", RBNZ_BMSF_SETVALMUS, RBNZ_BMS_VICTORY);
+            }
+            roboenzaMode = ROBOSTATE_END;
+            terminate;
         }
+
+        delay(1);
     }
 }
 
@@ -142,7 +144,8 @@ script "ROBOENZ_GETMODESTATE" (void) { SetResultValue(roboenzaMode); }
 
 script "RROBOENZ_SCORE_UNLOADING" UNLOADING
 {
-    SetGameModeLimit(GAMELIMIT_WINS, 0);
+    if(GetCvar("roboenzafrenzy"))
+        SetGameModeLimit(GAMELIMIT_WINS, 0);
 }
 
 world int WRLD_PATIENTZERO: patientsZero[];
@@ -157,6 +160,9 @@ script "RROBOENZ_ALPHA_CONT_DEATH" DEATH
 
 script "RROBOENZ_ALPHA_CONTINGENCY" (int who) DISCONNECT
 {
+    if(!canRoboenza())
+        terminate;
+
     if(getAlphaCount() > 1) { // only do this if there are more alphas than 1
         if(Timer() < contingencyTimer()) { // only do this if close to start of round
             int pz = findInPatientsZero(who);

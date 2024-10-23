@@ -11,6 +11,9 @@
 
 script "RROBOENZ_DTADD" OPEN
 {
+    if(!canRoboenza())
+        terminate;
+
     delay(1);
 
     // Need to remake the possession script from vanilla because it triggers the color script that's impossible to disable once it's on
