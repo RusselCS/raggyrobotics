@@ -190,7 +190,7 @@ Column "ArtifactIcon"
 
 	Alignment = Center
 	ClipRectHeight = -2
-	GameMode = Terminator, Possession, TeamPossession, CTF, OneFlagCTF, Skulltag
+	GameModes = Terminator, Possession, TeamPossession, CTF, OneFlagCTF, Skulltag
 	Size = 13
 }
 
@@ -349,16 +349,17 @@ Scoreboard
 
 	HeaderFont = "SmallFont"
 	RowFont = "SmallFont"
-	HeaderColor = "Grey"
-	RowColor = "Grey"
-	LocalRowColor = "Green"
-	LocalRowDemoColor = "Gold"
+	HeaderTextColor = "Grey"
+	RowTextColor = "Grey"
+	LocalRowTextColor = "Green"
+	LocalRowDemoTextColor = "Gold"
 	BackgroundColor = "00 00 00"
 	BackgroundAmount = 0.5
 	BackgroundBorderSize = 4
 	LightRowBackgroundColor = "40 40 40"
 	DarkRowBackgroundColor = "20 20 20"
 	LocalRowBackgroundColor = "80 80 80"
+	ContentAlpha = 1.0
 	RowBackgroundAmount = 0.65
 	DeadPlayerTextAlpha = 0.35
 	DeadPlayerRowBackgroundAmount = 0
@@ -371,5 +372,6 @@ Scoreboard
 	ColumnOrder = "Index", "ReadyToGoAndStatusIcons", "Player", "Vote", "Frags", "Infections", "Strain", "Time", "Ping"
 	RankOrder = "Frags", "Infections", "Strain"
 
-	AddFlag UseHeaderColorForBorders
+	AddFlag UseHeaderTextColorForBorders
+	AddFlag SeparateDeadSpectators
 }

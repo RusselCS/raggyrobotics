@@ -558,60 +558,73 @@ script "ROBOENZ_TRANSFORMFREEZE" (void) {
 // ---- Else damagetype, if inflictor is not of type BasicACSDamager, disable damage.
 // 
 script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
-{
-    if(!canRoboenza())
-        terminate;
-
+{   
     if(ev == GAMEEVENT_ACTOR_DAMAGED) {
-        int victim = PlayerNumber();
-        dmg = GetEventResult();
+        int res = getEventResult();
+        if(res != 0) {
+            dmg = res;
+        }
 
-        if(victim >= 0 && dmg > 0) { // Victim is a player and damage is more than 0
-            bool victimInfected = CheckInventory("RoboenzaInfected") > 0;
-            int victimHp = GetActorProperty(0, APROP_Health);
+        // if(!canRoboenza()) {
+        //     SetResultValue(dmg);
+        // } else {
+            int victim = PlayerNumber();
 
-            SetActivator(0, AAPTR_DAMAGE_SOURCE);
-            int attacker = PlayerNumber();
-            int attackerHp = GetActorProperty(0, APROP_Health);
+            if(victim >= 0 && dmg > 0) { // Victim is a player and damage is more than 0
+                bool victimInfected = CheckInventory("RoboenzaInfected") > 0;
+                int victimHp = GetActorProperty(0, APROP_Health);
 
-            if(victiminfected) {
-                if(StrICmp(type, "FrenzyBlast") == 0) {
-                    SetActivator(victim + PLN_TID);
-                    int hf = 25;
-                    int vf = 90;
-                    GiveInventory("RoboenzaPitProtect", 1);
-                    if(attacker >= 0) {
-                        SetPointer(AAPTR_TARGET, attacker + PLN_TID);
-                        CallACS4("core_knockback", hf, vf, false, AAPTR_TARGET);
-                    } else {
-                        ThrustThingZ(0,vf,0,0);
-                        ThrustThing(random(0,255),hf,1,0);
-                    }
-                } else {
-                    if(CheckActorInventory(victim + PLN_TID, "InfectRecoilTime") == 0) {
-                        if(CheckActorInventory(victim + PLN_TID, "RoboenzaAlphaInfected") == 0) {
-                            GiveActorInventory(victim + PLN_TID, "InfectRecoil", 1);
+                SetActivator(0, AAPTR_DAMAGE_SOURCE);
+                int attacker = PlayerNumber();
+                int attackerHp = GetActorProperty(0, APROP_Health);
+
+                if(victiminfected) {
+                    if(StrICmp(type, "FrenzyBlast") == 0) {
+                        SetActivator(victim + PLN_TID);
+                        int hf = 25;
+                        int vf = 90;
+                        GiveInventory("RoboenzaPitProtect", 1);
+                        if(attacker >= 0) {
+                            SetPointer(AAPTR_TARGET, attacker + PLN_TID);
+                            CallACS4("core_knockback", hf, vf, false, AAPTR_TARGET);
                         } else {
-                            GiveActorInventory(victim + PLN_TID, "AlphaRecoil", 1);
+                            ThrustThingZ(0,vf,0,0);
+                            ThrustThing(random(0,255),hf,1,0);
+                        }
+                    } else {
+                        if(CheckActorInventory(victim + PLN_TID, "InfectRecoilTime") == 0) {
+                            if(CheckActorInventory(victim + PLN_TID, "RoboenzaAlphaInfected") == 0) {
+                                GiveActorInventory(victim + PLN_TID, "InfectRecoil", 1);
+                            } else {
+                                GiveActorInventory(victim + PLN_TID, "AlphaRecoil", 1);
+                            }
                         }
                     }
-                }
-            } else {
-                if(attacker >= 0) {
-                    if(!PlayerInGame(attacker)) {
-                        SetResultValue(0);
-                    } else {
-                        SetActivator(0, AAPTR_DAMAGE_INFLICTOR);
-                        bool isDamager = (CheckFlag(0, "MISSILE") && CheckForActorVar(0, "user_damage"));
+                } else {
+                    if(attacker >= 0) {
+                        if(!PlayerInGame(attacker)) {
+                            SetResultValue(0);
+                        } else {
+                            SetActivator(0, AAPTR_DAMAGE_INFLICTOR);
+                            bool isDamager = (CheckFlag(0, "MISSILE") && CheckForActorVar(0, "user_damage"));
 
-                        if(StrICmp(type, "RoboenzaInfection") == 0) {
-                            if(dmg >= victimHp) {
-                                int hdc = GetUserCvar(victim, "handicap");
-                                if(hdc > 0) {
-                                    if(victimHp == max(1, GetActorProperty(victim + PLN_TID, APROP_SpawnHealth) - hdc)) {
-                                        CallACS4("RROBOENZ_INFECT", victim, false, 0, attacker+1);
-                                        CallACS1("ROBOENZ_ADDPLAYERSCORE", attacker);
-                                        CallACS2("RROBOENZ_YOUINFECTED", attacker, victim);
+                            if(StrICmp(type, "RoboenzaInfection") == 0) {
+                                bool final = playerCountTeam(TEAM_SURVIVOR) == 1;
+                                if(dmg >= victimHp) {
+                                    int hdc = GetUserCvar(victim, "handicap");
+                                    if(hdc > 0) {
+                                        if(victimHp == max(1, GetActorProperty(victim + PLN_TID, APROP_SpawnHealth) - hdc)) {
+                                            CallACS4("RROBOENZ_INFECT", victim, false, 0, attacker+1);
+                                            CallACS1("ROBOENZ_ADDPLAYERSCORE", attacker);
+                                            if(!final)
+                                                CallACS2("RROBOENZ_YOUINFECTED", attacker, victim);
+                                        } else {
+                                            GiveActorInventory(attacker + PLN_TID, "RoboenzaTimer", FixedMul(ZOMBIE_TIME, 0.2));
+                                            healActor(attacker + PLN_TID, FixedMul(GetActorProperty(attacker + PLN_TID, AProp_SpawnHealth), 0.2));
+                                            if(GetCvar("rroboenz_sv_killsrealpha"))
+                                                applyAlpha(attacker);
+                                            SetResultValue(dmg * 100);
+                                        }
                                     } else {
                                         GiveActorInventory(attacker + PLN_TID, "RoboenzaTimer", FixedMul(ZOMBIE_TIME, 0.2));
                                         healActor(attacker + PLN_TID, FixedMul(GetActorProperty(attacker + PLN_TID, AProp_SpawnHealth), 0.2));
@@ -620,29 +633,24 @@ script "RROBOENZ_DAMAGEEVENT" (int ev, int dmg, int type) EVENT
                                         SetResultValue(dmg * 100);
                                     }
                                 } else {
-                                    GiveActorInventory(attacker + PLN_TID, "RoboenzaTimer", FixedMul(ZOMBIE_TIME, 0.2));
-                                    healActor(attacker + PLN_TID, FixedMul(GetActorProperty(attacker + PLN_TID, AProp_SpawnHealth), 0.2));
-                                    if(GetCvar("rroboenz_sv_killsrealpha"))
-                                        applyAlpha(attacker);
-                                    SetResultValue(dmg * 100);
+                                    if(CheckActorInventory(attacker + PLN_TID, "RoboenzaAlphaInfected") > 0)
+                                        revokeAlpha(attacker);
+
+                                    CallACS4("RROBOENZ_INFECT", victim, false, 0, attacker+1);
+                                    CallACS1("ROBOENZ_ADDPLAYERSCORE", attacker);
+                                    if(!final)
+                                        CallACS2("RROBOENZ_YOUINFECTED", attacker, victim);
                                 }
                             } else {
-                                if(CheckActorInventory(attacker + PLN_TID, "RoboenzaAlphaInfected") > 0)
-                                    revokeAlpha(attacker);
-
-                                CallACS4("RROBOENZ_INFECT", victim, false, 0, attacker+1);
-                                CallACS1("ROBOENZ_ADDPLAYERSCORE", attacker);
-                                CallACS2("RROBOENZ_YOUINFECTED", attacker, victim);
-                            }
-                        } else {
-                            if(!isDamager) {
-                                SetResultValue(0);
+                                if(!isDamager) {
+                                    SetResultValue(0);
+                                }
                             }
                         }
                     }
                 }
             }
-        }
+        // }
     }
 }
 

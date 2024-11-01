@@ -100,10 +100,10 @@ script "RROBOENZ_YOUINFECTED" (int attacker, int victim) CLIENTSIDE
         terminate;
 
     str fragMsg = StrParam(s:"YOU INFECTED ", n:victim+1, s:"!");
-    Log(s:fragMsg);
-
-    if(!GetCvar("CL_ShowLargeFragMessages"))
-        terminate;
+    
+    if(!GetCvar("CL_ShowLargeFragMessages")) {
+        Log(s:fragMsg);
+    }
 
     SetFont("BIGFONT");
     HudMessageBold(s:fragMsg; HUDMSG_FADEOUT, MSGID_YOUINFECTED1, CR_DARKGREEN, 1.5, 0.325, 2.5, 0.5);
