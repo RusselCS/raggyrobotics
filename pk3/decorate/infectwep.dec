@@ -12,7 +12,7 @@ actor RoboenzaWep : BaseMM8BDMWep0
     +WEAPON.AMMO_OPTIONAL
     +WEAPON.WIMPY_WEAPON
     +WEAPON.ALLOW_WITH_RESPAWN_INVUL
-    weapon.ammotype "BusterAmmo"
+    // weapon.ammotype "BusterAmmo"
     inventory.icon "NULLICON"
     Dropitem ""
     //inventory.icon "INFEWEP"

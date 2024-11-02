@@ -117,6 +117,11 @@ script "RROBOENZ_YOUINFECTED" (int attacker, int victim) CLIENTSIDE
     }
 }
 
+script "RROBOENZ_FYI" (int which) CLIENTSIDE
+{
+    Log(s:"(Winlimit is automatically changed every round to manage a match's end state.)");
+}
+
 script "RROBOENZ_APPLYZOMBIESKIN" (void) CLIENTSIDE
 {
     delay(1);
@@ -127,7 +132,7 @@ script "RROBOENZ_APPLYZOMBIESKIN" (void) CLIENTSIDE
 
     if(StrICmp(skin, "") != 0) {
         LogConsoleCommand("rroboenz_tempskin $skin");
-        LogConsoleCommand(StrParam(s:"skin ", s:skin));
+        LogConsoleCommand(StrParam(s:"skin \"", s:skin, s:"\""));
     }
 }
 
@@ -150,7 +155,7 @@ script "RROBOENZ_REVOKEZOMBIESKIN" (void) CLIENTSIDE
 
         if(StrICmp(temp, "") != 0) {
             if(StrICmp(zombie, comp) == 0) { // If the player changed their skin in the middle of this, it should just accept the new skin as uninfect.
-                LogConsoleCommand("skin $rroboenz_tempskin");
+                LogConsoleCommand(StrParam(s:"skin \"", s:temp, s:"\""));
             }
             SetUserCvarString(cpn, "rroboenz_tempskin", "");
         }
@@ -181,7 +186,7 @@ script "rroboenz_copyskintozombie" (void) NET CLIENTSIDE
 }
 
 function void LogConsoleCommand(str cmd) {
-    // Log(s:"Running console command: ", s:cmd);
+    Log(s:"Running console command: ", s:cmd);
     ConsoleCommand(cmd);
 }
 
@@ -324,6 +329,18 @@ function bool roboenzaBarCheck(void) {
 
 function bool hasPanicItem(int tid) {
     return CheckActorInventory(tid, "ExitUnitItem") > 0 || CheckActorInventory(tid, "FrenzyBuffItem") > 0;
+}
+
+script "rroboenz_changes_v1f" (void) NET CLIENTSIDE
+{
+    Log(s:"====================== v1fh ======================");
+    Log(s:"* Fixed SCORINFO not allowing the game to run with latest Zandronum alpha.");
+    Log(s:"* Fixed an issue where infected skins would not apply when the skin name had spaces.");
+    Log(s:"* Tweaked default CVars to work around some existing bugs with alpha queue system.");
+    Log(s:"* Added a message to explain to players why the winlimit keeps changing.");
+    Log(s:"* Made some tweaks to the backend for compatibility with Binary's modevote.");
+    Log(s:"* Made some tweaks to the backend to begin compatibility with class mods.");
+    Log(s:"=================================================");
 }
 
 script "rroboenz_changes_v1e" (void) NET CLIENTSIDE

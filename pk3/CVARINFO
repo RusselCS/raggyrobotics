@@ -11,7 +11,7 @@ server noarchive int rroboenz_sv_alpharand = 3;
 server noarchive bool rroboenz_sv_resolidinfect = true;
 server noarchive bool rroboenz_sv_killsrealpha = true;
 
-server noarchive bool rroboenz_sv_debugmode = false;
+server noarchive bool rroboenz_sv_debugmode = true;
 
 server noarchive int rroboenz_temp_alphacount = 0;
 
