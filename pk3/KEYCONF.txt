@@ -3,6 +3,7 @@ alias resetzombieskin "closemenu; pukename rroboenz_resetzombieskin"
 alias copyzombieskin "closemenu; pukename rroboenz_copyskintozombie"
 alias usepanicbutton "pukename rroboenz_panicbutton"
 
+alias robochangelog_v1fh1 "pukename rroboenz_changes_v1fh1; gotoconsole"
 alias robochangelog_v1e "pukename rroboenz_changes_v1e; gotoconsole"
 alias robochangelog_v1dh1 "pukename rroboenz_changes_v1dh1; gotoconsole"
 alias robochangelog_v1d "pukename rroboenz_changes_v1d; gotoconsole"

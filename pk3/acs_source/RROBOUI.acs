@@ -186,7 +186,7 @@ script "rroboenz_copyskintozombie" (void) NET CLIENTSIDE
 }
 
 function void LogConsoleCommand(str cmd) {
-    Log(s:"Running console command: ", s:cmd);
+    // Log(s:"Running console command: ", s:cmd);
     ConsoleCommand(cmd);
 }
 
@@ -331,15 +331,18 @@ function bool hasPanicItem(int tid) {
     return CheckActorInventory(tid, "ExitUnitItem") > 0 || CheckActorInventory(tid, "FrenzyBuffItem") > 0;
 }
 
-script "rroboenz_changes_v1f" (void) NET CLIENTSIDE
+script "rroboenz_changes_v1fh1" (void) NET CLIENTSIDE
 {
-    Log(s:"====================== v1fh ======================");
+    Log(s:"====================== v1fh1 ======================");
     Log(s:"* Fixed SCORINFO not allowing the game to run with latest Zandronum alpha.");
+    Log(s:"* Updated \"You Infected\" message logic for parity with latest Zandronum alpha.");
     Log(s:"* Fixed an issue where infected skins would not apply when the skin name had spaces.");
     Log(s:"* Tweaked default CVars to work around some existing bugs with alpha queue system.");
     Log(s:"* Added a message to explain to players why the winlimit keeps changing.");
     Log(s:"* Made some tweaks to the backend for compatibility with Binary's modevote.");
     Log(s:"* Made some tweaks to the backend to begin compatibility with class mods.");
+    Log(s:"* The Skeld: Removed security cameras due to a rendering bug.");
+    Log(s:"* Crewmate Skin: Fixed mugshot turning into Maestro in most times.");
     Log(s:"=================================================");
 }
 
