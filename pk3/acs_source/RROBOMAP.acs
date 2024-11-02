@@ -102,3 +102,15 @@ function int tpScriptCheck(void)
 
 // On The Skeld, only infected players can use the vents.
 script "rroboenz_skeldcheck" (void) { SetResultValue(CheckInventory("RoboenzaInfected") > 0); }
+
+// Also on The Skeld, remove the security cameras because of rendering bug.
+script "rroboenz_skeldcameras" OPEN
+{
+    if(StrICmp(StrParam(n:PRINTNAME_LEVEL), "EMIMAP09") == 0)
+    {
+        ReplaceTextures("SKLDCAM1", "BLACK");
+        ReplaceTextures("SKLDCAM2", "BLACK");
+        ReplaceTextures("SKLDCAM3", "BLACK");
+        ReplaceTextures("SKLDCAM4", "BLACK");
+    }
+}

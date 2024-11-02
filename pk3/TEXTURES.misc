@@ -28,3 +28,17 @@ graphic RZFRZD, 16, 16 {Patch RZFND0, 0, 0}
 
 graphic RZEXTA, 16, 16 {Patch EXITB0, -3, -2}
 graphic RZEXTB, 16, 16 {Patch EXITC0, -3, -2}
+
+// adding missing mugshot graphics for among us
+graphic AMGST01,32,32{XScale 4.0 YScale 4.0 Patch FACEAMNG,0,0}
+graphic AMGST02,32,32{XScale 4.0 YScale 4.0 Patch FACEAMNG,0,0}
+graphic AMGGOD0,32,32{XScale 4.0 YScale 4.0 Patch FACEAMNG,0,0}
+graphic AMGDEAD0,32,32{XScale 4.0 YScale 4.0 Patch FACEAMNG,0,0}
+graphic AMGQUAD,32,32{XScale 4.0 YScale 4.0 Patch FACEAMNG,0,0}
+graphic AMGPAINR,32,32{XScale 4.0 YScale 4.0 Patch FACEAMNG,0,0}
+graphic AMGPAINC,32,32{XScale 4.0 YScale 4.0 Patch FACEAMNG,0,0}
+graphic AMGPAINL,32,32{XScale 4.0 YScale 4.0 Patch FACEAMNG,0,0}
+graphic AMGGOD1,32,32{XScale 4.0 YScale 4.0 Patch FACEAMNG,0,0}
+graphic AMGGOD2,32,32{XScale 4.0 YScale 4.0 Patch FACEAMNG,0,0}
+graphic AMGKILL,32,32{XScale 4.0 YScale 4.0 Patch FACEAMNG,0,0}
+graphic AMGGRIN,32,32{XScale 4.0 YScale 4.0 Patch FACEAMNG,0,0}
