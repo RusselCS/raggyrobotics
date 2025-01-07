@@ -2,6 +2,8 @@ ROBOENZA FRENZY
 Mod by Russel
 for MM8BDM v6b
 
+(Latest version of this mod requires the latest Zandronum 3.2 alpha to run, please go to [Zandronum.com/downloads](https://zandronum.com/download) and download the latest 3.2 development version.)
+
 Take to the streets during the Roboenza Pandemic!
 The virus overwrites your programming, making you want to tear everyone apart and spread the virus further.
 Stifle your local outbreaks by destroying infected robots.
